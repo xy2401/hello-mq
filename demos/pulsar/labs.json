@@ -1,0 +1,25 @@
+{
+  "product": "pulsar",
+  "compose": "compose/pulsar.compose.yml",
+  "service": "pulsar",
+  "imageEnvKey": "PULSAR_IMAGE",
+  "healthTimeout": 180,
+  "client": "java-pulsar-client-4.2.2",
+  "labs": [
+    {
+      "name": "basic",
+      "level": "L1",
+      "description": "Exclusive 订阅 + 业务提交后才 ack + 幂等落库：发 3 条、收 3 条、积压=0"
+    },
+    {
+      "name": "subscriptions",
+      "level": "L2",
+      "description": "同一 topic 四类订阅对比：Exclusive 独占 / Shared 分摊 / Failover 主备切换 / Key_Shared 同 key 粘连"
+    },
+    {
+      "name": "redelivery-replay",
+      "level": "L2",
+      "description": "negativeAck 重投达上限进 DLQ，reset-cursor 到 earliest 全量回放"
+    }
+  ]
+}

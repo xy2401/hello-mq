@@ -1,0 +1,51 @@
+---
+status: "verified"
+product: "rabbitmq"
+lab: "routing"
+brokerVersion: "4.1.4"
+image: "rabbitmq:4.1.4-management@sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
+client: "java-amqp-client-5.34.0"
+capturedAt: "2026-08-19T07:59:13.973Z"
+durationMs: 17233
+exitCode: 0
+assertions:
+  confirmed: 3
+  received:orders.routing.created: 2
+  unique:orders.routing.created: 2
+  depthAfter:orders.routing.created: 0
+  received:orders.routing.all: 3
+  unique:orders.routing.all: 3
+  depthAfter:orders.routing.all: 0
+  received:orders.routing.eu: 1
+  unique:orders.routing.eu: 1
+  depthAfter:orders.routing.eu: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.events routingKey=order.created durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.events routingKey=order.created durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.events routingKey=order.created.eu durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing destination=orders.events confirmed=3 status=done
+[assert] confirmed=3 PASS
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.routing.created attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.routing.created attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.created received=2 status=done
+[assert] received:orders.routing.created=2 PASS
+[assert] unique:orders.routing.created=2 PASS
+[assert] depthAfter:orders.routing.created=0 PASS
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.routing.all attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.routing.all attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.routing.all attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.all received=3 status=done
+[assert] received:orders.routing.all=3 PASS
+[assert] unique:orders.routing.all=3 PASS
+[assert] depthAfter:orders.routing.all=0 PASS
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.routing.eu consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.routing.eu attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.eu received=1 status=done
+[assert] received:orders.routing.eu=1 PASS
+[assert] unique:orders.routing.eu=1 PASS
+[assert] depthAfter:orders.routing.eu=0 PASS

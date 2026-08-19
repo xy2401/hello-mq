@@ -1,0 +1,42 @@
+---
+status: "verified"
+product: "rabbitmq"
+lab: "basic"
+brokerVersion: "4.1.4"
+image: "rabbitmq:4.1.4-management@sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
+client: "java-amqp-client-5.34.0"
+capturedAt: "2026-08-19T07:54:54.581Z"
+durationMs: 13080
+exitCode: 0
+assertions:
+  confirmed: 3
+  received: 3
+  uniqueMessageIds: 3
+  redeliveredCount: 0
+  businessCommitted: 3
+  duplicatesSkipped: 0
+  business_rows: 3
+  queueDepthAfter: 0
+  consumerExitCode: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic routingKey=orders.basic durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic routingKey=orders.basic durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic routingKey=orders.basic durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic destination=orders.basic confirmed=3 status=done
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic queue=orders.basic received=3 status=done
+[inspect] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=basic business_rows=3 processed_rows=3 status=snapshot
+[assert] confirmed=3 PASS
+[assert] received=3 PASS
+[assert] uniqueMessageIds=3 PASS
+[assert] redeliveredCount=0 PASS
+[assert] businessCommitted=3 PASS
+[assert] duplicatesSkipped=0 PASS
+[assert] business_rows=3 PASS
+[assert] queueDepthAfter=0 PASS
+[assert] consumerExitCode=0 PASS

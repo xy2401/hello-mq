@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hello-mq.dev/contracts/order-created.v1.schema.json",
+  "title": "OrderCreated.v1",
+  "description": "hello-mq 统一事件信封（规格 §5.2），payload 为订单创建事件。新增可选字段属于兼容演进；破坏性变更必须升级 schemaVersion。",
+  "type": "object",
+  "required": [
+    "messageId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "producer",
+    "traceId",
+    "correlationId",
+    "aggregateType",
+    "aggregateId",
+    "contentType",
+    "payload"
+  ],
+  "properties": {
+    "messageId": { "type": "string", "minLength": 1 },
+    "eventType": { "type": "string", "pattern": "^[a-z][a-z0-9]*\\.[a-z][a-z0-9.]*$" },
+    "schemaVersion": { "type": "integer", "minimum": 1, "const": 1 },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "producer": { "type": "string", "minLength": 1 },
+    "traceId": { "type": "string", "minLength": 1 },
+    "correlationId": { "type": "string", "minLength": 1 },
+    "aggregateType": { "type": "string", "minLength": 1 },
+    "aggregateId": { "type": "string", "minLength": 1 },
+    "contentType": { "type": "string", "const": "application/json" },
+    "payload": { "$ref": "#/definitions/orderCreatedPayload" }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "orderCreatedPayload": {
+      "type": "object",
+      "required": ["orderId", "customerId", "amount", "currency"],
+      "properties": {
+        "orderId": { "type": "string", "minLength": 1 },
+        "customerId": { "type": "string", "minLength": 1 },
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 }
+      },
+      "additionalProperties": true
+    }
+  }
+}

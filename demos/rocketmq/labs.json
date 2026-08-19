@@ -1,0 +1,30 @@
+{
+  "product": "rocketmq",
+  "compose": "compose/rocketmq.compose.yml",
+  "service": "proxy",
+  "imageEnvKey": "ROCKETMQ_IMAGE",
+  "healthTimeout": 120,
+  "client": "java-rocketmq-client-java-5.2.0",
+  "labs": [
+    {
+      "name": "basic",
+      "level": "L1",
+      "description": "Normal Topic + SimpleConsumer 手动确认 + 幂等落库：发 3 条、收 3 条、消费位点追平"
+    },
+    {
+      "name": "fifo-delay",
+      "level": "L2",
+      "description": "FIFO Topic 同 MessageGroup 保序消费；定时消息实际投递延迟不小于设定值"
+    },
+    {
+      "name": "transaction",
+      "level": "L2",
+      "description": "Half Message 首查 UNKNOWN、回查后 COMMIT；消息最终恰好消费 1 次"
+    },
+    {
+      "name": "retry-dlq",
+      "level": "L2",
+      "description": "消费失败按消费组重试策略重投，达上限进 %DLQ% 组 Topic"
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+name: collect-snapshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_pr:
+        description: '用刷新后的快照自动开 PR'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  collect:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - run: npm ci
+      - name: build demos
+        run: mvn -B -f demos/pom.xml package -DskipTests
+
+      # collect 模式：逐产品跑全部实验并无条件写入 outputs/<product>/<lab>.snapshot
+      # 单产品失败不中断其余产品，最后汇总报错
+      - name: collect rabbitmq
+        run: npm run collect-outputs -- rabbitmq || echo "FAIL_rabbitmq=1" >> "$GITHUB_ENV"
+      - name: collect kafka
+        run: npm run collect-outputs -- kafka || echo "FAIL_kafka=1" >> "$GITHUB_ENV"
+      - name: collect rocketmq
+        run: npm run collect-outputs -- rocketmq || echo "FAIL_rocketmq=1" >> "$GITHUB_ENV"
+      - name: collect pulsar
+        run: npm run collect-outputs -- pulsar || echo "FAIL_pulsar=1" >> "$GITHUB_ENV"
+
+      - name: verify outputs
+        run: npm run verify-outputs
+
+      - name: upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-diagnostics
+          path: .lab/
+          if-no-files-found: ignore
+
+      - name: fail if any product failed
+        run: |
+          failed=""
+          for product in rabbitmq kafka rocketmq pulsar; do
+            if [ "$(eval echo "\$FAIL_$product")" = "1" ]; then failed="$failed $product"; fi
+          done
+          if [ -n "$failed" ]; then
+            echo "以下产品实验失败:$failed"
+            exit 1
+          fi
+
+      - name: cleanup containers
+        if: always()
+        run: |
+          for product in rabbitmq kafka rocketmq pulsar; do
+            npm run lab -- $product clean || true
+          done
+          docker ps -a --format '{{.Names}}' | grep '^hello-mq-' || echo 'no hello-mq containers left'
+
+      - name: upload snapshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-snapshots
+          path: outputs/
+
+      - name: open PR with refreshed snapshots
+        if: ${{ inputs.create_pr }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -e
+          git add outputs
+          if git diff --cached --quiet; then
+            echo '快照无变化，跳过开 PR'
+            exit 0
+          fi
+          branch=snapshot-refresh-${GITHUB_RUN_NUMBER}-${GITHUB_RUN_ATTEMPT}
+          git checkout -b "$branch"
+          git commit -m "chore: refresh lab snapshots (run ${GITHUB_RUN_NUMBER})"
+          git push -u origin "$branch"
+          gh pr create \
+            --title "chore: refresh lab snapshots" \
+            --body "由 collect-snapshots 工作流自动生成（run ${GITHUB_RUN_ID}）。请核对快照断言语义后合并。"

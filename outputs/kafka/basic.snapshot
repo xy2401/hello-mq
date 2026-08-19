@@ -1,0 +1,39 @@
+---
+status: "verified"
+product: "kafka"
+lab: "basic"
+brokerVersion: "4.3.1"
+image: "apache/kafka:4.3.1@sha256:77e3df9054047a88b520d0cc46e16696d3b22022e1d580aeccd2632df6532837"
+client: "java-kafka-clients-4.3.1"
+capturedAt: "2026-08-19T09:27:00.562Z"
+durationMs: 27918
+exitCode: 0
+assertions:
+  produced: 3
+  received: 3
+  uniqueMessageIds: 3
+  businessCommitted: 3
+  business_rows: 3
+  consumerGroupLag: 0
+  consumerExitCode: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 offset=0 seq=1 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 offset=1 seq=2 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 offset=0 seq=3 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic destination=orders.basic produced=3 status=done
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic destination=orders.basic consumerGroup=orders-basic-group consumer=consumer-1 partitions=0,1,2 status=assigned
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 offset=0 seq=1 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 seq=1 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 offset=1 seq=2 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 seq=2 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 offset=0 seq=3 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 seq=3 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic destination=orders.basic consumer=consumer-1 received=3 status=done
+[inspect] timestamp=<ts> level=INFO service=order-service product=kafka lab=basic business_rows=3 processed_rows=3 status=snapshot
+[assert] produced=3 PASS
+[assert] received=3 PASS
+[assert] uniqueMessageIds=3 PASS
+[assert] businessCommitted=3 PASS
+[assert] business_rows=3 PASS
+[assert] consumerGroupLag=0 PASS
+[assert] consumerExitCode=0 PASS

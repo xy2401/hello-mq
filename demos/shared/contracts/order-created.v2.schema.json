@@ -1,0 +1,57 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://hello-mq.dev/contracts/order-created.v2.schema.json",
+  "title": "OrderCreated.v2",
+  "description": "hello-mq 统一事件信封（规格 §5.2），payload 为订单创建事件。v2 是对 v1 的一次兼容性演进：仅在 payload 内新增可选字段 channel 与 notes，v1 的全部字段、required 约束与语义保持不变——任何能通过 v1 schema 校验的消息（含全部现有 fixture）也必然通过 v2 校验。schemaVersion 仍为 1：按规格 §5.3，只有破坏性变更才升级 schemaVersion，新增可选字段不升级。",
+  "type": "object",
+  "required": [
+    "messageId",
+    "eventType",
+    "schemaVersion",
+    "occurredAt",
+    "producer",
+    "traceId",
+    "correlationId",
+    "aggregateType",
+    "aggregateId",
+    "contentType",
+    "payload"
+  ],
+  "properties": {
+    "messageId": { "type": "string", "minLength": 1 },
+    "eventType": { "type": "string", "pattern": "^[a-z][a-z0-9]*\\.[a-z][a-z0-9.]*$" },
+    "schemaVersion": { "type": "integer", "minimum": 1, "const": 1 },
+    "occurredAt": { "type": "string", "format": "date-time" },
+    "producer": { "type": "string", "minLength": 1 },
+    "traceId": { "type": "string", "minLength": 1 },
+    "correlationId": { "type": "string", "minLength": 1 },
+    "aggregateType": { "type": "string", "minLength": 1 },
+    "aggregateId": { "type": "string", "minLength": 1 },
+    "contentType": { "type": "string", "const": "application/json" },
+    "payload": { "$ref": "#/definitions/orderCreatedPayload" }
+  },
+  "additionalProperties": true,
+  "definitions": {
+    "orderCreatedPayload": {
+      "type": "object",
+      "required": ["orderId", "customerId", "amount", "currency"],
+      "properties": {
+        "orderId": { "type": "string", "minLength": 1 },
+        "customerId": { "type": "string", "minLength": 1 },
+        "amount": { "type": "number", "minimum": 0 },
+        "currency": { "type": "string", "minLength": 3, "maxLength": 3 },
+        "channel": {
+          "type": "string",
+          "minLength": 1,
+          "description": "v2 新增可选字段：下单渠道（如 app / web / mini-program）。v1 生产者不会发送该字段，消费者必须容忍缺失，且不得把未知取值当作处理失败。"
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 500,
+          "description": "v2 新增可选字段：订单备注。缺失等价于无备注，不得作为必填字段校验。"
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

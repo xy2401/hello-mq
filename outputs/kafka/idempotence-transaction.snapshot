@@ -1,0 +1,42 @@
+---
+status: "verified"
+product: "kafka"
+lab: "idempotence-transaction"
+brokerVersion: "4.3.1"
+image: "apache/kafka:4.3.1@sha256:77e3df9054047a88b520d0cc46e16696d3b22022e1d580aeccd2632df6532837"
+client: "java-kafka-clients-4.3.1"
+capturedAt: "2026-08-19T09:30:45.243Z"
+durationMs: 29236
+exitCode: 0
+assertions:
+  txnCommitted: 1
+  txnAborted: 1
+  committedVisible: 3
+  abortedVisible: 0
+  business_rows: 3
+  consumerGroupLag: 0
+  consumerExitCode: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.txn partitionOrQueue=0 offset=0 seq=1 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.txn partitionOrQueue=0 offset=1 seq=2 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.txn partitionOrQueue=1 offset=0 seq=3 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction destination=orders.txn produced=3 status=txn_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction destination=orders.txn consumerGroup=orders-txn-group consumer=consumer-1 partitions=0,1,2 status=assigned
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.txn partitionOrQueue=0 offset=0 seq=1 consumerGroup=orders-txn-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.txn partitionOrQueue=0 seq=1 consumerGroup=orders-txn-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.txn partitionOrQueue=0 offset=1 seq=2 consumerGroup=orders-txn-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.txn partitionOrQueue=0 seq=2 consumerGroup=orders-txn-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.txn partitionOrQueue=1 offset=0 seq=3 consumerGroup=orders-txn-group consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.txn partitionOrQueue=1 seq=3 consumerGroup=orders-txn-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction destination=orders.txn consumer=consumer-1 received=3 status=done
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.txn partitionOrQueue=0 offset=3 seq=1 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.txn partitionOrQueue=0 offset=4 seq=2 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction destination=orders.txn produced=2 status=txn_aborted
+[inspect] timestamp=<ts> level=INFO service=order-service product=kafka lab=idempotence-transaction business_rows=3 processed_rows=3 status=snapshot
+[assert] txnCommitted=1 PASS
+[assert] txnAborted=1 PASS
+[assert] committedVisible=3 PASS
+[assert] abortedVisible=0 PASS
+[assert] business_rows=3 PASS
+[assert] consumerGroupLag=0 PASS
+[assert] consumerExitCode=0 PASS

@@ -1,0 +1,39 @@
+name: docs
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  static-and-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: check-project
+        run: npm run check:project
+      - name: docs build
+        run: npm run docs:build
+      - name: compose validate
+        run: |
+          docker compose -f compose/rabbitmq.compose.yml --env-file .env.versions config --quiet
+          docker compose -f compose/kafka.compose.yml --env-file .env.versions config --quiet
+          docker compose -f compose/rocketmq.compose.yml --env-file .env.versions config --quiet
+          docker compose -f compose/pulsar.compose.yml --env-file .env.versions config --quiet
+
+  java-unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: maven verify
+        run: mvn -B -f demos/pom.xml verify

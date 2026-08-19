@@ -1,0 +1,262 @@
+#!/usr/bin/env node
+// hello-mq 静态门禁（规格 §13.2 的 Phase 1 落地子集）。
+// 由 npm run check:project 调用；失败以退出码 1 结束并列出全部问题。
+
+import { spawnSync } from 'node:child_process'
+import fs from 'node:fs'
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
+import YAML from 'yaml'
+import { parseSnapshot } from './normalize-output.js'
+import { nav, sidebar } from '../docs/.vitepress/nav.mjs'
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const DOCS = path.join(ROOT, 'docs')
+
+const failures = []
+function ok(msg) {
+  console.log(`[check] ${msg}`)
+}
+function fail(msg) {
+  failures.push(msg)
+  console.error(`[check] FAIL: ${msg}`)
+}
+
+function walk(dir, filter, out = []) {
+  if (!fs.existsSync(dir)) return out
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const full = path.join(dir, entry.name)
+    if (entry.isDirectory()) {
+      if (['node_modules', '.vitepress', 'dist', 'target', '.git', '.lab'].includes(entry.name)) continue
+      walk(full, filter, out)
+    } else if (filter(full)) {
+      out.push(full)
+    }
+  }
+  return out
+}
+
+function linkToFile(baseDir, link) {
+  if (link.startsWith('http://') || link.startsWith('https://') || link.startsWith('#') || link.startsWith('mailto:')) {
+    return null
+  }
+  const clean = link.split('#')[0]
+  if (!clean) return null
+  if (clean.startsWith('/')) {
+    const p = path.join(DOCS, clean)
+    if (clean.endsWith('/')) return path.join(p, 'index.md')
+    if (fs.existsSync(path.join(DOCS, `${clean}.md`))) return path.join(DOCS, `${clean}.md`)
+    if (fs.existsSync(path.join(DOCS, clean, 'index.md'))) return path.join(DOCS, clean, 'index.md')
+    return fs.existsSync(p) ? p : path.join(DOCS, `${clean}.md`)
+  }
+  return path.resolve(baseDir, clean)
+}
+
+function checkMarkdownLinks() {
+  const mdFiles = [path.join(ROOT, 'README.md'), ...walk(DOCS, (f) => f.endsWith('.md'))]
+  let checked = 0
+  for (const file of mdFiles) {
+    const baseDir = path.dirname(file)
+    const text = fs.readFileSync(file, 'utf8')
+    const linkRe = /\[[^\]]*\]\(([^)\s]+)\)/g
+    for (const m of text.matchAll(linkRe)) {
+      const target = linkToFile(baseDir, m[1])
+      if (!target) continue
+      checked += 1
+      if (!fs.existsSync(target)) {
+        fail(`broken link in ${path.relative(ROOT, file)}: ${m[1]}`)
+      }
+    }
+  }
+  ok(`markdown links checked (${checked})`)
+}
+
+function collectNavLinks() {
+  const links = []
+  const visit = (items) => {
+    for (const item of items ?? []) {
+      if (item.link) links.push(item.link)
+      if (item.items) visit(item.items)
+    }
+  }
+  visit(nav)
+  for (const section of Object.values(sidebar)) visit(section)
+  return links
+}
+
+function checkNavLinks() {
+  for (const link of collectNavLinks()) {
+    const target = linkToFile(DOCS, link)
+    if (!target || !fs.existsSync(target)) fail(`nav/sidebar link missing: ${link}`)
+  }
+  ok('nav/sidebar links exist')
+}
+
+function checkSnapshotsAndReferences() {
+  const requiredFields = ['status', 'product', 'lab', 'brokerVersion', 'image', 'client', 'capturedAt', 'durationMs', 'exitCode', 'assertions']
+  const snapshotFiles = walk(path.join(ROOT, 'outputs'), (f) => f.endsWith('.snapshot'))
+  for (const file of snapshotFiles) {
+    const snap = parseSnapshot(fs.readFileSync(file, 'utf8'))
+    for (const field of requiredFields) {
+      if (snap.frontmatter[field] === undefined) {
+        fail(`snapshot ${path.relative(ROOT, file)} missing field: ${field}`)
+      }
+    }
+    if (snap.frontmatter.status !== 'verified') {
+      fail(`snapshot ${path.relative(ROOT, file)} status=${snap.frontmatter.status}`)
+    }
+  }
+  const refs = []
+  for (const file of walk(DOCS, (f) => f.endsWith('.md'))) {
+    const text = fs.readFileSync(file, 'utf8')
+    for (const m of text.matchAll(/<LabOutput\s+product="([^"]+)"\s+lab="([^"]+)"/g)) {
+      refs.push({ file, product: m[1], lab: m[2] })
+    }
+  }
+  for (const ref of refs) {
+    const snapshot = path.join(ROOT, 'outputs', ref.product, `${ref.lab}.snapshot`)
+    if (!fs.existsSync(snapshot)) {
+      fail(`LabOutput reference without snapshot in ${path.relative(ROOT, ref.file)}: ${ref.product}/${ref.lab}`)
+      continue
+    }
+    const snap = parseSnapshot(fs.readFileSync(snapshot, 'utf8'))
+    if (snap.frontmatter.status !== 'verified') {
+      fail(`LabOutput reference points to unverified snapshot: ${ref.product}/${ref.lab}`)
+    }
+  }
+  ok(`snapshots (${snapshotFiles.length}) and LabOutput references (${refs.length}) consistent`)
+}
+
+function checkEnvVersions() {
+  const file = path.join(ROOT, '.env.versions')
+  const text = fs.readFileSync(file, 'utf8')
+  for (const line of text.split('\n')) {
+    const trimmed = line.trim()
+    if (!trimmed || trimmed.startsWith('#')) continue
+    const idx = trimmed.indexOf('=')
+    if (idx < 0) continue
+    const [key, value] = [trimmed.slice(0, idx), trimmed.slice(idx + 1)]
+    if (!key.endsWith('_IMAGE')) continue
+    if (/(^|:|-)latest($|[,@])/.test(value) || /:edge|:nightly/.test(value)) {
+      fail(`.env.versions floating tag: ${key}`)
+    }
+    if (!value.includes('@sha256:')) {
+      fail(`.env.versions missing digest: ${key}`)
+    }
+  }
+  ok('.env.versions pinned with tag+digest')
+}
+
+function checkComposeFiles() {
+  const files = walk(path.join(ROOT, 'compose'), (f) => f.endsWith('.yml'))
+  for (const file of files) {
+    let doc
+    try {
+      doc = YAML.parse(fs.readFileSync(file, 'utf8'))
+    } catch (err) {
+      fail(`compose file not parseable: ${path.relative(ROOT, file)} (${err.message})`)
+      continue
+    }
+    const services = Object.keys(doc.services ?? {})
+    if (new Set(services).size !== services.length) fail(`duplicate service names in ${file}`)
+    for (const [name, service] of Object.entries(doc.services ?? {})) {
+      for (const port of service.ports ?? []) {
+        const p = String(port)
+        if (!p.startsWith('127.0.0.1')) {
+          fail(`service ${name} in ${path.relative(ROOT, file)} exposes non-localhost port: ${p}`)
+        }
+      }
+      if (typeof service.image === 'string' && /(^|:)latest($|@)/.test(service.image)) {
+        fail(`service ${name} uses latest image`)
+      }
+    }
+  }
+  ok(`compose files parse, ports localhost-only (${files.length})`)
+}
+
+function checkContractsAndFixtures() {
+  const ajv = new Ajv({ allErrors: true })
+  addFormats(ajv)
+  const schemaPath = path.join(ROOT, 'demos', 'shared', 'contracts', 'order-created.v1.schema.json')
+  const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'))
+  const validate = ajv.compile(schema)
+
+  const fixturesDir = path.join(ROOT, 'demos', 'shared', 'fixtures')
+  const orderFixtures = fs.readdirSync(fixturesDir).filter((f) => f.startsWith('order-') && f.endsWith('.json'))
+  if (orderFixtures.length === 0) fail('no order fixtures found')
+  for (const f of orderFixtures) {
+    const data = JSON.parse(fs.readFileSync(path.join(fixturesDir, f), 'utf8'))
+    if (!validate(data)) fail(`fixture ${f} violates schema: ${ajv.errorsText(validate.errors)}`)
+  }
+  const poison = JSON.parse(fs.readFileSync(path.join(fixturesDir, 'poison-message.json'), 'utf8'))
+  if (validate(poison)) fail('poison-message.json unexpectedly passes schema (it must stay business-invalid)')
+  ok(`contracts: schema compiles, ${orderFixtures.length} fixtures valid, poison fixture intentionally invalid`)
+}
+
+function checkForbiddenFiles() {
+  const res = spawnSync('git', ['ls-files'], { cwd: ROOT, encoding: 'utf8' })
+  if (res.status !== 0) {
+    ok('git ls-files unavailable; skipped forbidden-file check')
+    return
+  }
+  const forbidden = /\.(class|jar|db)$/
+  for (const f of res.stdout.split('\n')) {
+    if (!f) continue
+    if (forbidden.test(f)) fail(`forbidden file tracked by git: ${f}`)
+    if (f === '.env') fail('.env must never be committed')
+  }
+  ok('no forbidden build artifacts/secrets tracked')
+}
+
+function checkBrokerTemplates() {
+  const requiredPages = ['index.md', 'quick-start.md', 'concepts.md', 'routing.md', 'reliability.md', 'storage-ha.md', 'operations.md', 'pitfalls.md']
+  const brokersDir = path.join(DOCS, 'brokers')
+  if (!fs.existsSync(brokersDir)) return
+  for (const product of fs.readdirSync(brokersDir)) {
+    const dir = path.join(brokersDir, product)
+    if (!fs.statSync(dir).isDirectory()) continue
+    for (const page of requiredPages) {
+      if (!fs.existsSync(path.join(dir, page))) fail(`brokers/${product}/ missing template page: ${page}`)
+    }
+  }
+  ok('broker volume template pages present')
+}
+
+function checkSourcesCheckedAt() {
+  const file = path.join(DOCS, 'reference', 'sources.md')
+  const text = fs.readFileSync(file, 'utf8')
+  const rows = text.split('\n').filter((l) => l.startsWith('|') && l.includes('http'))
+  if (rows.length === 0) fail('sources.md has no entries')
+  for (const row of rows) {
+    if (!/checkedAt|\d{4}-\d{2}-\d{2}/.test(row)) fail(`sources.md entry missing checkedAt date: ${row.slice(0, 60)}...`)
+  }
+  ok(`sources.md entries carry checkedAt dates (${rows.length})`)
+}
+
+function checkScriptSyntax() {
+  const scripts = walk(path.join(ROOT, 'scripts'), (f) => f.endsWith('.js'))
+  for (const s of scripts) {
+    const res = spawnSync('node', ['--check', s], { encoding: 'utf8' })
+    if (res.status !== 0) fail(`script syntax error: ${path.relative(ROOT, s)}\n${res.stderr}`)
+  }
+  ok(`script syntax OK (${scripts.length})`)
+}
+
+checkMarkdownLinks()
+checkNavLinks()
+checkSnapshotsAndReferences()
+checkEnvVersions()
+checkComposeFiles()
+checkContractsAndFixtures()
+checkForbiddenFiles()
+checkBrokerTemplates()
+checkSourcesCheckedAt()
+checkScriptSyntax()
+
+if (failures.length > 0) {
+  console.error(`\n[check] ${failures.length} problem(s) found`)
+  process.exit(1)
+}
+console.log('\n[check] all checks passed')

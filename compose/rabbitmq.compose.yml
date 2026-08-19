@@ -1,0 +1,19 @@
+name: hello-mq-rabbitmq
+
+services:
+  rabbitmq:
+    image: ${RABBITMQ_IMAGE:?RABBITMQ_IMAGE must be set via --env-file .env.versions}
+    hostname: hello-mq-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s

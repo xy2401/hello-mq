@@ -1,0 +1,74 @@
+name: smoke-labs
+
+on:
+  push:
+    branches: [main]
+  schedule:
+    - cron: '30 3 * * *'
+  workflow_dispatch:
+
+jobs:
+  labs:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - product: rabbitmq
+            lab: basic
+          - product: rabbitmq
+            lab: routing
+          - product: rabbitmq
+            lab: consumer-crash
+          - product: rabbitmq
+            lab: retry-dlq
+          - product: rabbitmq
+            lab: backlog-recovery
+          - product: kafka
+            lab: basic
+          - product: kafka
+            lab: consumer-group
+          - product: kafka
+            lab: ordering-replay
+          - product: kafka
+            lab: idempotence-transaction
+          - product: rocketmq
+            lab: basic
+          - product: rocketmq
+            lab: fifo-delay
+          - product: rocketmq
+            lab: transaction
+          - product: rocketmq
+            lab: retry-dlq
+          - product: pulsar
+            lab: basic
+          - product: pulsar
+            lab: subscriptions
+          - product: pulsar
+            lab: redelivery-replay
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - run: npm ci
+      - name: build demos
+        run: mvn -B -f demos/pom.xml package -DskipTests
+      - name: run lab
+        run: npm run lab -- ${{ matrix.product }} ${{ matrix.lab }}
+      - name: upload diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-diagnostics-${{ matrix.product }}-${{ matrix.lab }}
+          path: |
+            .lab/
+          if-no-files-found: ignore
