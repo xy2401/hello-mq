@@ -13,6 +13,7 @@
 | Apache Pulsar | <https://pulsar.apache.org/docs/> | 2026-08-19（内容已落地：[Pulsar 分卷](/brokers/pulsar/)） |
 | Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（内容已落地：[Redis Streams 分卷](/brokers/redis-streams/)） |
 | NATS | <https://docs.nats.io/> | 2026-08-19（内容已落地：[NATS 分卷](/brokers/nats/)） |
+| ActiveMQ Artemis | <https://activemq.apache.org/components/artemis/documentation/> | 2026-08-19（内容已落地：[Artemis 分卷](/brokers/artemis/)） |
 
 ## 使用约定
 

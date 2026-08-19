@@ -7,8 +7,8 @@
 ## 核心特色
 
 - **统一语义骨架**：所有产品按相同的十二个公共维度讲解（定位、核心实体、路由、存储、生产/消费可靠性、投递语义、顺序、失败处理、高可用、安全与可观测、限制与反模式）。
-- **产品分卷**：RabbitMQ、Kafka、RocketMQ、Pulsar（P0），Redis Streams、NATS JetStream（P1）。
-- **横向矩阵**：术语映射、投递语义、顺序与回放、重试/DLQ、事务、存储与高可用等选型维度（随产品分卷逐步落地）。
+- **产品分卷**：RabbitMQ、Kafka、RocketMQ、Pulsar（P0），Redis Streams、NATS JetStream（P1），ActiveMQ Artemis（P2，分卷与实验编排已就绪、快照未采集）。
+- **横向矩阵**：术语映射 、投递语义、顺序与回放、重试/DLQ、事务、存储与高可用等选型维度（随产品分卷逐步落地）。
 - **真实故障实验**：消费者崩溃重投、毒消息与 DLQ、幂等拦截等行为由 Docker 实验复现，并提交归一化验证快照。
 - **可靠消息模式**：Outbox、幂等消费、Saga、Schema 演进（随路线推进）。
 
@@ -22,6 +22,7 @@
 | Apache Pulsar | ✅ 已落地（8 页分卷 + 3 实验） | 存储计算分离、云原生多租户 |
 | Redis Streams | ✅ 已落地（8 页分卷 + 2 实验） | Redis 内的追加日志与消费组 |
 | NATS + JetStream | ✅ 已落地（8 页分卷 + 2 实验） | 低延迟 Core NATS 与持久化 JetStream |
+| ActiveMQ Artemis | ✅ 分卷落地（8 页 + 2 实验编排，快照未采集） | 多协议 JMS Broker：anycast/multicast、服务端重试与死信、XA 事务 |
 
 ## 目录结构
 
@@ -35,7 +36,8 @@ hello-mq/
 │   ├── rocketmq/       # RocketMQ 实验主类与实验注册表
 │   ├── pulsar/         # Pulsar 实验主类与实验注册表
 │   ├── redis-streams/  # Redis Streams 实验主类与实验注册表
-│   └── nats/           # NATS（Core + JetStream）实验主类与实验注册表
+│   ├── nats/           # NATS（Core + JetStream）实验主类与实验注册表
+│   └── artemis/        # ActiveMQ Artemis 实验主类与实验注册表
 ├── docs/               # VitePress 文档站（guide/fundamentals/brokers/labs/...）
 ├── outputs/            # 已验证实验快照（归一化后提交）
 ├── scripts/            # lab.js 实验入口与静态检查

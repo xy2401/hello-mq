@@ -1,0 +1,23 @@
+name: hello-mq-artemis
+
+services:
+  artemis:
+    image: ${ARTEMIS_IMAGE:?ARTEMIS_IMAGE must be set via --env-file .env.versions}
+    hostname: hello-mq-artemis
+    environment:
+      ARTEMIS_USER: admin
+      ARTEMIS_PASSWORD: hello-mq-artemis
+    volumes:
+      # 镜像仅在文件缺失时生成 etc 配置：挂载自定义 broker.xml 承载实验所需的重试/DLQ 地址设置。
+      - ./artemis/broker.xml:/var/lib/artemis/etc/broker.xml
+    ports:
+      # 61616：CORE/AMQP/OPENWIRE/STOMP/MQTT 全协议 acceptor；8161：Web 控制台（hawtio）
+      - "127.0.0.1:61616:61616"
+      - "127.0.0.1:8161:8161"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/61616'"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。

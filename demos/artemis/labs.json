@@ -1,0 +1,19 @@
+{
+  "product": "artemis",
+  "compose": "compose/artemis.compose.yml",
+  "service": "artemis",
+  "imageEnvKey": "ARTEMIS_IMAGE",
+  "client": "java-artemis-jms-2.44.0",
+  "labs": [
+    {
+      "name": "basic",
+      "level": "L1",
+      "description": "anycast 队列 + 业务提交后才 acknowledge + 幂等落库：发 3 条、收 3 条、队列深度归零"
+    },
+    {
+      "name": "retry-dlq",
+      "level": "L2",
+      "description": "消费失败按 address-setting 重投（共 3 次投递、固定 1s 间隔），耗尽转 orders-dlq 地址"
+    }
+  ]
+}

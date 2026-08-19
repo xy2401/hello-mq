@@ -11,7 +11,8 @@
 - RocketMQ 的业务消息全家桶（FIFO/Delay/Transaction/内置重试），不等于流处理与多租户平台；
 - Pulsar 的存算分离与多租户，伴随更高的部署组件与运维复杂度；
 - Redis Streams 的低门槛与内存级速度，换不来分区扩展、强持久化与多租户；
-- NATS 的低延迟与极简部署，换不来分区并行、内置重试/DLQ 与海量长期保留。
+- NATS 的低延迟与极简部署，换不来分区并行、内置重试/DLQ 与海量长期保留；
+- Artemis 的多协议与内置重试/延迟/XA，换不来日志回放与分区级水平扩展。
 
 任何「某某全面碾压某某」的结论都忽略了约束。下面是推导方法。
 
@@ -43,6 +44,7 @@
 | 业务消息中台（顺序 + 延迟 + 事务 + 内置重试都要） | RocketMQ 首选：四类消息类型 + Broker 内置重试/DLQ；Kafka 需全部应用层自建 |
 | 轻量任务队列/缓存侧事件（团队已有 Redis、中小规模、容忍内存容量上限） | Redis Streams 首选：XADD/XREADGROUP 直接可用，零新增组件；需要分区扩展或强持久化时回到 RabbitMQ/Kafka（见[轻量场景](#轻量场景redis-streams-与-nats)） |
 | 低延迟事件分发/请求-响应/边缘与 IoT（轻量部署、亚毫秒延迟、允许无持久化层） | NATS Core 首选：原生 Request-Reply 与 Subject 路由；需要保留与回放时叠加 JetStream（见[轻量场景](#轻量场景redis-streams-与-nats)） |
+| 已有 JMS 生态/多协议接入（JMS/AMQP/STOMP/MQTT 客户端共存，要服务端重试/DLQ + 延迟 + 事务） | Artemis 首选：单 Broker 覆盖内置重试、延迟、XA，且无需回放与分区扩展时；需要日志回放回到 Kafka/Pulsar |
 
 ### 顺序需求
 
@@ -64,11 +66,11 @@
 
 | 输入 | 候选与权衡 |
 | :--- | :--- |
-| 需要原生延迟/定时消息 | RocketMQ 首选（Delay 类型 + 投递时间戳）；RabbitMQ TTL+DLX 可近似但精度受限；Kafka/Pulsar 需业务自建 |
+| 需要原生延迟/定时消息 | RocketMQ 首选（Delay 类型 + 投递时间戳）；Artemis 亦原生（_AMQ_SCHED_DELAY）；RabbitMQ TTL+DLX 可近似但精度受限；Kafka/Pulsar 需业务自建 |
 | 需要「本地事务 ⇔ 消息投递」原子 | RocketMQ 事务消息（Half Message + 回查） |
 | 需要集群内 consume-transform-produce 的 EOS | Kafka 事务（幂等 + EOS，边界仅限 Kafka 内部） |
 | 需要跨分区原子写 | Pulsar Transactions / Kafka 事务 |
-| 跨外部数据库的「分布式事务」 | 四者都不直接提供：一律用 Outbox + 幂等消费落地（见[模式](/patterns/outbox)） |
+| 跨外部数据库的「分布式事务」 | 默认不直接提供，一律用 Outbox + 幂等消费落地（见[模式](/patterns/outbox)）；例外：Artemis XA 可把数据库 XA 资源纳入同一两阶段提交，但要求全部参与方支持 XA 且接受其性能与恢复复杂度 |
 
 ### 团队熟悉度
 
@@ -78,6 +80,7 @@
 | 大数据/流处理团队，已有 Kafka 运维体系 | 继续 Kafka；为「内置重试/延迟」引入第二个 Broker 前，先评估应用层模式成本 |
 | 电商/交易类业务团队 | RocketMQ 的业务消息特性与运维工具匹配度高 |
 | 云原生平台团队，需多租户与弹性 | Pulsar，但必须评估 BookKeeper + 元数据服务的运维投入 |
+| JMS/Java EE 背景的存量系统 | Artemis：JMS 客户端零迁移 + 多协议接入，但先确认无回放/分区扩展需求 |
 
 ### 复杂度对比（资源预算视角）
 
@@ -89,6 +92,7 @@
 | Pulsar | 高：Broker + BookKeeper + 元数据服务 | 存算分离换来弹性，代价是组件与调优面更大 |
 | Redis Streams | 极低～中：单实例/主从 + Sentinel（或 Cluster） | 零新增组件（若已有 Redis）；但 Stream 是单 key，容量受实例内存约束 |
 | NATS | 极低～低：单二进制，JetStream 开箱即用；集群为对等 gossip 路由 | 部署最简；Stream 无分区，吞吐与保留容量按单 Stream 规划 |
+| Artemis | 低：单节点 / live-backup 对，无外部元数据依赖 | 队列分布到集群节点扩展；单队列无分区，吞吐按队列规模规划 |
 
 ## 轻量场景（Redis Streams 与 NATS）
 

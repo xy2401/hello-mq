@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- hello-mq 实验用 Artemis 配置：只保留实验必需项，其余走镜像默认生成。
+     关键点：orders-retry 地址按 address-setting 控制重投与死信，验证"重试策略属于服务端配置"。 -->
+<configuration xmlns="urn:activemq"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
+  <core xmlns="urn:activemq:core">
+    <name>hello-mq-artemis</name>
+    <persistence-enabled>true</persistence-enabled>
+    <!-- 实验机不保证 libaio，用 NIO 日志避免启动失败 -->
+    <journal-type>NIO</journal-type>
+
+    <acceptors>
+      <acceptor name="all-protocols">tcp://0.0.0.0:61616?protocols=CORE,AMQP,OPENWIRE,STOMP,MQTT</acceptor>
+    </acceptors>
+
+    <security-enabled>true</security-enabled>
+
+    <address-settings>
+      <!-- retry-dlq 实验：共投递 3 次（1 次初始 + 2 次重投），固定 1s 间隔；
+           耗尽后转入 orders-dlq 地址（Artemis 的死信是"地址设置"而非消费端行为）。 -->
+      <address-setting match="orders-retry">
+        <max-delivery-attempts>3</max-delivery-attempts>
+        <redelivery-delay>1000</redelivery-delay>
+        <redelivery-multiplier>1.0</redelivery-multiplier>
+        <max-redelivery-delay>1000</max-redelivery-delay>
+        <dead-letter-address>orders-dlq</dead-letter-address>
+      </address-setting>
+      <address-setting match="#">
+        <address-full-policy>PAGE</address-full-policy>
+        <max-delivery-attempts>10</max-delivery-attempts>
+        <redelivery-delay>0</redelivery-delay>
+      </address-setting>
+    </address-settings>
+
+    <addresses>
+      <!-- DLQ 预建：anycast 队列，独立消费组可直接消费核对 -->
+      <address name="orders-dlq">
+        <anycast>
+          <queue name="orders-dlq"/>
+        </anycast>
+      </address>
+    </addresses>
+  </core>
+</configuration>
