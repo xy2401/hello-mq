@@ -2,10 +2,9 @@
 // 链接规则：'/x/y' → docs/x/y.md；'/x/' → docs/x/index.md。
 
 export const nav = [
-  { text: '首页', link: '/' },
   { text: '基础原理', link: '/fundamentals/' },
   {
-    text: '产品全典',
+    text: '产品分卷',
     items: [
       { text: 'RabbitMQ', link: '/brokers/rabbitmq/' },
       { text: 'Kafka', link: '/brokers/kafka/' },

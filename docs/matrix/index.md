@@ -16,10 +16,10 @@
 
 | 产品 | 版本 | 分卷入口 |
 | :--- | :--- | :--- |
-| RabbitMQ | 4.1.4 | [/brokers/rabbitmq/](/brokers/rabbitmq/) |
-| Kafka | 4.3.1 | [/brokers/kafka/](/brokers/kafka/) |
-| RocketMQ | 5.5.0 | [/brokers/rocketmq/](/brokers/rocketmq/) |
-| Pulsar | 4.2.4 | [/brokers/pulsar/](/brokers/pulsar/) |
+| <ProductLogo product="rabbitmq" /> RabbitMQ | 4.1.4 | [/brokers/rabbitmq/](/brokers/rabbitmq/) |
+| <ProductLogo product="kafka" /> Kafka | 4.3.1 | [/brokers/kafka/](/brokers/kafka/) |
+| <ProductLogo product="rocketmq" /> RocketMQ | 5.5.0 | [/brokers/rocketmq/](/brokers/rocketmq/) |
+| <ProductLogo product="pulsar" /> Pulsar | 4.2.4 | [/brokers/pulsar/](/brokers/pulsar/) |
 
 镜像均以 tag+digest 双锁定，见仓库 `.env.versions` 与[版本政策](/reference/version-policy)。
 

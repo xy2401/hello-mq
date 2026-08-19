@@ -1,6 +1,6 @@
 # hello-mq
 
-> **全主流消息队列、事件流平台、可靠消息模式与横向选型大典 (Message Queue & Event Streaming Explorer)**
+> **消息队列、事件流平台、可靠消息模式与横向选型知识库 (Message Queue & Event Streaming Explorer)**
 
 `hello-mq` 是一套面向开发者与架构师的消息队列、事件流平台和可靠消息模式知识库：用统一实验场景解释消息系统的核心语义，用可运行的容器化 Demo 验证关键结论，并用横向矩阵说明不同产品的能力边界与选型依据。
 

@@ -2,7 +2,7 @@
 layout: home
 hero:
   name: hello-mq
-  text: 消息队列、事件流与可靠消息模式大典
+  text: 消息队列、事件流与可靠消息模式
   tagline: 用统一实验场景解释消息系统核心语义，用可运行的容器化 Demo 验证关键结论，用横向矩阵说明能力边界与选型依据
   actions:
     - theme: brand
@@ -31,10 +31,10 @@ features:
 
 | 产品 | 状态 | 代表性 | 分卷 | 实验 |
 | :--- | :--- | :--- | :--- | :--- |
-| RabbitMQ | ✅ 已落地 | 传统消息队列与灵活路由 | [8 页](/brokers/rabbitmq/) | 5 个（basic / routing / consumer-crash / retry-dlq / backlog-recovery） |
-| Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/brokers/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
-| Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/brokers/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
-| Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/brokers/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
+| <ProductLogo product="rabbitmq" /> RabbitMQ | ✅ 已落地 | 传统消息队列与灵活路由 | [8 页](/brokers/rabbitmq/) | 5 个（basic / routing / consumer-crash / retry-dlq / backlog-recovery） |
+| <ProductLogo product="kafka" /> Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/brokers/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
+| <ProductLogo product="rocketmq" /> Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/brokers/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
+| <ProductLogo product="pulsar" /> Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/brokers/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
 | Redis Streams | ⏸ 不在范围 | Redis 内的追加日志与消费组 | — | — |
 | NATS + JetStream | ⏸ 不在范围 | 低延迟 Core NATS 与持久化 JetStream | — | — |
 
