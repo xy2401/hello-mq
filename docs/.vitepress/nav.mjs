@@ -2,7 +2,39 @@
 // 链接规则：'/x/y' → docs/x/y.md；'/x/' → docs/x/index.md。
 
 export const nav = [
-  { text: '基础原理', link: '/fundamentals/' },
+  {
+    text: '基础原理',
+    items: [
+      {
+        text: '核心概念',
+        items: [
+          { text: '为什么需要异步消息', link: '/fundamentals/why-messaging' },
+          { text: '消息模型', link: '/fundamentals/models' },
+          { text: '投递语义', link: '/fundamentals/delivery-semantics' },
+          { text: '顺序语义', link: '/fundamentals/ordering' },
+          { text: '存储与回放', link: '/fundamentals/storage-and-replay' },
+          { text: '背压与积压', link: '/fundamentals/backpressure' },
+        ],
+      },
+      {
+        text: '动手实验',
+        items: [
+          { text: '实验总览（17 个）', link: '/labs/' },
+          { text: '消费者崩溃与重投', link: '/labs/consumer-crash' },
+          { text: '毒消息与 DLQ', link: '/labs/poison-message' },
+          { text: '顺序与回放', link: '/labs/ordering' },
+        ],
+      },
+      {
+        text: '参考',
+        items: [
+          { text: '统一术语表', link: '/reference/glossary' },
+          { text: '证据政策', link: '/reference/evidence-policy' },
+          { text: '版本政策', link: '/reference/version-policy' },
+        ],
+      },
+    ],
+  },
   {
     text: '产品分卷',
     items: [
@@ -15,28 +47,9 @@ export const nav = [
   {
     text: '横向矩阵',
     items: [
-      {
-        text: '矩阵',
-        items: [
-          { text: '矩阵总览', link: '/matrix/' },
-          { text: '选型指南', link: '/matrix/selection-guide' },
-        ],
-      },
-      {
-        text: '实验与模式',
-        items: [
-          { text: '实验室', link: '/labs/' },
-          { text: '可靠消息模式', link: '/patterns/' },
-        ],
-      },
-      {
-        text: '参考',
-        items: [
-          { text: '统一术语表', link: '/reference/glossary' },
-          { text: '证据政策', link: '/reference/evidence-policy' },
-          { text: '版本政策', link: '/reference/version-policy' },
-        ],
-      },
+      { text: '矩阵总览', link: '/matrix/' },
+      { text: '选型指南', link: '/matrix/selection-guide' },
+      { text: '可靠消息模式', link: '/patterns/' },
     ],
   },
   { text: '运维实践', link: '/operations/observability' },
