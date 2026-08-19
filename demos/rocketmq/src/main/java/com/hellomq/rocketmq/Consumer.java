@@ -88,8 +88,13 @@ public final class Consumer {
           }
           entry.status("received").emit();
 
-          IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
-          String status = result == IdempotencyStore.Result.PROCESSED ? "business_committed" : "duplicate_skipped";
+          String status;
+          if (args.has("no-business")) {
+            status = "inspected";
+          } else {
+            IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
+            status = result == IdempotencyStore.Result.PROCESSED ? "business_committed" : "duplicate_skipped";
+          }
           log.entry()
               .envelope(envelope)
               .put("destination", view.getTopic())

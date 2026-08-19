@@ -1,0 +1,19 @@
+{
+  "product": "redis-streams",
+  "compose": "compose/redis-streams.compose.yml",
+  "service": "redis",
+  "imageEnvKey": "REDIS_IMAGE",
+  "client": "java-jedis-6.0.0",
+  "labs": [
+    {
+      "name": "basic",
+      "level": "L1",
+      "description": "XADD + Consumer Group + XREADGROUP/XACK + 幂等落库：发 3 条、收 3 条；消费后条目仍保留在 Stream"
+    },
+    {
+      "name": "consumer-crash",
+      "level": "L2",
+      "description": "消费者在 XACK 前崩溃，条目滞留 PEL；XCLAIM 移交新消费者，幂等表拦截重复"
+    }
+  ]
+}

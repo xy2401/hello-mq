@@ -7,6 +7,7 @@ import path from 'node:path'
 const TOPIC = {
   basic: 'orders-basic',
   fifo: 'orders-fifo',
+  delay: 'orders-delay',
   txn: 'orders-txn',
   retry: 'orders-retry',
 }
@@ -31,23 +32,39 @@ function uniqueMessageIds(events) {
 }
 
 async function mqadmin(ctx, args) {
-  return ctx.composeExec('broker', ['sh', 'mqadmin', '-n', 'namesrv:9876', ...args])
+  // mqadmin 5.x 要求子命令在最前，-n 等选项必须放在子命令之后，否则会静默失败（exit 0）。
+  const res = await ctx.composeExec('broker', ['sh', 'mqadmin', ...args, '-n', 'namesrv:9876'])
+  if (/not exist/i.test(res.stdout) || /Exception|ERROR/i.test(`${res.stdout}\n${res.stderr}`)) {
+    throw new Error(`mqadmin ${args[0]} failed: ${res.stdout}\n${res.stderr}`)
+  }
+  return res
 }
 
-async function createTopic(ctx, topic, type) {
-  await mqadmin(ctx, ['updateTopic', '-c', 'DefaultCluster', '-t', topic, '-r', '4', '-w', '4', '-a', `+message.type=${type}`])
+async function waitRoute(ctx, topic) {
   // Broker 每 ~30s 向 NameServer 心跳注册路由；创建后必须等路由可见，否则客户端报 40402。
   const deadline = Date.now() + 60_000
   while (Date.now() < deadline) {
-    const res = await ctx.composeExec('broker', ['sh', 'mqadmin', '-n', 'namesrv:9876', 'topicRoute', '-t', topic], { allowNonZero: true })
+    const res = await ctx.composeExec('broker', ['sh', 'mqadmin', 'topicRoute', '-t', topic, '-n', 'namesrv:9876'], { allowNonZero: true })
     if (res.exitCode === 0 && res.stdout.includes('brokerName')) return
     await new Promise((resolve) => setTimeout(resolve, 2000))
   }
   throw new Error(`topic route for ${topic} not visible in namesrv within 60s`)
 }
 
-async function createGroup(ctx, group, extra = []) {
+async function createTopic(ctx, topic, type) {
+  await mqadmin(ctx, ['updateTopic', '-c', 'DefaultCluster', '-t', topic, '-r', '4', '-w', '4', '-a', `+message.type=${type}`])
+  await waitRoute(ctx, topic)
+}
+
+async function createGroup(ctx, group, extra = [], { dlq = false } = {}) {
   await mqadmin(ctx, ['updateSubGroup', '-c', 'DefaultCluster', '-g', group, ...extra])
+  // broker.conf 关闭自动创建：%RETRY%（必要时 %DLQ%）路由须显式创建并等可见，否则重试/死信/consumerProgress 报 40402。
+  await mqadmin(ctx, ['updateTopic', '-c', 'DefaultCluster', '-t', `%RETRY%${group}`, '-r', '1', '-w', '1'])
+  await waitRoute(ctx, `%RETRY%${group}`)
+  if (dlq) {
+    await mqadmin(ctx, ['updateTopic', '-c', 'DefaultCluster', '-t', `%DLQ%${group}`, '-r', '1', '-w', '1'])
+    await waitRoute(ctx, `%DLQ%${group}`)
+  }
 }
 
 async function consumeDiff(ctx, group) {
@@ -87,7 +104,7 @@ export async function fifoDelay(ctx) {
   const dbFifo = path.join(ctx.workDir, 'idempotency-fifo.db')
   const dbDelay = path.join(ctx.workDir, 'idempotency-delay.db')
   await createTopic(ctx, TOPIC.fifo, 'FIFO')
-  await createTopic(ctx, TOPIC.basic, 'NORMAL')
+  await createTopic(ctx, TOPIC.delay, 'DELAY')
   await createGroup(ctx, GROUP.fifo)
   await createGroup(ctx, GROUP.delay)
 
@@ -107,11 +124,11 @@ export async function fifoDelay(ctx) {
 
   // 定时消息：请求延迟 3s，实际投递延迟必须 ≥ 3s（Broker 定时调度不早于交付时间）。
   await ctx.runJava(
-    ['produce', '--lab=fifo-delay', `--topic=${TOPIC.basic}`, '--files=order-1001.json', '--delay-ms=3000'],
+    ['produce', '--lab=fifo-delay', `--topic=${TOPIC.delay}`, '--files=order-1001.json', '--delay-ms=3000'],
     { label: 'producer:delay' },
   )
   const delayConsumer = await ctx.runJava(
-    ['consume', `--topic=${TOPIC.basic}`, `--group=${GROUP.delay}`, `--db=${dbDelay}`, '--lab=fifo-delay', '--expected=1', '--hard-timeout-ms=30000'],
+    ['consume', `--topic=${TOPIC.delay}`, `--group=${GROUP.delay}`, `--db=${dbDelay}`, '--lab=fifo-delay', '--expected=1', '--hard-timeout-ms=30000'],
     { label: 'consumer:delay' },
   )
   const delayed = delayConsumer.events.filter((e) => e.status === 'received')
@@ -154,13 +171,13 @@ export async function retryDlq(ctx) {
     type: 'CUSTOMIZED',
     customizedRetryPolicy: { next: [1000, 1000] },
   })
-  await createGroup(ctx, GROUP.retry, ['-r', '2', '-p', retryPolicy])
+  await createGroup(ctx, GROUP.retry, ['-r', '2', '-p', retryPolicy], { dlq: true })
   await createGroup(ctx, GROUP.dlqInspect)
 
   const consumerPromise = ctx.runJava(
     [
       'consume', '--mode=push', `--topic=${TOPIC.retry}`, `--group=${GROUP.retry}`, `--db=${db}`,
-      '--lab=retry-dlq', '--expected=1', '--fail-aggregate=order-poison', '--max-attempts=2',
+      '--lab=retry-dlq', '--expected=1', '--fail-aggregate=order-poison', '--max-attempts=3',
     ],
     { label: 'consumer:push' },
   )
@@ -177,13 +194,13 @@ export async function retryDlq(ctx) {
   ctx.assert('businessCommitted', count(consumer.events, (e) => e.status === 'business_committed'), 1)
   ctx.assert('business_rows', Number(inspect.events.find((e) => e.business_rows)?.business_rows ?? -1), 1)
   ctx.assert('poisonAttempts', consumer.events.filter((e) => e.status === 'consume_failed').length >= 2, true)
-  ctx.assert('poisonMaxAttempt', Number(done?.poisonMaxAttempt ?? 0), 2)
+  ctx.assert('poisonMaxAttempt', Number(done?.poisonMaxAttempt ?? 0), 3)
 
   // DLQ 观察：毒消息耗尽重试后进入 %DLQ%<消费组> Topic，用独立消费组收出并核对。
   const dlq = await ctx.runJava(
     [
       'consume', `--topic=%DLQ%${GROUP.retry}`, `--group=${GROUP.dlqInspect}`, `--db=${dbDlq}`,
-      '--lab=retry-dlq', '--expected=1', '--hard-timeout-ms=30000', '--consumer=dlq-inspect',
+      '--lab=retry-dlq', '--expected=1', '--hard-timeout-ms=30000', '--consumer=dlq-inspect', '--no-business',
     ],
     { label: 'consumer:dlq' },
   )

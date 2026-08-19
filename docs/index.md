@@ -35,8 +35,8 @@ features:
 | <ProductLogo product="kafka" /> Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/brokers/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
 | <ProductLogo product="rocketmq" /> Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/brokers/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
 | <ProductLogo product="pulsar" /> Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/brokers/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
-| Redis Streams | ⏸ 不在范围 | Redis 内的追加日志与消费组 | — | — |
-| NATS + JetStream | ⏸ 不在范围 | 低延迟 Core NATS 与持久化 JetStream | — | — |
+| <ProductLogo product="redis" /> Redis Streams | ✅ 已落地 | Redis 内的追加日志与消费组 | [8 页](/brokers/redis-streams/) | 2 个（basic / consumer-crash） |
+| <ProductLogo product="nats" /> NATS + JetStream | ✅ 已落地 | 低延迟 Core NATS 与持久化 JetStream | [8 页](/brokers/nats/) | 2 个（core-pubsub / jetstream-replay） |
 
 ## 从同步调用到事件驱动
 
@@ -122,15 +122,15 @@ features:
 
 ## 横向矩阵速览
 
-四个产品在关键能力上的支持方式不同——「原生」不等于「免费」，「业务实现」也不等于「不可行」。完整矩阵与证据链接见 [横向矩阵](/matrix/)。
+六个产品在关键能力上的支持方式不同——「原生」不等于「免费」，「业务实现」也不等于「不可行」。完整矩阵与证据链接见 [横向矩阵](/matrix/)。
 
-| 能力 | RabbitMQ | Kafka | RocketMQ | Pulsar |
-| :--- | :--- | :--- | :--- | :--- |
-| 端到端 exactly-once | 业务实现 | 仅集群内 EOS | 业务实现 | 业务实现 |
-| 顺序消息 | 单队列内 | 分区内 | MessageGroup 内 | 分区 + 订阅类型相关 |
-| 内置重试与 DLQ | 组合配置（TTL+DLX） | 业务实现 | 原生（Broker 内置） | 组合配置（DeadLetterPolicy） |
-| 延迟消息 | 组合配置（TTL+DLX） | 业务实现 | 原生（定时投递） | 业务实现 |
-| 消息回放 | 不适用（ACK 即删） | 原生（位点/时间戳） | 原生（位点重置） | 原生（reset-cursor） |
+| 能力 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 端到端 exactly-once | 业务实现 | 仅集群内 EOS | 业务实现 | 业务实现 | 业务实现 | 业务实现 |
+| 顺序消息 | 单队列内 | 分区内 | MessageGroup 内 | 分区 + 订阅类型相关 | 单 Stream 内 | Subject/Stream 内 |
+| 内置重试与 DLQ | 组合配置（TTL+DLX） | 业务实现 | 原生（Broker 内置） | 组合配置（DeadLetterPolicy） | 业务实现（PEL+XCLAIM） | 组合配置（AckWait+MaxDeliver） |
+| 延迟消息 | 组合配置（TTL+DLX） | 业务实现 | 原生（定时投递） | 业务实现 | 不适用 | 原生（JetStream 延迟投递） |
+| 消息回放 | 不适用（ACK 即删） | 原生（位点/时间戳） | 原生（位点重置） | 原生（reset-cursor） | 原生（XRANGE/XGROUP SETID） | Core 不适用；JetStream 原生 |
 
 选型没有万能冠军：按输入维度筛选候选，见 [选型指南](/matrix/selection-guide)。
 

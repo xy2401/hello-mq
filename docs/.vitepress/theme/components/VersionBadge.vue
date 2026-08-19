@@ -1,6 +1,6 @@
 <script setup lang="ts">
 // 产品页头的版本徽章（规格 §10.2）：展示本仓库验证过的镜像与客户端版本基线。
-defineProps<{ product: string; broker: string; client?: string; image?: string; logo?: 'rabbitmq' | 'kafka' | 'rocketmq' | 'pulsar' }>()
+defineProps<{ product: string; broker: string; client?: string; image?: string; logo?: 'rabbitmq' | 'kafka' | 'rocketmq' | 'pulsar' | 'redis' | 'nats' }>()
 </script>
 
 <template>

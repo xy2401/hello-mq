@@ -9,7 +9,9 @@
 - RabbitMQ 的灵活路由与队列语义，换不来日志回放；
 - Kafka 的回放与吞吐生态，换不来 Broker 内置重试与延迟消息；
 - RocketMQ 的业务消息全家桶（FIFO/Delay/Transaction/内置重试），不等于流处理与多租户平台；
-- Pulsar 的存算分离与多租户，伴随更高的部署组件与运维复杂度。
+- Pulsar 的存算分离与多租户，伴随更高的部署组件与运维复杂度；
+- Redis Streams 的低门槛与内存级速度，换不来分区扩展、强持久化与多租户；
+- NATS 的低延迟与极简部署，换不来分区并行、内置重试/DLQ 与海量长期保留。
 
 任何「某某全面碾压某某」的结论都忽略了约束。下面是推导方法。
 
@@ -37,8 +39,10 @@
 | :--- | :--- |
 | 低延迟任务队列（单消息 ACK、少量队列、万级 TPS 内） | RabbitMQ 首选：队列语义与 prefetch 天然匹配；Pulsar Shared 可作备选但部署更重 |
 | 海量事件流/日志管道（持久化、多消费组、高吞吐） | Kafka 首选：提交日志 + 回放；Pulsar 备选：需要存算分离或多租户时 |
-| 海量 Topic / 多租户平台（按业务方隔离、配额管理） | Pulsar 首选：Tenant/Namespace 原生多租户；其他三者均无对等层级（见[存储与高可用](/matrix/storage-ha-scaling)） |
+| 海量 Topic / 多租户平台（按业务方隔离、配额管理） | Pulsar 首选：Tenant/Namespace 原生多租户；其他产品无对等层级（NATS Account 是轻量替代，见[存储与高可用](/matrix/storage-ha-scaling)） |
 | 业务消息中台（顺序 + 延迟 + 事务 + 内置重试都要） | RocketMQ 首选：四类消息类型 + Broker 内置重试/DLQ；Kafka 需全部应用层自建 |
+| 轻量任务队列/缓存侧事件（团队已有 Redis、中小规模、容忍内存容量上限） | Redis Streams 首选：XADD/XREADGROUP 直接可用，零新增组件；需要分区扩展或强持久化时回到 RabbitMQ/Kafka（见[轻量场景](#轻量场景redis-streams-与-nats)） |
+| 低延迟事件分发/请求-响应/边缘与 IoT（轻量部署、亚毫秒延迟、允许无持久化层） | NATS Core 首选：原生 Request-Reply 与 Subject 路由；需要保留与回放时叠加 JetStream（见[轻量场景](#轻量场景redis-streams-与-nats)） |
 
 ### 顺序需求
 
@@ -83,6 +87,17 @@
 | Kafka | 中：Broker + KRaft 控制器 | 分区副本 + 磁盘容量规划 |
 | RocketMQ | 中：namesrv + broker（+ proxy） | 5.x 架构组件较多，见[概念映射](/brokers/rocketmq/concepts) |
 | Pulsar | 高：Broker + BookKeeper + 元数据服务 | 存算分离换来弹性，代价是组件与调优面更大 |
+| Redis Streams | 极低～中：单实例/主从 + Sentinel（或 Cluster） | 零新增组件（若已有 Redis）；但 Stream 是单 key，容量受实例内存约束 |
+| NATS | 极低～低：单二进制，JetStream 开箱即用；集群为对等 gossip 路由 | 部署最简；Stream 无分区，吞吐与保留容量按单 Stream 规划 |
+
+## 轻量场景（Redis Streams 与 NATS）
+
+P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」的轻量场景。判断流程：
+
+1. **先确认规模与可靠性等级**：需要分区级并行、多年保留回放、Broker 内置重试/DLQ、事务消息中的任何一项，直接回到 P0 候选；以下只在中小规模、常规 at-least-once 需求下成立。
+2. **Redis Streams 适用**：团队已有 Redis 运维能力；消息量与保留期在实例内存预算内；需要消费组、PEL 可查的失败追踪与有限回放；可接受主从异步复制的故障窗口。典型：缓存侧异步任务、轻量事件通知、会话内审计流水。
+3. **NATS 适用**：需要低延迟 pub/sub 或原生 Request-Reply；部署预算极小（单二进制、无外部元数据依赖）；Core 的 at-most-once 可接受，或叠加 JetStream 获得保留与回放。典型：服务间轻量事件分发、边缘/IoT 汇聚、内部命令通道。
+4. **共同的禁止表述**：不要把 Redis Streams 当作 Kafka 的轻量替代（无分区、无强持久化保证），也不要把 Core NATS 当作可靠队列（无订阅者即丢）——见各自[陷阱与检查表](/brokers/redis-streams/pitfalls)。
 
 ## 第三步：输出格式（每个选型结论必须包含）
 

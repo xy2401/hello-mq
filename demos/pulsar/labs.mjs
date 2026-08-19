@@ -34,13 +34,9 @@ function uniqueMessageIds(events) {
 
 async function topicBacklog(ctx, topic) {
   const res = await ctx.composeExec('pulsar', ['bin/pulsar-admin', 'topics', 'stats', FULL(topic)])
-  let backlog = 0
-  let matched = false
-  for (const m of res.stdout.matchAll(/Msg backlog in number of messages\s*:\s*(\d+)/gi)) {
-    backlog += Number(m[1])
-    matched = true
-  }
-  return matched ? backlog : -999
+  // Pulsar 4.x 的 topics stats 输出 JSON：取顶层 msgBacklog（首个匹配），避免与订阅级重复计数。
+  const m = res.stdout.match(/"msgBacklog"\s*:\s*(\d+)/)
+  return m ? Number(m[1]) : -999
 }
 
 export async function basic(ctx) {
@@ -73,21 +69,23 @@ export async function subscriptions(ctx) {
   // Exclusive：独占订阅，第二个同订阅消费者必须被拒绝（ConsumerBusy）。
   const dbEx = path.join(ctx.workDir, 'idempotency-exclusive.db')
   const exConsumerPromise = ctx.runJava(
-    ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.exclusive}`, '--sub-type=Exclusive', `--db=${dbEx}`, '--lab=subscriptions', '--consumer=ex-1', '--expected=3'],
+    ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.exclusive}`, '--sub-type=Exclusive', `--db=${dbEx}`, '--lab=subscriptions', '--consumer=ex-1', '--idle-exit-ms=12000'],
     { label: 'consumer:exclusive' },
   )
   const exProducer = await ctx.runJava(
     ['produce', '--lab=subscriptions', `--topic=${TOPIC.subs}`, `--files=${ORDER_FILES}`],
     { label: 'producer:exclusive' },
   )
-  const exConsumer = await exConsumerPromise
-  ctx.assert('produced', count(exProducer.events, (e) => e.status === 'produced'), 3)
-  ctx.assert('exclusiveReceived', count(exConsumer.events, (e) => e.status === 'received'), 3)
+  // 碰撞测试必须在 ex-1 仍在线时进行：订阅一旦释放，第二个消费者即可加入。
+  await new Promise((resolve) => setTimeout(resolve, 4000))
   const collision = await ctx.runJava(
     ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.exclusive}`, '--sub-type=Exclusive', `--db=${path.join(ctx.workDir, 'idempotency-collision.db')}`, '--lab=subscriptions', '--consumer=ex-2', '--idle-exit-ms=3000'],
     { label: 'consumer:exclusive-collision', allowNonZero: true },
   )
   ctx.assert('exclusiveSecondConsumerRejected', collision.exitCode !== 0, true)
+  const exConsumer = await exConsumerPromise
+  ctx.assert('produced', count(exProducer.events, (e) => e.status === 'produced'), 3)
+  ctx.assert('exclusiveReceived', count(exConsumer.events, (e) => e.status === 'received'), 3)
 
   // Shared：两个消费者瓜分消息，每条恰被消费一次。
   const dbS1 = path.join(ctx.workDir, 'idempotency-shared-1.db')
@@ -114,15 +112,16 @@ export async function subscriptions(ctx) {
   ctx.assert('sharedS2GotMessages', count(s2.events, (e) => e.status === 'received') > 0, true)
 
   // Failover：主消费者收全量，备份消费者 0 条；主退出后备份提升为主继续收全量。
+  // priorityLevel 决定主备：值大者为主；备份在位期间收不到消息，只能按总时长退出。
   const dbF1 = path.join(ctx.workDir, 'idempotency-failover-primary.db')
   const dbF2 = path.join(ctx.workDir, 'idempotency-failover-replica.db')
   const [primaryPromise, replicaPromise] = [
     ctx.runJava(
-      ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.failover}`, '--sub-type=Failover', `--db=${dbF1}`, '--lab=subscriptions', '--consumer=a-primary', '--expected=3'],
+      ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.failover}`, '--sub-type=Failover', `--db=${dbF1}`, '--lab=subscriptions', '--consumer=a-primary', '--expected=3', '--priority=10'],
       { label: 'consumer:failover-primary' },
     ),
     ctx.runJava(
-      ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.failover}`, '--sub-type=Failover', `--db=${dbF2}`, '--lab=subscriptions', '--consumer=b-replica', '--idle-exit-ms=8000'],
+      ['consume', `--topic=${TOPIC.subs}`, `--subscription=${SUB.failover}`, '--sub-type=Failover', `--db=${dbF2}`, '--lab=subscriptions', '--consumer=b-replica', '--total-exit-ms=20000'],
       { label: 'consumer:failover-replica' },
     ),
   ]
@@ -199,7 +198,7 @@ export async function redeliveryReplay(ctx) {
   // DLQ 检查：Pulsar DLQ topic 命名 <topic>-<subscription>-DLQ，恰好 1 条 poison。
   const dbDlq = path.join(ctx.workDir, 'idempotency-dlq.db')
   const dlq = await ctx.runJava(
-    ['consume', `--topic=${TOPIC.redelivery}-${SUB.redeliver}-DLQ`, `--subscription=${SUB.dlqInspect}`, '--sub-type=Exclusive', `--db=${dbDlq}`, '--lab=redelivery-replay', '--consumer=dlq-1', '--expected=1'],
+    ['consume', `--topic=${TOPIC.redelivery}-${SUB.redeliver}-DLQ`, `--subscription=${SUB.dlqInspect}`, '--sub-type=Exclusive', `--db=${dbDlq}`, '--lab=redelivery-replay', '--consumer=dlq-1', '--expected=1', '--no-business'],
     { label: 'consumer:dlq' },
   )
   ctx.assert('dlqReceived', count(dlq.events, (e) => e.status === 'received'), 1)
@@ -209,7 +208,7 @@ export async function redeliveryReplay(ctx) {
     1,
   )
 
-  // reset-cursor 到 earliest 后全量回放：order-1001 与 poison 再次被消费（新 db，poison 本轮不再失败）。
+  // reset-cursor 到 earliest 后全量回放：order-1001 与 poison 再次被消费（poison 业务载荷非法，只收不写库）。
   await ctx.composeExec('pulsar', [
     'bin/pulsar-admin', 'topics', 'reset-cursor', FULL(TOPIC.redelivery),
     '--subscription', SUB.redeliver,
@@ -217,13 +216,11 @@ export async function redeliveryReplay(ctx) {
   ])
   const dbReplay = path.join(ctx.workDir, 'idempotency-replay.db')
   const replay = await ctx.runJava(
-    ['consume', `--topic=${TOPIC.redelivery}`, `--subscription=${SUB.redeliver}`, '--sub-type=Shared', `--db=${dbReplay}`, '--lab=redelivery-replay', '--consumer=replay-1', '--expected=2'],
+    ['consume', `--topic=${TOPIC.redelivery}`, `--subscription=${SUB.redeliver}`, '--sub-type=Shared', `--db=${dbReplay}`, '--lab=redelivery-replay', '--consumer=replay-1', '--expected=2', '--no-business'],
     { label: 'consumer:replay' },
   )
   ctx.assert('replayReceived', count(replay.events, (e) => e.status === 'received'), 2)
   ctx.assert('replayUniqueMessageIds', uniqueMessageIds(replay.events), 2)
-  const inspectReplay = await ctx.runJava(['inspect-db', '--lab=redelivery-replay', `--db=${dbReplay}`], { label: 'inspect-db:replay' })
-  ctx.assert('replayBusinessRows', Number(inspectReplay.events.find((e) => e.business_rows)?.business_rows ?? -1), 2)
 }
 
 export { redeliveryReplay as 'redelivery-replay' }

@@ -1,0 +1,38 @@
+---
+status: "verified"
+product: "rocketmq"
+lab: "basic"
+brokerVersion: "5.5.0"
+image: "apache/rocketmq:5.5.0@sha256:7e8f6c9dbd9df742ed26ba69c00d4ad69e2f86a56f3ca7782ff8144dd0798132"
+client: "java-rocketmq-client-java-5.2.0"
+capturedAt: "2026-08-19T15:56:48.597Z"
+durationMs: 108427
+exitCode: 0
+assertions:
+  produced: 3
+  received: 3
+  uniqueMessageIds: 3
+  businessCommitted: 3
+  business_rows: 3
+  consumeDiff: 0
+  consumerExitCode: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-basic seq=1 brokerMessageId=010AF02B859F0AA1AE0A976C1800000000 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders-basic seq=2 brokerMessageId=010AF02B859F0AA1AE0A976C1800000001 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders-basic seq=3 brokerMessageId=010AF02B859F0AA1AE0A976C1800000002 durationMs=<ms> status=produced
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic destination=orders-basic produced=3 status=done
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-basic seq=1 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false deliveryDelayMs=1078 status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-basic seq=1 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders-basic seq=3 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false deliveryDelayMs=873 status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders-basic seq=3 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders-basic seq=2 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false deliveryDelayMs=1008 status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders-basic seq=2 consumerGroup=orders-basic-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic destination=orders-basic consumer=consumer-1 received=3 status=done
+[inspect] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=basic business_rows=3 processed_rows=3 status=snapshot
+[assert] produced=3 PASS
+[assert] received=3 PASS
+[assert] uniqueMessageIds=3 PASS
+[assert] businessCommitted=3 PASS
+[assert] business_rows=3 PASS
+[assert] consumeDiff=0 PASS
+[assert] consumerExitCode=0 PASS

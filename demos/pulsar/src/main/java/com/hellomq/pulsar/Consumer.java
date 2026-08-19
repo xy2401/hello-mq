@@ -32,6 +32,9 @@ public final class Consumer {
     long hardTimeoutMs = args.getInt("hard-timeout-ms", 110_000);
     String failAggregate = args.get("fail-aggregate", "");
     int maxRedeliver = args.getInt("max-redeliver", 2);
+    boolean noBusiness = args.has("no-business");
+    int priority = args.getInt("priority", 0);
+    long totalExitMs = args.getInt("total-exit-ms", -1);
 
     LabLogger log = LabLogger.of("consumer", "pulsar", lab, "order-service");
     try (IdempotencyStore store = new IdempotencyStore(dbPath, lab);
@@ -44,6 +47,7 @@ public final class Consumer {
               .subscriptionName(subscription)
               .subscriptionType(SubscriptionType.valueOf(subType))
               .consumerName(name)
+              .priorityLevel(priority)
               // 默认 60s 太慢；redelivery-replay 实验依赖快速重投
               .negativeAckRedeliveryDelay(500, TimeUnit.MILLISECONDS);
       if (!failAggregate.isEmpty()) {
@@ -99,24 +103,37 @@ public final class Consumer {
               continue;
             }
 
-            IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
-            String status = result == IdempotencyStore.Result.PROCESSED ? "business_committed" : "duplicate_skipped";
-            if (result == IdempotencyStore.Result.PROCESSED) {
-              businessCommitted++;
+            if (noBusiness) {
+              log.entry()
+                  .envelope(envelope)
+                  .put("destination", msg.getTopicName())
+                  .put("subscription", subscription)
+                  .put("consumer", name)
+                  .put("attempt", attempt)
+                  .status("inspected")
+                  .emit();
+              consumer.acknowledge(msg);
+            } else {
+              IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
+              String status = result == IdempotencyStore.Result.PROCESSED ? "business_committed" : "duplicate_skipped";
+              if (result == IdempotencyStore.Result.PROCESSED) {
+                businessCommitted++;
+              }
+              log.entry()
+                  .envelope(envelope)
+                  .put("destination", msg.getTopicName())
+                  .put("seq", seq == null ? "" : seq)
+                  .put("subscription", subscription)
+                  .put("consumer", name)
+                  .put("attempt", attempt)
+                  .status(status)
+                  .emit();
+              consumer.acknowledge(msg);
             }
-            log.entry()
-                .envelope(envelope)
-                .put("destination", msg.getTopicName())
-                .put("seq", seq == null ? "" : seq)
-                .put("subscription", subscription)
-                .put("consumer", name)
-                .put("attempt", attempt)
-                .status(status)
-                .emit();
-            consumer.acknowledge(msg);
           }
-          if (expected >= 0 && businessCommitted >= expected) break;
+          if (expected >= 0 && (noBusiness ? received >= expected : businessCommitted >= expected)) break;
           if (idleExitMs > 0 && System.currentTimeMillis() - lastEventAt >= idleExitMs) break;
+          if (totalExitMs > 0 && System.currentTimeMillis() - startedAt >= totalExitMs) break;
           if (System.currentTimeMillis() - startedAt > hardTimeoutMs) break;
         }
         log.entry()

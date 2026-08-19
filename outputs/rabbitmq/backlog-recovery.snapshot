@@ -1,0 +1,51 @@
+---
+status: "verified"
+product: "rabbitmq"
+lab: "backlog-recovery"
+brokerVersion: "4.1.4"
+image: "rabbitmq:4.1.4-management@sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
+client: "java-amqp-client-5.34.0"
+capturedAt: "2026-08-19T15:30:40.141Z"
+durationMs: 17020
+exitCode: 0
+assertions:
+  confirmed: 6
+  backlogDepth: 6
+  received: 6
+  uniqueMessageIds: 6
+  businessCommitted: 3
+  businessDuplicatesSkipped: 3
+  business_rows: 3
+  queueDepthAfter: 0
+  consumerExitCode: 0
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-4 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-5 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-6 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog routingKey=orders.backlog durationMs=<ms> status=confirmed
+[producer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery destination=orders.backlog confirmed=6 status=done
+[assert] confirmed=6 PASS
+[assert] backlogDepth=6 PASS
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-3 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-4 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-4 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders.backlog attempt=1 status=duplicate_skipped
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-5 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-5 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=trace-2 correlationId=order-1002 destination=orders.backlog attempt=1 status=duplicate_skipped
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-6 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=mid-6 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=trace-3 correlationId=order-1003 destination=orders.backlog attempt=1 status=duplicate_skipped
+[consumer] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery queue=orders.backlog received=6 status=done
+[inspect] timestamp=<ts> level=INFO service=order-service product=rabbitmq lab=backlog-recovery business_rows=3 processed_rows=3 status=snapshot
+[assert] received=6 PASS
+[assert] uniqueMessageIds=6 PASS
+[assert] businessCommitted=3 PASS
+[assert] businessDuplicatesSkipped=3 PASS
+[assert] business_rows=3 PASS
+[assert] queueDepthAfter=0 PASS
+[assert] consumerExitCode=0 PASS

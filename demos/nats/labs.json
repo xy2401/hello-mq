@@ -1,0 +1,19 @@
+{
+  "product": "nats",
+  "compose": "compose/nats.compose.yml",
+  "service": "nats",
+  "imageEnvKey": "NATS_IMAGE",
+  "client": "java-jnats-2.21.1",
+  "labs": [
+    {
+      "name": "core-pubsub",
+      "level": "L1",
+      "description": "Core NATS 易失语义：无订阅者时发布的 3 条消息丢失；先订阅再发布则 3 发 3 收"
+    },
+    {
+      "name": "jetstream-replay",
+      "level": "L2",
+      "description": "JetStream 持久消费 + 从头回放：第二个 durable consumer 重收同 3 条，幂等表拦截重复"
+    }
+  ]
+}

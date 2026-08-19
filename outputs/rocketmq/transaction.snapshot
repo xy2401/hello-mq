@@ -1,0 +1,30 @@
+---
+status: "verified"
+product: "rocketmq"
+lab: "transaction"
+brokerVersion: "5.5.0"
+image: "apache/rocketmq:5.5.0@sha256:7e8f6c9dbd9df742ed26ba69c00d4ad69e2f86a56f3ca7782ff8144dd0798132"
+client: "java-rocketmq-client-java-5.2.0"
+capturedAt: "2026-08-19T16:00:43.687Z"
+durationMs: 97288
+exitCode: 0
+assertions:
+  halfSent: 1
+  checkBacksAtLeast2: true
+  received: 1
+  businessCommitted: 1
+  business_rows: 1
+---
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-txn seq=1 brokerMessageId=01220AAE4DAA8EC3520A976D0200000001 durationMs=<ms> status=half_sent
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction destination=orders-txn checkBack=1 status=txn_check
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction destination=orders-txn checkBack=2 status=txn_check
+[producer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction destination=orders-txn checkBacks=2 resolved=true status=txn_resolved
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-txn seq=1 consumerGroup=orders-txn-group consumer=consumer-1 attempt=1 redelivered=false deliveryDelayMs=9426 status=received
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction messageId=mid-1 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=trace-1 correlationId=order-1001 destination=orders-txn seq=1 consumerGroup=orders-txn-group attempt=1 status=business_committed
+[consumer] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction destination=orders-txn consumer=consumer-1 received=1 status=done
+[inspect] timestamp=<ts> level=INFO service=order-service product=rocketmq lab=transaction business_rows=1 processed_rows=1 status=snapshot
+[assert] halfSent=1 PASS
+[assert] checkBacksAtLeast2=true PASS
+[assert] received=1 PASS
+[assert] businessCommitted=1 PASS
+[assert] business_rows=1 PASS

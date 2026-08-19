@@ -1,0 +1,18 @@
+name: hello-mq-nats
+
+services:
+  nats:
+    image: ${NATS_IMAGE:?NATS_IMAGE must be set via --env-file .env.versions}
+    hostname: hello-mq-nats
+    # -js 启用 JetStream；-m 8222 开启 HTTP 监控（仅绑定 127.0.0.1）
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "127.0.0.1:4222:4222"
+      - "127.0.0.1:8222:8222"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8222/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s

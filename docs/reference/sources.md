@@ -11,8 +11,8 @@
 | Apache Kafka | <https://kafka.apache.org/documentation/> | 2026-08-19（内容已落地：[Kafka 分卷](/brokers/kafka/)） |
 | Apache RocketMQ | <https://rocketmq.apache.org/docs/> | 2026-08-19（内容已落地：[RocketMQ 分卷](/brokers/rocketmq/)） |
 | Apache Pulsar | <https://pulsar.apache.org/docs/> | 2026-08-19（内容已落地：[Pulsar 分卷](/brokers/pulsar/)） |
-| Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（登记；不在本仓库当前范围） |
-| NATS | <https://docs.nats.io/> | 2026-08-19（登记；不在本仓库当前范围） |
+| Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（内容已落地：[Redis Streams 分卷](/brokers/redis-streams/)） |
+| NATS | <https://docs.nats.io/> | 2026-08-19（内容已落地：[NATS 分卷](/brokers/nats/)） |
 
 ## 使用约定
 
