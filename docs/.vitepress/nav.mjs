@@ -12,11 +12,34 @@ export const nav = [
       { text: 'Pulsar', link: '/brokers/pulsar/' },
     ],
   },
-  { text: '实验室', link: '/labs/' },
-  { text: '横向矩阵', link: '/matrix/' },
-  { text: '可靠消息模式', link: '/patterns/' },
+  {
+    text: '横向矩阵',
+    items: [
+      {
+        text: '矩阵',
+        items: [
+          { text: '矩阵总览', link: '/matrix/' },
+          { text: '选型指南', link: '/matrix/selection-guide' },
+        ],
+      },
+      {
+        text: '实验与模式',
+        items: [
+          { text: '实验室', link: '/labs/' },
+          { text: '可靠消息模式', link: '/patterns/' },
+        ],
+      },
+      {
+        text: '参考',
+        items: [
+          { text: '统一术语表', link: '/reference/glossary' },
+          { text: '证据政策', link: '/reference/evidence-policy' },
+          { text: '版本政策', link: '/reference/version-policy' },
+        ],
+      },
+    ],
+  },
   { text: '运维实践', link: '/operations/observability' },
-  { text: '参考', link: '/reference/glossary' },
 ]
 
 export const sidebar = {
