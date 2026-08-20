@@ -56,6 +56,12 @@ docker compose -p <project> exec kafka \
 - 生产基线：SASL + TLS（或 mTLS）、按 Topic/Group 的 ACL 最小授权、审计日志；controller quorum 节点独立且奇数。
 - 单容器 KRaft 合一拓扑不等价生产集群；生产应分离 broker/controller 角色并规划磁盘与网络。
 
+## cli-tools：纯自带 CLI 实验
+
+镜像 `/opt/kafka/bin` 自带全部 43 个 `.sh` 工具，纯靠它们即可完成收发闭环：`kafka-cluster.sh` 查集群状态 → `kafka-topics.sh` 建 `orders.cli` → `kafka-console-producer.sh` 管道灌入 3 条 → `kafka-console-consumer.sh` 以 `--from-beginning --max-messages 3` 收满退出。最后 `kafka-consumer-groups.sh` 复查 endOffset=3、lag=0，全程不引入任何客户端 SDK。
+
+<LabOutput product="kafka" lab="cli-tools" />
+
 ## 官方资料
 
 - Monitoring（JMX 指标）：<https://kafka.apache.org/documentation/#monitoring>（checkedAt: 2026-08-19）

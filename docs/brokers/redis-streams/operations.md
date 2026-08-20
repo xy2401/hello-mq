@@ -65,3 +65,9 @@ redis-cli XTRIM orders.events MAXLEN ~ 100000
 | 内存告警 | 无裁剪策略 | MAXLEN/MINID + 评估各组回放需求 |
 | 切换后少量消息「消失」 | 异步复制丢失窗口 | WAIT 要求 + 上游对账补偿 |
 | 慢组读不到老数据 | 激进 XTRIM 删掉了未消费条目 | 裁剪阈值覆盖最慢组的积压上限 |
+
+## cli-tools：纯自带 CLI 实验
+
+镜像的 `redis-cli` 六件套即可完成闭环：`INFO server` 查状态 → `XGROUP CREATE ... 0 MKSTREAM` 顺带建 Stream 与组 → `XADD` 追加 3 条 → 首次消费必须用 `XREADGROUP ... '>'` 拿新条目（`0` 只重放该消费者的 pending），`XACK` 后再用 `0` 重放确认 pending 清空。复查 XLEN=3、PENDING=0，全程不引入任何客户端 SDK。
+
+<LabOutput product="redis-streams" lab="cli-tools" />

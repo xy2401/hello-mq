@@ -55,7 +55,7 @@ flowchart LR
 4. [可靠性](/brokers/rabbitmq/reliability)：两段确认与崩溃窗口。
 5. [存储与高可用](/brokers/rabbitmq/storage-ha)：三种队列与 Quorum 权衡。
 6. [运维与观测](/brokers/rabbitmq/operations)、[陷阱与检查表](/brokers/rabbitmq/pitfalls)。
-7. 动手实验：[basic](/labs/basic-flow)、[consumer-crash](/labs/consumer-crash)、[routing 与 retry-dlq](/labs/poison-message)。
+7. 动手实验：[basic](/labs/basic-flow)、[consumer-crash](/labs/consumer-crash)、[routing 与 retry-dlq](/labs/poison-message)、[cli-tools](/brokers/rabbitmq/operations)。
 
 ## 版本基线
 

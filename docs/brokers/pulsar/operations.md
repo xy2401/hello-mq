@@ -74,6 +74,12 @@ docker compose -p hello-mq-pulsar-basic exec pulsar \
 - 生产基线：TLS 传输加密 + 认证（JWT/OAuth2/客户端证书）、tenant/namespace/topic 层级授权最小化、审计日志；管理 API 与元数据服务端口不暴露公网。
 - standalone 单容器（broker+bookie+元数据合一）不等价生产集群：生产应三层分离部署、元数据服务奇数节点、bookie 磁盘与 quorum 独立规划。
 
+## cli-tools：纯自带 CLI 实验
+
+standalone 镜像 bin 目录共 19 项，`pulsar-admin` 与 `pulsar-client` 即可完成收发闭环：`brokers healthcheck` 体检 → `topics create` 建 non-partitioned Topic → `pulsar-client produce -m` 以逗号分隔一次拆成 3 条消息 → `consume -n 3 --subscription-position Earliest` 收满自动退出。最后 `topics stats` 复查 msgInCounter=3、msgBacklog=0，全程不引入任何客户端 SDK。
+
+<LabOutput product="pulsar" lab="cli-tools" />
+
 ## 官方资料
 
 - Admin API（Topics）：<https://pulsar.apache.org/docs/next/admin-api-topics>（checkedAt: 2026-08-19）

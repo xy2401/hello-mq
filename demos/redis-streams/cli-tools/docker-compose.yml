@@ -1,0 +1,19 @@
+# redis-streams/cli-tools：只起单节点 redis，全部操作由镜像自带 redis-cli 完成，不引入任何客户端 SDK。
+# 独立运行：bash run.sh
+name: hello-mq-redis-streams-cli-tools
+
+services:
+  redis:
+    image: ${REDIS_IMAGE:?REDIS_IMAGE must be set via --env-file ../../.env.versions}
+    hostname: hello-mq-redis
+    # AOF 开启：与 basic 实验保持一致的持久化配置。
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。

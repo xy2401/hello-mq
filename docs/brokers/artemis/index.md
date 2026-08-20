@@ -61,14 +61,16 @@ flowchart LR
 
 ## 动手实验
 
-本仓库提供两个可重复实验（快照尚未采集，验证输出待补）：
+本仓库提供三个可重复实验（前两个快照尚未采集，验证输出待补）：
 
 - `artemis basic`（L1）：JMS send 确认 + 业务提交后才 acknowledge + 幂等落库，验证「ack 即删除、队列深度归零」。
 - `artemis retry-dlq`（L2）：毒消息按 address-setting 重投（共 3 次投递、固定 1s 间隔），耗尽后转入 `orders-dlq`。
+- `artemis cli-tools`：纯镜像自带统一入口 `bin/artemis` 完成收发闭环（producer/consumer/browser 子命令，快照已采集，见 [运维与观测](/brokers/artemis/operations)）。
 
 ```bash
 bash demos/artemis/basic/run.sh
 bash demos/artemis/retry-dlq/run.sh
+bash demos/artemis/cli-tools/run.sh
 ```
 
 ## 版本基线

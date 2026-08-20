@@ -68,3 +68,9 @@ nats sub 'orders.>'                     # 手工订阅（Core 层）
 | 消息反复重投 | AckWait < 业务处理时长 | 调大 AckWait 或拆小批处理 |
 | 副本长时间降级 | R3 节点失联/磁盘慢 | 检查节点健康与磁盘 IO；必要时 stream restore |
 | 客户端频繁重连 | 网络抖动或服务器过载 | 检查 /varz 负载与客户端重连缓冲配置 |
+
+## cli-tools：纯自带 CLI 实验
+
+nats:2.11.5 官方镜像是 distroless：文件系统仅含 `/nats-server` 单一二进制，无 shell、无自带收发 CLI（nats CLI 由 nats-io/natscli 独立发行）。因此本实验只做二进制盘点（`--version/--help`）与宿主机 8222 监控端点体检（`/healthz`、`/varz`、`/connz`、`/subsz`）；CLI 缺口如实记录在 gap.out.txt（容器内 `exec nats` 实测 executable file not found）。收发需外部客户端，Java 版见 core-pubsub 实验。
+
+<LabOutput product="nats" lab="cli-tools" />

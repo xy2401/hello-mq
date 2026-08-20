@@ -1,0 +1,24 @@
+# pulsar/cli-tools：只起 standalone broker，全部操作由镜像自带 bin/pulsar-admin、bin/pulsar-client 完成，不引入任何客户端 SDK。
+# 独立运行：bash run.sh
+name: hello-mq-pulsar-cli-tools
+
+services:
+  pulsar:
+    image: ${PULSAR_IMAGE:?PULSAR_IMAGE must be set via --env-file ../../.env.versions}
+    hostname: hello-mq-pulsar
+    command: ["bin/pulsar", "standalone", "-nss"]
+    environment:
+      # standalone 内嵌 broker + BookKeeper + ZooKeeper；实验机资源有限，显式压低堆与直接内存。
+      PULSAR_MEM: "-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+      PULSAR_GC: "-XX:+UseG1GC"
+    ports:
+      - "127.0.0.1:6650:6650"
+      - "127.0.0.1:8080:8080"
+    # standalone 冷启动要初始化 BookKeeper ledger 与元数据，明显慢于普通 Broker。
+    healthcheck:
+      test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。

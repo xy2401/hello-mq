@@ -57,7 +57,7 @@ flowchart LR
 4. [可靠性](/brokers/kafka/reliability)：acks、幂等生产、offset 提交窗口与事务边界。
 5. [存储与高可用](/brokers/kafka/storage-ha)：日志、retention/compaction、副本与 KRaft。
 6. [运维与观测](/brokers/kafka/operations)、[陷阱与检查表](/brokers/kafka/pitfalls)。
-7. 动手实验：[basic](/brokers/kafka/quick-start)、[consumer-group](/labs/ordering)、[ordering-replay](/labs/ordering)、[idempotence-transaction](/brokers/kafka/reliability)。
+7. 动手实验：[basic](/brokers/kafka/quick-start)、[consumer-group](/labs/ordering)、[ordering-replay](/labs/ordering)、[idempotence-transaction](/brokers/kafka/reliability)、[cli-tools](/brokers/kafka/operations)。
 
 ## 版本基线
 

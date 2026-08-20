@@ -59,10 +59,12 @@ flowchart LR
 
 - `nats core-pubsub`（L1）：无订阅者发布的 3 条消息丢失；先订阅再发布则 3 发 3 收——实证 Core NATS 的易失语义。
 - `nats jetstream-replay`（L2）：Durable Consumer 消费后，第二个 Consumer 从头回放同批消息，幂等表拦截全部重复；ACK 不删除 Stream 消息。
+- `nats cli-tools`：distroless 镜像仅 `/nats-server` 单一二进制，无自带收发 CLI（缺口记录在 gap.out.txt）；状态靠宿主机 8222 监控端点体检（见 [运维与观测](/brokers/nats/operations)）。
 
 ```bash
 bash demos/nats/core-pubsub/run.sh
 bash demos/nats/jetstream-replay/run.sh
+bash demos/nats/cli-tools/run.sh
 ```
 
 ## 版本基线

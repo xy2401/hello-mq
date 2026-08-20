@@ -176,4 +176,5 @@
 - [存储与高可用、扩展与并行](/matrix/storage-ha-scaling)：复制协议、故障容忍、扩容粒度与多租户
 - [安全](/matrix/security)：传输/静态加密、认证、授权与审计
 - [运维观测](/matrix/operations)：管理工具、指标导出、积压观测与 Schema 生态
+- [自带 CLI](/matrix/cli-tools)：镜像自带命令的 bin 规模、状态、建队列与收发闭环对照
 - [选型指南](/matrix/selection-guide)：输入维度 → 候选与权衡，没有万能冠军

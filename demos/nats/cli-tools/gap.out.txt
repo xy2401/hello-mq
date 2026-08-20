@@ -1,0 +1,5 @@
+# 缺口记录：nats 官方镜像不含 nats CLI（由 nats-io/natscli 独立发行），distroless 镜像连 shell 都没有，
+# 纯镜像自带命令无法收发消息；收发需外部客户端（Java 实验见 demos/nats/core-pubsub）。
+[cli-tools] $ compose exec nats nats --version   # 尝试在容器内寻找自带 CLI，预期失败
+OCI runtime exec failed: exec failed: unable to start container process: exec: "nats": executable file not found in $PATH
+exit=127（预期失败：镜像不含 nats 二进制）

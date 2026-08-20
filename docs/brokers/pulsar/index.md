@@ -59,7 +59,7 @@ flowchart LR
 4. [可靠性](/brokers/pulsar/reliability)：ack 时机、negativeAck、重投与 DLQ。
 5. [存储与高可用](/brokers/pulsar/storage-ha)：ledger、quorum、retention/TTL 与 tiered storage。
 6. [运维与观测](/brokers/pulsar/operations)、[陷阱与检查表](/brokers/pulsar/pitfalls)。
-7. 动手实验：[basic](/brokers/pulsar/quick-start)、[subscriptions](/brokers/pulsar/routing)、[redelivery-replay](/brokers/pulsar/reliability)。
+7. 动手实验：[basic](/brokers/pulsar/quick-start)、[subscriptions](/brokers/pulsar/routing)、[redelivery-replay](/brokers/pulsar/reliability)、[cli-tools](/brokers/pulsar/operations)。
 
 ## 版本基线
 

@@ -62,7 +62,7 @@ flowchart LR
 4. [可靠性](/brokers/rocketmq/reliability)：发送确认、ack 时机、幂等消费与事务消息边界。
 5. [存储与高可用](/brokers/rocketmq/storage-ha)：CommitLog/ConsumeQueue/IndexFile、复制与 Proxy。
 6. [运维与观测](/brokers/rocketmq/operations)、[陷阱与检查表](/brokers/rocketmq/pitfalls)。
-7. 动手实验：[basic](/brokers/rocketmq/quick-start)、[fifo-delay](/brokers/rocketmq/routing)、[transaction](/brokers/rocketmq/reliability)、[retry-dlq](/brokers/rocketmq/reliability)。
+7. 动手实验：[basic](/brokers/rocketmq/quick-start)、[fifo-delay](/brokers/rocketmq/routing)、[transaction](/brokers/rocketmq/reliability)、[retry-dlq](/brokers/rocketmq/reliability)、[cli-tools](/brokers/rocketmq/operations)。
 
 ## 版本基线
 

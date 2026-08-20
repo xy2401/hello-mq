@@ -1,0 +1,14 @@
+[cli-tools] $ sh -c redis-cli XREADGROUP GROUP orders-cli-group consumer-1 COUNT 3 STREAMS orders:cli '>'   && redis-cli XACK orders:cli orders-cli-group $(redis-cli XRANGE orders:cli - + | awk '(NR-1)%3==0')   && redis-cli XREADGROUP GROUP orders-cli-group consumer-1 COUNT 3 STREAMS orders:cli 0
+orders:cli
+1787242436731-0
+payload
+order-cli-1
+1787242436736-0
+payload
+order-cli-2
+1787242436739-0
+payload
+order-cli-3
+3
+orders:cli
+

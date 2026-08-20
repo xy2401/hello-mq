@@ -56,6 +56,7 @@ const matrixSidebar = [
       { text: '存储、高可用与扩展', link: '/matrix/storage-ha-scaling' },
       { text: '安全', link: '/matrix/security' },
       { text: '运维与观测', link: '/matrix/operations' },
+      { text: '自带 CLI', link: '/matrix/cli-tools' },
       { text: '选型指南', link: '/matrix/selection-guide' },
     ],
   },

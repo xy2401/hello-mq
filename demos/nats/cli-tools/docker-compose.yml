@@ -1,0 +1,18 @@
+# nats/cli-tools：只起单节点 server，盘点镜像自带能力。
+# 重要事实：nats:2.11.5 官方镜像是 distroless，文件系统仅含 /nats-server 单一二进制（无 shell、
+# 无任何收发 CLI——nats CLI 由 nats-io/natscli 独立发行），因此本实验只能覆盖版本/帮助与
+# 宿主机监控端点，收发缺口如实记录在 gap.out.txt（收发需外部客户端，Java 实验见 core-pubsub）。
+# distroless 无法内置 healthcheck（没有 wget/sh），就绪探测由 run.sh 在宿主机 curl /healthz。
+# 独立运行：bash run.sh
+name: hello-mq-nats-cli-tools
+
+services:
+  nats:
+    image: ${NATS_IMAGE:?NATS_IMAGE must be set via --env-file ../../.env.versions}
+    hostname: hello-mq-nats
+    # -js 启用 JetStream；-m 8222 开启 HTTP 监控（仅绑定 127.0.0.1）
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "127.0.0.1:4222:4222"
+      - "127.0.0.1:8222:8222"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。

@@ -1,0 +1,26 @@
+# artemis/cli-tools：只起单节点 broker，全部操作由镜像自带 /opt/activemq-artemis/bin/artemis 完成，
+# 不引入任何客户端 SDK（2.44 镜像自带 producer/consumer/browser 子命令，可纯 CLI 完成收发闭环）。
+# 独立运行：bash run.sh
+name: hello-mq-artemis-cli-tools
+
+services:
+  artemis:
+    image: ${ARTEMIS_IMAGE:?ARTEMIS_IMAGE must be set via --env-file ../../.env.versions}
+    hostname: hello-mq-artemis
+    environment:
+      ARTEMIS_USER: admin
+      ARTEMIS_PASSWORD: hello-mq-artemis
+    volumes:
+      # 镜像仅在文件缺失时生成 etc 配置：挂载自定义 broker.xml 承载实验所需的地址设置。
+      - ../broker.xml:/var/lib/artemis/etc/broker.xml
+    ports:
+      # 61616：CORE/AMQP/OPENWIRE/STOMP/MQTT 全协议 acceptor；8161：Web 控制台（hawtio）
+      - "127.0.0.1:61616:61616"
+      - "127.0.0.1:8161:8161"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/61616'"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s

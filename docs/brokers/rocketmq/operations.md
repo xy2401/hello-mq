@@ -65,6 +65,12 @@ RocketMQ Dashboard（原 rocketmq-console）提供 Web 界面：Topic/消费组�
 - 生产基线：ACL 鉴权 + TLS、按 Topic/Group 最小授权、管理端口与数据端口分离并限制网络访问。
 - 单容器三服务拓扑不等价生产集群；生产应分离角色、规划副本与磁盘（见 [存储与高可用](/brokers/rocketmq/storage-ha)）。
 
+## cli-tools：纯自带 CLI 实验
+
+bin 目录共 36 项，`mqadmin` 即可完成收发闭环：`clusterList` 查状态 → `updateTopic` 建 `ordersCli` → `sendMessage` 连发 3 条全部 SEND_OK → `consumeMessage` 一次排空收齐 3 条 → `topicStatus` 复查 maxOffset 合计=3，全程不引入任何客户端 SDK。两处实测坑：Broker 约 30s 心跳注册路由，建 Topic 后需等路由可见再收发；`consumeMessage -c` 并非可靠条数上限，用默认 messageCount=128 即可。
+
+<LabOutput product="rocketmq" lab="cli-tools" />
+
 ## 官方资料
 
 - RocketMQ 文档首页：<https://rocketmq.apache.org/docs/>（checkedAt: 2026-08-19）
