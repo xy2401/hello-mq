@@ -24,7 +24,7 @@
 | <ProductLogo product="nats" /> NATS | 2.11.5 | [/brokers/nats/](/brokers/nats/) |
 | ActiveMQ Artemis | 2.44.0 | [/brokers/artemis/](/brokers/artemis/) |
 
-镜像均以 tag+digest 双锁定，见仓库 `.env.versions` 与[版本政策](/reference/version-policy)。
+镜像均以 tag+digest 双锁定，见 `demos/.env.versions` 与[版本政策](/reference/version-policy)。
 
 ## 五级标记图例
 

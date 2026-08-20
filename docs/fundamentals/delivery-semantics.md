@@ -65,7 +65,7 @@ sequenceDiagram
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq consumer-crash   # 重投发生且被幂等拦截：duplicatesObserved=1, duplicatesApplied=0
+bash demos/rabbitmq/consumer-crash/run.sh   # 重投发生且被幂等拦截：duplicatesObserved=1, duplicatesApplied=0
 ```
 
 ## 官方资料与版本说明

@@ -39,7 +39,7 @@ flowchart LR
 
 ## 事件语义：eventType 而不是队列名
 
-规格 §5.3 要求 `eventType` 使用小写点分命名（如 `order.created`），**不得用队列名/topic 名代替业务语义**。发布订阅的拓扑会变（拆分队列、改名、迁移产品），事件类型是契约的一部分（见 [Schema 演进](/patterns/schema-evolution)）。
+本项目约定要求 `eventType` 使用小写点分命名（如 `order.created`），**不得用队列名/topic 名代替业务语义**。发布订阅的拓扑会变（拆分队列、改名、迁移产品），事件类型是契约的一部分（见 [Schema 演进](/patterns/schema-evolution)）。
 
 ## 保证成立的条件 / 不保证什么
 

@@ -4,35 +4,31 @@
 
 ## 统一命令接口
 
+每个实验一个自包含目录（`demos/<product>/<lab>/`），内含完整流程的 `docker-compose.yml` 与薄封装的 `run.sh`：
+
 ```bash
-npm run lab -- list                    # 列出产品与实验
-npm run lab -- rabbitmq basic          # 运行单个实验
-npm run lab -- rabbitmq all            # 运行某产品全部 L1/L2 实验
-npm run lab -- rabbitmq clean          # 清理该产品实验资源
-npm run collect-outputs -- rabbitmq    # 重跑并刷新快照
-npm run verify-outputs                 # 核验已提交快照
+bash demos/rabbitmq/basic/run.sh                # 运行单个实验（jar 缺失时自动 mvn 构建）
+for s in demos/*/*/run.sh; do bash "$s"; done   # 全量运行
+npm run check:compose                           # 仅静态校验全部 compose 文件
 ```
 
 ## 实验生命周期
 
-`scripts/lab.js` 对每个实验执行固定十步（对应规格 §9.4）：
+编排完全由 compose 语义表达（`depends_on` 的 `service_healthy` / `service_completed_successfully`），run.sh 只做编排之外的事：
 
-1. 校验产品名、实验名与危险等级（L1/L2 默认执行；L3/L4 不在本期）。
-2. 解析 `.env.versions`，拒绝未锁定的 `latest` 镜像；核心镜像必须含 digest。
-3. 使用项目名隔离的 Compose Project 启动目标产品。
-4. 轮询产品健康检查（2 秒间隔、90 秒超时），不使用固定长 sleep。
-5. 创建 Queue/Exchange/Binding 等实验资源（由 Java 客户端声明）。
-6. 先启动 Consumer，再运行 Producer；特殊实验按声明编排。
-7. 收集客户端输出与 Broker 诊断信息（`rabbitmqctl list_queues` 等）。
-8. 运行断言，逐条输出 `[assert] <name>=<value> PASS|FAIL`。
-9. 正常路径自动停止容器；失败时保留诊断信息并输出 compose logs 提示。
-10. 清理范围仅限当前 Compose Project 与带项目前缀的资源。
+1. `ensure_jar`：jar 缺失时才触发 Maven 构建。
+2. `docker compose up`：启动 broker → setup → producer → consumer → inspect-db 完整链路；健康等待由 `service_healthy` 条件承担，无固定长 sleep。
+3. `collect_logs`：每个服务的日志分别落到实验目录 `<服务>.out.txt`（如 `producer.out.txt`、`consumer.out.txt`）。
+4. `assert_eq` 断言：grep/jq 解析日志与 broker 状态，逐条写入 `assert.out.txt`（`PASS|FAIL`）。
+5. trap EXIT 清理：`docker compose down --volumes --remove-orphans`，仅限本实验 Compose Project。
+
+多阶段实验（如崩溃注入、积压度量）在 run.sh 中分阶段 `compose up -d <子集>`，其余仍由 compose 依赖链保证顺序。
 
 ## 命名与隔离
 
 - Compose Project：`hello-mq-<product>-<lab>`（如 `hello-mq-rabbitmq-basic`）。
-- 队列/交换机名由实验声明，清理只按项目名前缀匹配。
-- Producer/Consumer 以宿主机 JVM 进程运行（非容器）：崩溃注入可确定性触发（观察退出码 137），stdout 直接捕获，无需维护客户端镜像。Broker 始终在容器内。
+- 队列/交换机/Topic 名由实验声明，清理只按项目名前缀匹配。
+- Producer/Consumer 也是 compose 服务：digest 锁定的 JRE 镜像挂载本机构建的 jar 与共享 fixture 运行；崩溃注入由容器内 `halt(137)` 触发，退出码经 `docker inspect` 读取。
 
 ## 断言规则
 
@@ -45,18 +41,18 @@ npm run verify-outputs                 # 核验已提交快照
 - Broker 状态：队列深度、DLQ 消息数（经 `rabbitmqctl --formatter=json`）。
 - **失败注入确实发生**：崩溃实验必须观察到退出码 137，而不是“测试路径没有触发”。
 
-## 快照规则
+## 输出日志规则
 
-- 快照写入 `outputs/<product>/<lab>.snapshot`，frontmatter 含产品、实验、Broker 版本、镜像（tag@digest）、客户端版本、耗时、退出码与断言值。
-- 正文经 `scripts/normalize-output.js` 归一化：时间戳、动态 Message ID、容器名后缀、主机路径、ANSI 颜色全部替换为稳定占位符；归一化必须幂等。
-- 普通运行与已提交快照比较断言数值；`collect` 显式刷新快照（升级镜像或客户端时必须走此流程并审查语义变化）。
+- 每次实验结束后，各角色日志写入实验目录 `demos/<product>/<lab>/<服务>.out.txt`，断言结果写入同目录 `assert.out.txt`。
+- 日志不做归一化处理，每次重跑会覆盖旧文件；重跑即刷新。
+- 文档站 `<LabOutput>` 组件按角色分块渲染对应日志文件，页面只保留复现命令与日志现场。
 
 ## 安全规则
 
 - 所有 Broker 端口仅绑定 `127.0.0.1`。
 - 停止/删除只作用于本 Compose Project 已解析出的资源；不使用 Docker 全局 prune。
 - 删除数据卷需显式确认（本期实验随 `down --volumes` 清理命名卷，无全局影响）。
-- `.env.example` 中的演示凭据仅限本地。
+- `demos/.env.example` 中的演示凭据仅限本地。
 
 ## 实验分级（本期范围）
 

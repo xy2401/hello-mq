@@ -9,7 +9,6 @@ import { fileURLToPath } from 'node:url'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import YAML from 'yaml'
-import { parseSnapshot } from './normalize-output.js'
 import { nav, sidebar } from '../docs/.vitepress/nav.mjs'
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
@@ -94,43 +93,8 @@ function checkNavLinks() {
   ok('nav/sidebar links exist')
 }
 
-function checkSnapshotsAndReferences() {
-  const requiredFields = ['status', 'product', 'lab', 'brokerVersion', 'image', 'client', 'capturedAt', 'durationMs', 'exitCode', 'assertions']
-  const snapshotFiles = walk(path.join(ROOT, 'outputs'), (f) => f.endsWith('.snapshot'))
-  for (const file of snapshotFiles) {
-    const snap = parseSnapshot(fs.readFileSync(file, 'utf8'))
-    for (const field of requiredFields) {
-      if (snap.frontmatter[field] === undefined) {
-        fail(`snapshot ${path.relative(ROOT, file)} missing field: ${field}`)
-      }
-    }
-    if (snap.frontmatter.status !== 'verified') {
-      fail(`snapshot ${path.relative(ROOT, file)} status=${snap.frontmatter.status}`)
-    }
-  }
-  const refs = []
-  for (const file of walk(DOCS, (f) => f.endsWith('.md'))) {
-    const text = fs.readFileSync(file, 'utf8')
-    for (const m of text.matchAll(/<LabOutput\s+product="([^"]+)"\s+lab="([^"]+)"/g)) {
-      refs.push({ file, product: m[1], lab: m[2] })
-    }
-  }
-  for (const ref of refs) {
-    const snapshot = path.join(ROOT, 'outputs', ref.product, `${ref.lab}.snapshot`)
-    if (!fs.existsSync(snapshot)) {
-      fail(`LabOutput reference without snapshot in ${path.relative(ROOT, ref.file)}: ${ref.product}/${ref.lab}`)
-      continue
-    }
-    const snap = parseSnapshot(fs.readFileSync(snapshot, 'utf8'))
-    if (snap.frontmatter.status !== 'verified') {
-      fail(`LabOutput reference points to unverified snapshot: ${ref.product}/${ref.lab}`)
-    }
-  }
-  ok(`snapshots (${snapshotFiles.length}) and LabOutput references (${refs.length}) consistent`)
-}
-
 function checkEnvVersions() {
-  const file = path.join(ROOT, '.env.versions')
+  const file = path.join(ROOT, 'demos', '.env.versions')
   const text = fs.readFileSync(file, 'utf8')
   for (const line of text.split('\n')) {
     const trimmed = line.trim()
@@ -150,7 +114,8 @@ function checkEnvVersions() {
 }
 
 function checkComposeFiles() {
-  const files = walk(path.join(ROOT, 'compose'), (f) => f.endsWith('.yml'))
+  const files = walk(path.join(ROOT, 'demos'), (f) => f.endsWith('docker-compose.yml'))
+  if (files.length === 0) fail('no demos/*/*/docker-compose.yml found')
   for (const file of files) {
     let doc
     try {
@@ -246,7 +211,6 @@ function checkScriptSyntax() {
 
 checkMarkdownLinks()
 checkNavLinks()
-checkSnapshotsAndReferences()
 checkEnvVersions()
 checkComposeFiles()
 checkContractsAndFixtures()

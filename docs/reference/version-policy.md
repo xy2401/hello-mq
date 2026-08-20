@@ -11,7 +11,7 @@
 RABBITMQ_IMAGE=rabbitmq:4.1.4-management@sha256:<digest>
 ```
 
-- Compose 文件只写 `image: ${RABBITMQ_IMAGE}`，由 lab.js 以 `--env-file .env.versions` 注入。
+- Compose 文件只写 `image: ${RABBITMQ_IMAGE}`，由各实验的 `docker compose --env-file ../.env.versions` 注入。
 - Digest 必须用 `docker buildx imagetools inspect <image>:<tag>` 实测获取并记录，禁止凭记忆抄写。
 - Java 客户端版本锁在 `demos/pom.xml` 的 `dependencyManagement` 中。
 
@@ -28,13 +28,14 @@ RABBITMQ_IMAGE=rabbitmq:4.1.4-management@sha256:<digest>
 | Pulsar 镜像 | `apachepulsar/pulsar:4.2.4` | 2026-08-19 | standalone 单容器（broker + BookKeeper + 元数据内嵌）（checkedAt: 2026-08-19，来源见[官方资料基线](/reference/sources)） |
 | pulsar-client | 4.2.2 | 2026-08-19 | 与 Broker 同 4.2.x 版本线 |
 | JDK（字节码目标） | 21 | 2026-08-19 | `maven.compiler.release=21`；本地可用更高版本 JDK 编译 |
+| Temurin JRE 镜像 | `eclipse-temurin:21-jre` | 2026-08-20 | compose 内 producer/consumer 等 Java 服务的基础镜像（checkedAt: 2026-08-20） |
 
 ## 升级流程
 
 1. 在独立分支更新 `.env.versions` 的 tag 与 digest（实测获取）。
 2. 更新客户端依赖版本并确认编译与单测通过。
-3. `npm run collect-outputs -- <product>` 刷新全部快照。
-4. 审查快照语义变化（断言数值、日志形态），再修改文档结论。
+3. 重跑相关实验（`bash demos/<产品>/<实验>/run.sh`）刷新输出日志。
+4. 审查日志语义变化（断言数值、日志形态），再修改文档结论。
 5. “当前最新”“默认值”等时效性表述必须更新核对日期。
 
 ## 审查节奏

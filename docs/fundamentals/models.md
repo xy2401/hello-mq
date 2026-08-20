@@ -122,8 +122,8 @@ flowchart LR
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq basic     # 竞争消费：发 3 收 3，单队列单消费者
-npm run lab -- rabbitmq routing   # 三个独立订阅（队列）对同一交换机的不同路由
+bash demos/rabbitmq/basic/run.sh     # 竞争消费：发 3 收 3，单队列单消费者
+bash demos/rabbitmq/routing/run.sh   # 三个独立订阅（队列）对同一交换机的不同路由
 ```
 
 ## 官方资料与版本说明

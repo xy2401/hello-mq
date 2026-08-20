@@ -11,7 +11,7 @@
 ## 一步运行实验
 
 ```bash
-npm run lab -- kafka basic
+bash demos/kafka/basic/run.sh
 ```
 
 该命令完成整个闭环：启动 Broker → 创建 3 分区 Topic `orders.basic` → Producer 以 `acks=all` + 幂等生产发送 3 条 `OrderCreated.v1` → 消费组手动提交 offset + 幂等落库 → 断言（含消费组 lag=0）→ 自动停止并删除容器。
@@ -19,34 +19,31 @@ npm run lab -- kafka basic
 ## 手工走一遍（理解每一步）
 
 ```bash
-# 1. 启动 Broker（compose 文件锁定镜像 digest；项目名与 lab.js 一致）
-docker compose -p hello-mq-kafka-basic --env-file .env.versions \
-  -f compose/kafka.compose.yml up -d
+cd demos/kafka/basic
 
-# 2. 等待健康（轮询，而不是固定 sleep；参数为位置参数）
-node scripts/wait-for-service.js hello-mq-kafka-basic \
-  compose/kafka.compose.yml kafka 90 .env.versions
+# 1. 构建 jar（run.sh 的 ensure_jar 同样只在缺失时执行）
+mvn -B -q -f ../../pom.xml -pl kafka -am package -DskipTests
 
-# 3. 建 Topic、发送、消费（lab 内部同样调用这些目标）
-mvn -B -q -f demos/pom.xml -pl kafka -am package -DskipTests
-java -jar demos/kafka/target/hello-mq-kafka.jar setup --lab=basic
-java -jar demos/kafka/target/hello-mq-kafka.jar produce --lab=basic \
-  --topic=orders.basic --files=order-1001.json,order-1002.json,order-1003.json
-java -jar demos/kafka/target/hello-mq-kafka.jar consume --lab=basic \
-  --topic=orders.basic --group=orders-basic-group --db=.lab/kafka/basic/idempotency.db --expected=3
+# 2. 启动完整流程：kafka → setup → producer → consumer → inspect-db
+#    （镜像 digest 经 env file 注入；顺序与健康等待由 depends_on 条件保证）
+docker compose --env-file ../../.env.versions up -d
+docker compose wait inspect-db
 
-# 4. 观察消费组位点（lag 应为 0）
-docker compose -p hello-mq-kafka-basic exec kafka \
-  /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 \
-  --describe --group orders-basic-group
+# 3. 观察消费组位点（lag 应为 0）
+docker compose exec kafka /opt/kafka/bin/kafka-consumer-groups.sh \
+  --bootstrap-server localhost:9092 --describe --group orders-basic-group
 
-# 5. 清理（仅删除本项目的 Compose Project）
-npm run lab -- kafka clean
+# 4. 查看各角色日志与退出码
+docker compose logs producer
+docker compose ps --all
+
+# 5. 清理（仅删除本实验的 Compose Project）
+docker compose --env-file ../../.env.versions down --volumes
 ```
 
 ## 预期输出
 
-每条日志都是统一的 key=value 结构（规格 §12.2）。生产端关键一行（分区与 offset 可见）：
+每条日志都是统一的 key=value 结构。生产端关键一行（分区与 offset 可见）：
 
 ```text
 [producer] ... destination=orders.basic partitionOrQueue=0 offset=0 seq=1 status=produced
@@ -71,7 +68,7 @@ npm run lab -- kafka clean
 
 ## 清理与安全
 
-- `npm run lab -- kafka clean` 只 down 本仓库的 Kafka Compose Project（`hello-mq-kafka-*`）。
+- run.sh 退出时的 `docker compose down --volumes` 只 down 本实验的 Kafka Compose Project（`hello-mq-kafka-basic`）。
 - 实验 Broker 不挂持久卷：每次实验都是干净状态，日志目录在容器内临时路径；生产存储见 [存储与高可用](/brokers/kafka/storage-ha)。
 
 ## 下一步

@@ -1,0 +1,108 @@
+# nats/jetstream-replay 完整实验流程：建流 → 生产 3（JetStream ACK 确认）→
+# 首个 durable 消费 3 → replay durable 从头重收同 3 条（幂等表拦截重复）→ 幂等库检查 + 流快照。
+# 两个 durable 共用同一幂等库（这正是拦截重复的前提）；ACK 不删除消息，快照仍为 3。
+# 独立运行：bash run.sh
+name: hello-mq-nats-jetstream-replay
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  environment:
+    HELLOMQ_NATS_URL: nats://nats:4222
+  volumes:
+    - ../target/hello-mq-nats.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  nats:
+    image: ${NATS_IMAGE:?NATS_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-nats
+    # -js 启用 JetStream；-m 8222 开启 HTTP 监控（仅绑定 127.0.0.1）
+    command: ["-js", "-m", "8222"]
+    ports:
+      - "127.0.0.1:4222:4222"
+      - "127.0.0.1:8222:8222"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8222/healthz"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  setup:
+    <<: *java-base
+    depends_on:
+      nats:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=jetstream-replay"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=jetstream-replay
+      - --mode=jetstream
+      - --subject=orders.events
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+
+  consumer-first:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=jetstream-replay
+      - --mode=jetstream
+      - --subject=orders.events
+      - --durable=orders-first
+      - --db=/data/idempotency.db
+      - --expected=3
+
+  consumer-replay:
+    <<: *java-base
+    depends_on:
+      consumer-first:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=jetstream-replay
+      - --mode=jetstream
+      - --subject=orders.events
+      - --durable=orders-replay
+      - --db=/data/idempotency.db
+      - --expected=3
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-nats.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer-replay:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=jetstream-replay", "--db=/data/idempotency.db"]
+
+  stats:
+    <<: *java-base
+    depends_on:
+      inspect-db:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "stats", "--lab=jetstream-replay", "--stream=ORDERS"]
+
+volumes:
+  idempotency:

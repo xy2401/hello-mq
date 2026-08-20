@@ -60,7 +60,7 @@ flowchart LR
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq retry-dlq   # 观察失败消息旁路对正常消息进度的影响
+bash demos/rabbitmq/retry-dlq/run.sh   # 观察失败消息旁路对正常消息进度的影响
 ```
 
 ## 官方资料与版本说明

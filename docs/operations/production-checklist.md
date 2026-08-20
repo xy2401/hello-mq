@@ -9,13 +9,13 @@
 - [ ] 升级 Broker 遵循流程：独立分支更新镜像/客户端/快照 → 核对语义变化 → 再改文档结论。
 - [ ] 「当前最新」「默认值」类表述带核对日期；每季度（或安全事件时）核对官方支持版本。
 
-依据：[版本政策](/reference/version-policy)（规格 §11.1）。
+依据：[版本政策](/reference/version-policy)。
 
 ## 2. 生产侧：可靠投递
 
 - [ ] 生产者启用并正确处理发布确认（publisher confirm / acks=all + 幂等 producer / sendResult 回调）。
 - [ ] 「业务写入 + 消息发送」不是裸双写：采用 [Outbox](/patterns/outbox)（或 RocketMQ 事务消息等等价机制），明确失败窗口归属。
-- [ ] 消息使用统一信封（规格 §5.2）：messageId 全局唯一、eventType 语义化、schemaVersion、traceId/correlationId 全链路。
+- [ ] 消息使用统一信封：messageId 全局唯一、eventType 语义化、schemaVersion、traceId/correlationId 全链路。
 - [ ] 契约变更走兼容演进流程（见 [Schema 演进](/patterns/schema-evolution)）；破坏性变更有升版本与共存过渡方案。
 
 ## 3. 消费侧：幂等、重试与 DLQ
@@ -45,7 +45,7 @@
 
 - [ ] 存储按「峰值速率 × 保留期 × 副本数 × 冗余系数」计算过（见[容量规划](/operations/capacity-planning)）。
 - [ ] 吞吐余量 ≥ 2 倍峰值；消费者扩容路径已验证（并行度单位：分区/队列/消费者关系）。
-- [ ] 压测报告按规格 §12.4 记录完整环境，标题为「该固定环境下的实验结果」；未把单机 Demo 数字当生产基准。
+- [ ] 压测报告记录完整环境，标题为「该固定环境下的实验结果」；未把单机 Demo 数字当生产基准。
 - [ ] 磁盘/内存水位双阈值告警（预警线 + 强制动作线）。
 
 ## 7. 备份与演练

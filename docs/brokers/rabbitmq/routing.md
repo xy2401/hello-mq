@@ -47,7 +47,7 @@ flowchart LR
 动手验证：
 
 ```bash
-npm run lab -- rabbitmq routing
+bash demos/rabbitmq/routing/run.sh
 ```
 
 三队列分别收到 2/3/1 条，与上表一致。
@@ -68,7 +68,7 @@ channel.basicQos(1); // 未 ACK 消息最多 1 条，处理完再发下一条
 
 - 「Producer 直接发给队列」——除了 Default Exchange，消息都先经过 Exchange；发到未声明的 Exchange 会关 Channel。
 - 「绑定可以解绑就没事了」——绑定关系本身是持久状态，声明幂等但删除绑定会改变流量走向，变更需当发布对待。
-- 「routing key 就是 eventType」——本仓库约定 routing key 表达路由意图（可与 eventType 一致），队列名不应承载业务语义（规格 §5.3）。
+- 「routing key 就是 eventType」——本仓库约定 routing key 表达路由意图（可与 eventType 一致），队列名不应承载业务语义。
 - 「Fanout + 单队列 = 广播」——广播要求每个订阅者有自己的队列；共用一个队列就退化成竞争消费。
 
 ## 官方资料

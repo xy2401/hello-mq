@@ -43,7 +43,7 @@ flowchart LR
 | 维度 | Kafka（本仓库覆盖范围） |
 | :--- | :--- |
 | 投递语义 | at-least-once（acks=all + 手动提交）；Kafka 内部（produce→consume 同一集群）可 exactly-once（EOS 事务），跨外部系统不成立 |
-| 顺序 | 分区内有序；跨分区无全局顺序保证（规格禁止表述之一） |
+| 顺序 | 分区内有序；跨分区无全局顺序保证（常见错误认知） |
 | 重试/DLQ | 无 Broker 内置消费重试；Retry Topic/DLQ 是应用或框架层模式 |
 | 延迟消息 | 无内置延迟消息，需应用层实现 |
 | 高可用 | 分区多副本 + ISR；KRaft 管理元数据，无需 ZooKeeper |

@@ -1,0 +1,310 @@
+# pulsar/subscriptions 完整实验流程：同一 topic 四类订阅对比。
+# Exclusive 独占（第二个消费者被拒绝）/ Shared 分摊 / Failover 主备切换 / Key_Shared 同 key 粘连。
+# Pulsar 新订阅默认从 Latest 开始：每轮均由 run.sh 先起消费者并等待 status=subscribed 再生产；
+# Exclusive 碰撞窗口（ex-1 在线时起 ex-2）与 Failover 提升时机（主备均退出后再起 promoted）
+# 无法用 depends_on 表达，由 run.sh 分阶段编排。
+# 独立运行：bash run.sh
+name: hello-mq-pulsar-subscriptions
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-pulsar.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  pulsar:
+    image: ${PULSAR_IMAGE:?PULSAR_IMAGE must be set via --env-file ../.env.versions}
+    command: ["bin/pulsar", "standalone", "-nss"]
+    environment:
+      # standalone 内嵌 broker + BookKeeper + ZooKeeper；实验机资源有限，显式压低堆与直接内存。
+      PULSAR_MEM: "-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+      PULSAR_GC: "-XX:+UseG1GC"
+    ports:
+      - "127.0.0.1:6650:6650"
+      - "127.0.0.1:8080:8080"
+    # standalone 冷启动要初始化 BookKeeper ledger 与元数据，明显慢于普通 Broker。
+    healthcheck:
+      test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+
+  setup:
+    <<: *java-base
+    depends_on:
+      pulsar:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=subscriptions"]
+
+  # --- 阶段 1：Exclusive 独占。ex-1 独享订阅；ex-2 在 ex-1 在线时加入必须被拒绝（ConsumerBusy）。
+  consumer-ex-1:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-exclusive-sub
+      - --sub-type=Exclusive
+      - --db=/data/idempotency-exclusive.db
+      - --lab=subscriptions
+      - --consumer=ex-1
+      - --idle-exit-ms=12000
+      - --service-url=pulsar://pulsar:6650
+
+  producer-exclusive:
+    <<: *java-base
+    depends_on:
+      consumer-ex-1:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=subscriptions
+      - --topic=orders-subscriptions
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+  # 碰撞测试预期非零退出；启动时机（ex-1 仍在线）由 run.sh 控制。
+  consumer-ex-2:
+    <<: *java-base
+    depends_on:
+      producer-exclusive:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-exclusive-sub
+      - --sub-type=Exclusive
+      - --db=/data/idempotency-collision.db
+      - --lab=subscriptions
+      - --consumer=ex-2
+      - --idle-exit-ms=3000
+      - --service-url=pulsar://pulsar:6650
+
+  # --- 阶段 2：Shared 分摊。两个消费者瓜分 3 条消息，每条恰被消费一次。
+  # ex-2 预期非零退出（无对应的成功完成条件可用），阶段顺序改以 ex-1 成功退出为门。
+  consumer-shared-1:
+    <<: *java-base
+    depends_on:
+      consumer-ex-1:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-shared-sub
+      - --sub-type=Shared
+      - --db=/data/idempotency-shared-1.db
+      - --lab=subscriptions
+      - --consumer=s-1
+      - --idle-exit-ms=8000
+      - --service-url=pulsar://pulsar:6650
+
+  consumer-shared-2:
+    <<: *java-base
+    depends_on:
+      consumer-ex-1:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-shared-sub
+      - --sub-type=Shared
+      - --db=/data/idempotency-shared-2.db
+      - --lab=subscriptions
+      - --consumer=s-2
+      - --idle-exit-ms=8000
+      - --service-url=pulsar://pulsar:6650
+
+  producer-shared:
+    <<: *java-base
+    depends_on:
+      consumer-shared-1:
+        condition: service_started
+      consumer-shared-2:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=subscriptions
+      - --topic=orders-subscriptions
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+  # --- 阶段 3：Failover 主备。priority 大者为主收全量，备份 0 条；主备均退出后备份提升收新一轮全量。
+  consumer-failover-primary:
+    <<: *java-base
+    depends_on:
+      producer-shared:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-failover-sub
+      - --sub-type=Failover
+      - --db=/data/idempotency-failover-primary.db
+      - --lab=subscriptions
+      - --consumer=a-primary
+      - --expected=3
+      - --priority=10
+      - --service-url=pulsar://pulsar:6650
+
+  consumer-failover-replica:
+    <<: *java-base
+    depends_on:
+      producer-shared:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-failover-sub
+      - --sub-type=Failover
+      - --db=/data/idempotency-failover-replica.db
+      - --lab=subscriptions
+      - --consumer=b-replica
+      - --total-exit-ms=20000
+      - --service-url=pulsar://pulsar:6650
+
+  producer-failover:
+    <<: *java-base
+    depends_on:
+      consumer-failover-primary:
+        condition: service_started
+      consumer-failover-replica:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=subscriptions
+      - --topic=orders-subscriptions
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+  # 提升时机（主备均已退出）由 run.sh 控制，避免双备份同时在位谁是主不确定。
+  consumer-failover-promoted:
+    <<: *java-base
+    depends_on:
+      producer-failover:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-failover-sub
+      - --sub-type=Failover
+      - --db=/data/idempotency-failover-promoted.db
+      - --lab=subscriptions
+      - --consumer=b-replica
+      - --expected=3
+      - --service-url=pulsar://pulsar:6650
+
+  producer-failover-promoted:
+    <<: *java-base
+    depends_on:
+      consumer-failover-promoted:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=subscriptions
+      - --topic=orders-subscriptions
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+  # --- 阶段 4：Key_Shared 粘连。两个 key 各 3 条（repeat=3 生成新 messageId），同 key 固定同一消费者。
+  consumer-keyshared-1:
+    <<: *java-base
+    depends_on:
+      producer-failover-promoted:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-keyshared-sub
+      - --sub-type=Key_Shared
+      - --db=/data/idempotency-keyshared-1.db
+      - --lab=subscriptions
+      - --consumer=k-1
+      - --idle-exit-ms=8000
+      - --service-url=pulsar://pulsar:6650
+
+  consumer-keyshared-2:
+    <<: *java-base
+    depends_on:
+      producer-failover-promoted:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-subscriptions
+      - --subscription=orders-keyshared-sub
+      - --sub-type=Key_Shared
+      - --db=/data/idempotency-keyshared-2.db
+      - --lab=subscriptions
+      - --consumer=k-2
+      - --idle-exit-ms=8000
+      - --service-url=pulsar://pulsar:6650
+
+  producer-keyshared:
+    <<: *java-base
+    depends_on:
+      consumer-keyshared-1:
+        condition: service_started
+      consumer-keyshared-2:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=subscriptions
+      - --topic=orders-subscriptions
+      - --files=order-1001.json,order-1002.json
+      - --repeat=3
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+volumes:
+  idempotency:

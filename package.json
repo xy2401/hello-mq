@@ -6,18 +6,15 @@
   "description": "消息队列、事件流平台与可靠消息模式知识库（Message Queue & Event Streaming Explorer）",
   "license": "MIT",
   "engines": {
-    "node": ">=20"
+    "node": "^20.19.0 || >=22.16.0"
   },
   "scripts": {
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
     "check:project": "node scripts/check-project.js",
-    "check:compose": "docker compose config --quiet",
-    "check": "npm run check:project && npm run docs:build",
-    "lab": "node scripts/lab.js",
-    "collect-outputs": "node scripts/lab.js collect",
-    "verify-outputs": "node scripts/lab.js verify"
+    "check:compose": "for f in demos/*/*/docker-compose.yml; do docker compose -p probe -f $f --env-file demos/.env.versions config --quiet || exit 1; done",
+    "check": "npm run check:project && npm run docs:build"
   },
   "devDependencies": {
     "ajv": "^8.17.1",

@@ -51,7 +51,7 @@ sequenceDiagram
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq basic   # 观察生产确认、投递、消费确认三个独立状态
+bash demos/rabbitmq/basic/run.sh   # 观察生产确认、投递、消费确认三个独立状态
 ```
 
 ## 官方资料与版本说明

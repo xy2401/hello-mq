@@ -4,7 +4,7 @@
 
 ## 生产端：发送确认与幂等键
 
-发送有同步、异步、单向三种模式；同步发送拿到回执才算「被接受」。但必须澄清一条禁止表述（规格 §7.3）：
+发送有同步、异步、单向三种模式；同步发送拿到回执才算「被接受」。但必须澄清一条禁止表述：
 
 - **「发送 SDK 最终失败 = Broker 一定没收到」是错的。** 网络超时、客户端重试之下，消息可能已经写入 Broker。发送端的「失败」只代表你没拿到确认，不代表 Broker 状态。
 - 因此**消费端必须用幂等键（messageId/业务唯一键）去重**，不能依赖「发送失败就没这消息」的假设。
@@ -48,7 +48,7 @@
 动手验证（首查返回 UNKNOWN、第二次 COMMIT，最终恰好消费 1 次）：
 
 ```bash
-npm run lab -- rocketmq transaction
+bash demos/rocketmq/transaction/run.sh
 ```
 
 <LabOutput product="rocketmq" lab="transaction" />
@@ -62,7 +62,7 @@ npm run lab -- rocketmq transaction
 
 ## 消费失败：重试、最大次数与 DLQ
 
-RocketMQ 内置消费重试（规格 §7.3 强制点），状态过程：
+RocketMQ 内置消费重试，状态过程：
 
 ```mermaid
 flowchart LR
@@ -80,7 +80,7 @@ flowchart LR
 动手验证（毒消息 `aggregateId=order-poison` 返回 FAILURE，重试 2 次后进 DLQ）：
 
 ```bash
-npm run lab -- rocketmq retry-dlq
+bash demos/rocketmq/retry-dlq/run.sh
 ```
 
 <LabOutput product="rocketmq" lab="retry-dlq" />

@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+# hello-mq 实验公共函数：各实验 run.sh 先设置 LAB_DIR 再 source 本文件。
+# 职责：jar 构建检查、compose 启动与等待、按角色收集日志、断言、退出时清理。
+set -euo pipefail
+
+: "${LAB_DIR:?run-common.sh 需在 source 前设置 LAB_DIR 为实验目录}"
+
+PRODUCT="$(basename "$(dirname "$LAB_DIR")")"
+LAB="$(basename "$LAB_DIR")"
+PROJECT="hello-mq-${PRODUCT}-${LAB}"
+ENV_FILE="$LAB_DIR/../.env.versions"
+ASSERT_FILE="$LAB_DIR/assert.out.txt"
+FAILURES=0
+: > "$ASSERT_FILE"
+
+compose() {
+  docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE" "$@"
+}
+
+cleanup() {
+  compose down --volumes --remove-orphans >/dev/null 2>&1 || true
+}
+trap cleanup EXIT
+
+# ensure_jar <product>：jar 缺失时才触发 Maven 构建（只建该模块及其依赖）。
+ensure_jar() {
+  local product="$1"
+  local jar="$LAB_DIR/../target/hello-mq-${product}.jar"
+  if [ ! -f "$jar" ]; then
+    (cd "$LAB_DIR/../.." && mvn -B -f demos/pom.xml package -DskipTests -pl "$product" -am)
+  fi
+}
+
+# compose_up <终止服务...>：后台启动完整流程，等待终止服务退出（编排顺序由 compose depends_on 保证）。
+compose_up() {
+  compose up -d
+  compose wait "$@" || true
+}
+
+# collect_logs <服务...>：每个服务日志落到实验目录 <服务>.out.txt。
+collect_logs() {
+  local service
+  for service in "$@"; do
+    compose logs --no-color --no-log-prefix "$service" > "$LAB_DIR/${service}.out.txt"
+  done
+}
+
+# count_log <服务> <模式>：日志中匹配行数（无匹配为 0）。
+count_log() {
+  { grep -c -- "$2" "$LAB_DIR/$1.out.txt" || true; }
+}
+
+# unique_log <服务> <模式>：匹配内容去重后的个数。
+unique_log() {
+  { grep -o -- "$2" "$LAB_DIR/$1.out.txt" || true; } | sort -u | wc -l | tr -d ' '
+}
+
+# unique_logs <模式> <服务...>：跨多个服务日志的匹配内容去重个数。
+unique_logs() {
+  local pattern="$1" service
+  shift
+  {
+    for service in "$@"; do
+      grep -o -- "$pattern" "$LAB_DIR/${service}.out.txt" || true
+    done
+  } | sort -u | wc -l | tr -d ' '
+}
+
+# field_log <服务> <键>：取日志中最后一次 key=value 的值。
+field_log() {
+  { grep -o -- "$2=[^ ]*" "$LAB_DIR/$1.out.txt" || true; } | tail -n 1 | cut -d= -f2
+}
+
+service_exit_code() {
+  local cid
+  cid="$(compose ps -q "$1")"
+  docker inspect -f '{{.State.ExitCode}}' "$cid"
+}
+
+assert_eq() {
+  local name="$1" actual="$2" expected="$3"
+  if [ "$actual" = "$expected" ]; then
+    printf 'PASS %s: %s\n' "$name" "$actual" >> "$ASSERT_FILE"
+  else
+    printf 'FAIL %s: expected=%s actual=%s\n' "$name" "$expected" "$actual" >> "$ASSERT_FILE"
+    FAILURES=$((FAILURES + 1))
+  fi
+}
+
+assert_exit() {
+  assert_eq "$1.exitCode" "$(service_exit_code "$1")" "$2"
+}
+
+finish() {
+  if [ "$FAILURES" -gt 0 ]; then
+    printf 'RESULT: %d assertion(s) FAILED\n' "$FAILURES" >> "$ASSERT_FILE"
+    cat "$ASSERT_FILE" >&2
+    exit 1
+  fi
+  printf 'RESULT: all assertions passed\n' >> "$ASSERT_FILE"
+  cat "$ASSERT_FILE"
+}
+
+# rabbitmq_queue_depth <队列>：经 rabbitmqctl 查队列深度（队列不存在按 0）。
+rabbitmq_queue_depth() {
+  compose exec -T rabbitmq rabbitmqctl list_queues name messages --formatter=json \
+    | jq --arg q "$1" '[ .[] | select(.name == $q) | .messages ] | first // 0'
+}
+
+# kafka_group_lag <消费组>：汇总该组所有分区 lag。
+kafka_group_lag() {
+  compose exec -T kafka /opt/kafka/bin/kafka-consumer-groups.sh \
+    --bootstrap-server localhost:9092 --describe --group "$1" \
+    | awk 'NR > 1 && NF >= 6 && $6 != "-" { lag += $6 } END { print lag + 0 }'
+}

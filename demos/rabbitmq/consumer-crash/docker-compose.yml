@@ -1,0 +1,98 @@
+# rabbitmq/consumer-crash 完整实验流程：消费者业务提交后、ACK 前崩溃（exit 137），
+# 未 ACK 消息重投递，被幂等表拦截。run1 预期失败，run2 依赖 service_completed（不限退出码）。
+# 独立运行：bash run.sh
+name: hello-mq-rabbitmq-consumer-crash
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  rabbitmq:
+    image: ${RABBITMQ_IMAGE:?RABBITMQ_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  setup:
+    <<: *java-base
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=consumer-crash", "--uri=amqp://guest:guest@rabbitmq:5672"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=consumer-crash
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.crash
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+
+  consumer-run1:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=consumer-crash
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.crash
+      - --db=/data/idempotency.db
+      - --expected=3
+      - --crash-before-ack-at=1
+
+  # run2 与 run1 的顺序由 run.sh 分阶段编排（compose 条件无法表达"依赖失败退出"）。
+  consumer-run2:
+    <<: *java-base
+    depends_on:
+      consumer-run1:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=consumer-crash
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.crash
+      - --db=/data/idempotency.db
+      - --expected=3
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer-run2:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=consumer-crash", "--db=/data/idempotency.db"]
+
+volumes:
+  idempotency:

@@ -32,12 +32,12 @@ flowchart LR
 动手验证（FIFO 保序 + 定时消息延迟 ≥3s）：
 
 ```bash
-npm run lab -- rocketmq fifo-delay
+bash demos/rocketmq/fifo-delay/run.sh
 ```
 
 <LabOutput product="rocketmq" lab="fifo-delay" />
 
-## Tag 过滤 vs Key 索引（规格 §7.3 强制点）
+## Tag 过滤 vs Key 索引
 
 | 属性 | 用途 | 生效位置 | 典型用法 |
 | :--- | :--- | :--- | :--- |

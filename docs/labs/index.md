@@ -4,7 +4,7 @@
 
 ## 为什么需要实验
 
-消息系统的很多结论都附带前置条件：哪个 Broker 版本、什么配置、客户端如何确认。没有可复现实验支撑的结论，在本仓库只会以「规范层面」标注，不会写成事实断言。因此每个关键行为尽量落到一次可以重复执行的 Docker 实验，并把归一化后的快照提交进仓库（见 [证据政策](/reference/evidence-policy)）。
+消息系统的很多结论都附带前置条件：哪个 Broker 版本、什么配置、客户端如何确认。没有可复现实验支撑的结论，在本仓库只会以「规范层面」标注，不会写成事实断言。因此每个关键行为尽量落到一次可以重复执行的 Docker 实验，并把输出日志提交进仓库（见 [证据政策](/reference/evidence-policy)）。
 
 ## 实验清单
 
@@ -26,44 +26,49 @@
 | Pulsar | [basic](/brokers/pulsar/quick-start) | L1 | Exclusive 订阅 + 业务提交后才 ack + 幂等落库的最小闭环 |
 | Pulsar | [subscriptions](/brokers/pulsar/routing) | L2 | 四类订阅对比：Exclusive/Shared/Failover/Key_Shared |
 | Pulsar | [redelivery-replay](/brokers/pulsar/reliability) | L2 | negativeAck 重投达上限进 DLQ，reset-cursor 全量回放 |
+| NATS | [core-pubsub](/brokers/nats/quick-start) | L1 | Core NATS 即发即忘与订阅收发的最小闭环 |
+| NATS | [jetstream-replay](/brokers/nats/quick-start) | L2 | JetStream 持久化流与按序重放 |
+| Redis Streams | [basic](/brokers/redis-streams/quick-start) | L1 | XADD/XREADGROUP + 消费确认 + 幂等落库的最小闭环 |
+| Redis Streams | [consumer-crash](/brokers/redis-streams/reliability) | L2 | 消费者崩溃后 PEL 滞留，XCLAIM 接管不丢不重 |
+| ActiveMQ Artemis | [basic](/brokers/artemis/quick-start) | L1 | JMS 收发 + 手动确认 + 幂等落库的最小闭环 |
+| ActiveMQ Artemis | [retry-dlq](/brokers/artemis/reliability) | L2 | 服务端重投达上限进入死信地址 |
 
 等级定义见 [实验约定](/guide/lab-conventions)：L0 静态检查、L1 单节点冒烟、L2 可靠性行为、L3/L4 默认不执行。
 
 ## 运行方式
 
-```bash
-# 列出全部实验
-npm run lab -- list
+每个实验一个自包含目录，`run.sh` 即完整流程：
 
+```bash
 # 运行单个实验
-npm run lab -- rabbitmq basic
+bash demos/rabbitmq/basic/run.sh
 
 # 运行某产品全部实验
-npm run lab -- rabbitmq all
+for s in demos/rabbitmq/*/run.sh; do bash "$s"; done
 
-# 清理某产品的实验资源（仅删除本项目 Compose Project）
-npm run lab -- rabbitmq clean
+# 运行全部实验
+for s in demos/*/*/run.sh; do bash "$s"; done
 ```
 
 每个实验都会：
 
-1. 用项目名隔离的 Compose Project（`hello-mq-<product>-<lab>`）启动 Broker；
-2. 轮询健康检查而不是固定等待；
-3. 先声明拓扑，再运行 Producer 与 Consumer（宿主机 JVM 进程，见 [实验约定](/guide/lab-conventions)）；
-4. 执行业务级断言（数量、幂等表行数、队列深度、重投次数），输出 PASS/FAIL；
-5. 正常路径自动停止并删除容器，把归一化快照写入 `outputs/<product>/<lab>.snapshot`。
+1. 用项目名隔离的 Compose Project（`hello-mq-<product>-<lab>`）启动完整流程（broker → setup → producer → consumer → inspect-db）；
+2. 由 `depends_on` 的 `service_healthy` / `service_completed_successfully` 条件等待与排序，而不是固定等待；
+3. producer/consumer 以容器服务运行（digest 锁定的 JRE 镜像挂载本机构建的 jar，见 [实验约定](/guide/lab-conventions)）；
+4. 执行业务级断言（数量、幂等表行数、队列深度、重投次数），PASS/FAIL 写入 `assert.out.txt`；
+5. 结束后自动停止并删除容器，把各角色日志写入实验目录 `<服务>.out.txt`。
 
 ::: warning 断言原则
 「进程退出码为 0」不等于实验成功。每个实验至少断言：生产确认数、消费数量与唯一 messageId 数、业务落库行数、产品侧状态（队列深度、x-death 计数等），以及失败注入确实发生（如崩溃退出码 137）。
 :::
 
-## 快照如何阅读
+## 输出日志如何阅读
 
-快照由 frontmatter（状态、镜像、断言）与归一化日志两部分组成。归一化会把时间戳替换为 `<ts>`、messageId 替换为 `mid-N`、容器标识替换为 `<cid>`，保证不同机器上运行得到可比较的结果。每个实验页内嵌一份当时提交的快照：
+每个实验结束后，各角色输出日志（`producer.out.txt`、`consumer.out.txt` 等）与断言结果（`assert.out.txt`）写入实验目录 `demos/<product>/<lab>/`。每个实验页内嵌一份当前提交的日志：
 
 <LabOutput product="rabbitmq" lab="basic" />
 
-想在自己的机器上得到同样的结果，运行页面底部的复现命令即可。
+想在自己的机器上复现，运行日志面板里的复现命令即可。
 
 ## 下一步
 

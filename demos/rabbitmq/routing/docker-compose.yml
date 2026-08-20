@@ -1,0 +1,102 @@
+# rabbitmq/routing 完整实验流程：Topic Exchange 三种绑定模式的路由分发对比。
+# 独立运行：bash run.sh
+name: hello-mq-rabbitmq-routing
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  rabbitmq:
+    image: ${RABBITMQ_IMAGE:?RABBITMQ_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  setup:
+    <<: *java-base
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=routing", "--uri=amqp://guest:guest@rabbitmq:5672"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=routing
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --exchange=orders.events
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --routing-keys=order.created,order.created,order.created.eu
+      - --fixtures=/app/fixtures
+
+  consumer-created:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=routing
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.routing.created
+      - --db=/data/idempotency-created.db
+      - --expected=2
+
+  consumer-all:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=routing
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.routing.all
+      - --db=/data/idempotency-all.db
+      - --expected=3
+
+  consumer-eu:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=routing
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.routing.eu
+      - --db=/data/idempotency-eu.db
+      - --expected=1
+
+volumes:
+  idempotency:

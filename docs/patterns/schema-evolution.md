@@ -4,12 +4,12 @@
 
 ## 契约在哪里
 
-规格 §5.3 要求 Schema 文件放入 `demos/shared/contracts/` 并至少提供 JSON Schema：
+本项目约定要求 Schema 文件放入 `demos/shared/contracts/` 并至少提供 JSON Schema：
 
 - `order-created.v1.schema.json`：统一信封 + `order.created` 事件的首版契约；
 - `order-created.v2.schema.json`：v1 的兼容演进版（本页示例，随本文档同一批创建）。
 
-信封层（`messageId`/`eventType`/`schemaVersion` 等）由规格 §5.2 固定；演进主要发生在 `payload` 内。所有信封都要求 `additionalProperties: true`——**未知字段必须能通过校验并被消费者忽略**，这是兼容演进的机制基础。
+信封层（`messageId`/`eventType`/`schemaVersion` 等）由统一信封约定固定；演进主要发生在 `payload` 内。所有信封都要求 `additionalProperties: true`——**未知字段必须能通过校验并被消费者忽略**，这是兼容演进的机制基础。
 
 ## 兼容演进示例：v1 → v2
 
@@ -77,7 +77,7 @@ v2 消息示例（仅 payload 变化）：
 
 - **消费者**：反序列化必须忽略未知字段（不得用严格白名单校验整条消息）；不得对新可选字段做非空断言；升级顺序永远是「先升级消费者容忍度，再升级生产者输出」。
 - **生产者**：不复用旧字段名承载新语义；新增字段给明确默认语义（缺失 = 什么含义）；发契约变更前通知所有已知订阅（[发布订阅](/patterns/pub-sub)的扇出意味着下游数量容易失控）。
-- **CI 把关**：契约文件的变更应触发 fixture 回归校验（规格 §13.2 要求 JSON Schema 与 fixture 校验通过），保证「v2 必须向后兼容 v1 fixture」这类约束不靠自觉。
+- **CI 把关**：契约文件的变更应触发 fixture 回归校验（本项目约定要求 JSON Schema 与 fixture 校验通过），保证「v2 必须向后兼容 v1 fixture」这类约束不靠自觉。
 
 ## 常见误区
 

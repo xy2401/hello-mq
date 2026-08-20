@@ -1,0 +1,100 @@
+# redis-streams/consumer-crash 完整实验流程：消费者业务提交后、XACK 前崩溃（exit 137），
+# 条目滞留 PEL；run2 XCLAIM 接管重投递，被幂等表拦截。run1 预期失败，run2 顺序由 run.sh 分阶段编排。
+# 独立运行：bash run.sh
+name: hello-mq-redis-streams-consumer-crash
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-redis-streams.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+  environment:
+    HELLOMQ_REDIS_HOST: redis
+
+services:
+  redis:
+    image: ${REDIS_IMAGE:?REDIS_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-redis
+    # AOF 开启：Streams 条目落盘语义实验；消息安全仍取决于持久化策略（见分卷 reliability 页）
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "127.0.0.1:6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 5s
+
+  setup:
+    <<: *java-base
+    depends_on:
+      redis:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=consumer-crash"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=consumer-crash
+      - --stream=orders.crash
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+
+  consumer-run1:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --stream=orders.crash
+      - --group=orders-crash-group
+      - --consumer=consumer-1
+      - --db=/data/idempotency.db
+      - --lab=consumer-crash
+      - --expected=3
+      - --crash-before-ack-at=1
+
+  # run2 与 run1 的顺序由 run.sh 分阶段编排（compose 条件无法表达"依赖失败退出"）。
+  consumer-run2:
+    <<: *java-base
+    depends_on:
+      consumer-run1:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --stream=orders.crash
+      - --group=orders-crash-group
+      - --consumer=consumer-2
+      - --db=/data/idempotency.db
+      - --lab=consumer-crash
+      - --expected=3
+      - --claim
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-redis-streams.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer-run2:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=consumer-crash", "--db=/data/idempotency.db"]
+
+volumes:
+  idempotency:

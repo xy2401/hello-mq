@@ -33,7 +33,7 @@ sequenceDiagram
 
 1. **同事务**：outbox 表必须与业务表在同一个数据库、同一个事务里。跨库的「outbox」不成立。
 2. **转发器**：两种常见实现——轮询（`SELECT … WHERE sent=false` + 更新标记）或 CDC（订阅数据库变更日志，如 binlog/WAL）。转发器崩溃不丢消息：未标记的记录下一轮还会被捡起来。
-3. **messageId 提前生成**：消息在写 outbox 时就带全局唯一 `messageId`（规格 §5.2），转发器重复发布时内容不变，接收端可用它去重。
+3. **messageId 提前生成**：消息在写 outbox 时就带全局唯一 `messageId`，转发器重复发布时内容不变，接收端可用它去重。
 
 ## Outbox 只解决发送侧
 

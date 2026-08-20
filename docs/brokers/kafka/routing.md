@@ -27,12 +27,12 @@ flowchart LR
 
 - 同一 key 的消息总是进同一分区 → 分区内顺序写入（ordering-replay 实验断言 `samePartitionOnProduce=1`）。
 - 无 key 的消息按 Sticky 策略分布到各分区（批量内轮转、批间尽量粘连），目的是摊匀负载并保留批内局部性。
-- **跨分区没有全局顺序**——「Kafka 保证全局顺序」是禁止表述（规格 §7.2）。
+- **跨分区没有全局顺序**——「Kafka 保证全局顺序」是禁止表述。
 
 动手验证：
 
 ```bash
-npm run lab -- kafka ordering-replay
+bash demos/kafka/ordering-replay/run.sh
 ```
 
 <LabOutput product="kafka" lab="ordering-replay" />
@@ -44,7 +44,7 @@ npm run lab -- kafka ordering-replay
 - 本仓库 consumer-group 实验用两个消费者瓜分 3 分区，随后独立组 b 再次全量接收：
 
 ```bash
-npm run lab -- kafka consumer-group
+bash demos/kafka/consumer-group/run.sh
 ```
 
 <LabOutput product="kafka" lab="consumer-group" />

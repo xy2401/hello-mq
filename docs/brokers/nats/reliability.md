@@ -1,6 +1,6 @@
 # NATS 可靠性
 
-> 本页结论：Core NATS 是 at-most-once 的易失通道——发布无确认、订阅者离线即丢；JetStream 是 at-least-once 的持久通道——PublishAck + Explicit ACK + AckWait 重投。两层的可靠性结论不可互相迁移（规格 §7.6）。
+> 本页结论：Core NATS 是 at-most-once 的易失通道——发布无确认、订阅者离线即丢；JetStream 是 at-least-once 的持久通道——PublishAck + Explicit ACK + AckWait 重投。两层的可靠性结论不可互相迁移。
 
 ## Core NATS：易失语义的精确边界
 
@@ -37,7 +37,7 @@ sequenceDiagram
   Note over JS: 超过 AckWait 未 ACK ⇒ 重投
 ```
 
-三层语义（规格 §4.2）：
+三层语义：
 
 | 层级 | 保证 | 边界 |
 | :--- | :--- | :--- |
@@ -68,7 +68,7 @@ Explicit ACK + 并行处理时，先投递的消息若后 ACK（或触发重投�
 ## 不保证什么
 
 - Core 层：无持久化、无确认、无重投——任何「Core NATS 保证送达」的表述都是错误的。
-- JetStream：不提供跨外部系统的 exactly-once；业务副作用一致性仍需幂等消费（规格 §5.4）。
+- JetStream：不提供跨外部系统的 exactly-once；业务副作用一致性仍需幂等消费。
 - WorkQueue 保留策略下消息被消费即删除——该策略下「回放」不再成立，跨策略结论不可泛化。
 
 ## 官方资料

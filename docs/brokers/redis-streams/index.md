@@ -62,14 +62,14 @@ flowchart LR
 
 ## 动手实验
 
-本仓库提供两个可重复实验（`npm run lab -- list` 查看详情）：
+本仓库提供两个可重复实验：
 
 - `redis-streams basic`（L1）：XADD + Consumer Group + XACK + 幂等落库，验证「消费后条目仍在 Stream」。
 - `redis-streams consumer-crash`（L2）：XACK 前崩溃 → 条目滞留 PEL → XCLAIM 接管 → 幂等表拦截重复。
 
 ```bash
-npm run lab -- redis-streams basic
-npm run lab -- redis-streams consumer-crash
+bash demos/redis-streams/basic/run.sh
+bash demos/redis-streams/consumer-crash/run.sh
 ```
 
 ## 版本基线

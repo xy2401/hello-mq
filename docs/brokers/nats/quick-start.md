@@ -10,7 +10,7 @@
 ## 一步运行实验
 
 ```bash
-npm run lab -- nats jetstream-replay
+bash demos/nats/jetstream-replay/run.sh
 ```
 
 该命令完成整个闭环：启动 NATS（`-js` 启用 JetStream）→ 创建 File 存储的 Stream `ORDERS`（捕获 `orders.events`）→ Producer 用 `JetStream.publish` 发 3 条并等待服务端 PublishAck → 第一个 Durable Consumer 消费并幂等落库 → 第二个 Durable Consumer 从头回放，幂等表拦截 3 条重复 → 断言 Stream 消息数仍为 3 → 自动停止并删除容器。
@@ -18,39 +18,27 @@ npm run lab -- nats jetstream-replay
 想看 Core NATS 的对照面：
 
 ```bash
-npm run lab -- nats core-pubsub
+bash demos/nats/core-pubsub/run.sh
 ```
 
 ## 手工走一遍（理解每一步）
 
 ```bash
-# 1. 启动 NATS（compose 文件锁定镜像 digest；项目名与 lab.js 一致）
-docker compose -p hello-mq-nats-jetstream-replay --env-file .env.versions \
-  -f compose/nats.compose.yml up -d
+cd demos/nats/jetstream-replay
 
-# 2. 等待健康（轮询监控端口 /healthz，而不是固定 sleep）
-node scripts/wait-for-service.js hello-mq-nats-jetstream-replay \
-  compose/nats.compose.yml nats 90 .env.versions
+# 1. 启动完整流程：nats → setup → producer → consumer-first → consumer-replay → inspect-db → stats
+#    （新 durable 从头回放 ⇒ 回放轮全部 duplicate_skipped；顺序由 depends_on 条件保证）
+docker compose --env-file ../../.env.versions up -d
+docker compose wait stats
 
-# 3. 建 Stream、发送、消费、回放
-mvn -B -q -f demos/pom.xml -pl nats -am package -DskipTests
-java -jar demos/nats/target/hello-mq-nats.jar setup --lab=jetstream-replay
-java -jar demos/nats/target/hello-mq-nats.jar produce --lab=jetstream-replay \
-  --mode=jetstream --subject=orders.events \
-  --files=order-1001.json,order-1002.json,order-1003.json
-java -jar demos/nats/target/hello-mq-nats.jar consume --lab=jetstream-replay \
-  --mode=jetstream --subject=orders.events --durable=orders-first \
-  --db=.lab/idempotency.db --expected=3
-java -jar demos/nats/target/hello-mq-nats.jar consume --lab=jetstream-replay \
-  --mode=jetstream --subject=orders.events --durable=orders-replay \
-  --db=.lab/idempotency.db --expected=3   # 新 durable ⇒ 从头回放 ⇒ 全部 duplicate_skipped
+# 2. 观察关键语义：ACK 不删除 Stream 消息
+docker compose exec nats nats stream info ORDERS    # Messages => 3
 
-# 4. 观察关键语义：ACK 不删除 Stream 消息
-docker compose -p hello-mq-nats-jetstream-replay -f compose/nats.compose.yml \
-  exec nats nats stream info ORDERS    # Messages => 3
+# 3. 查看各角色日志
+docker compose logs producer consumer-first consumer-replay
 
-# 5. 清理（仅删除本项目的 Compose Project）
-npm run lab -- nats clean
+# 4. 清理（仅删除本实验的 Compose Project）
+docker compose --env-file ../../.env.versions down --volumes
 ```
 
 ## 预期输出
@@ -69,21 +57,20 @@ npm run lab -- nats clean
 [consumer] ... messageId=... consumer=orders-replay status=duplicate_skipped
 ```
 
-Core NATS 实验中则是 `status=published`——注意它**没有** `confirmed`：Core 层不存在服务端确认（规格 §7.6 禁止混写）。
+Core NATS 实验中则是 `status=published`——注意它**没有** `confirmed`：Core 层不存在服务端确认。
 
 ## 调试入口
 
 ```bash
-# 官方 CLI 在镜像内可用
-docker compose -p hello-mq-nats-jetstream-replay -f compose/nats.compose.yml \
-  exec nats nats stream ls
+# 实验运行期间，官方 CLI 在镜像内可用（在 demos/nats/jetstream-replay 目录执行）
+docker compose exec nats nats stream ls
 # HTTP 监控（仅 localhost）
 curl http://127.0.0.1:8222/jsz?consumers=1
 ```
 
 ## 清理与安全
 
-- `npm run lab -- nats clean` 只 down 本仓库的 Compose Project（`hello-mq-nats-*`）。
+- run.sh 退出时的 `docker compose down --volumes` 只 down 本实验的 Compose Project（如 `hello-mq-nats-jetstream-replay`）。
 - 实验不挂持久卷：JetStream 的 File 存储随容器销毁，每次实验从干净状态开始。
 
 ## 下一步

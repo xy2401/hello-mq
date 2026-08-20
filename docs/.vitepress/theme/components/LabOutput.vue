@@ -2,8 +2,9 @@
 import { data } from '../data/lab-outputs.data'
 
 const props = defineProps<{ product: string; lab: string }>()
-const snapshot = data[`${props.product}/${props.lab}`]
-const reproCommand = `npm run lab -- ${props.product} ${props.lab}`
+const logs = data[`${props.product}/${props.lab}`] ?? {}
+const roles = Object.keys(logs)
+const reproCommand = `bash demos/${props.product}/${props.lab}/run.sh`
 
 function copyCommand() {
   if (typeof navigator !== 'undefined' && navigator.clipboard) {
@@ -14,117 +15,65 @@ function copyCommand() {
 
 <template>
   <div class="lab-output">
-    <template v-if="snapshot">
-      <div class="lab-output__head">
-        <span class="lab-output__badge" :class="`lab-output__badge--${snapshot.status}`">
-          {{ snapshot.status }}
-        </span>
-        <strong>{{ snapshot.product }} / {{ snapshot.lab }}</strong>
-        <span class="lab-output__meta">broker {{ snapshot.brokerVersion }} · {{ snapshot.client }}</span>
-      </div>
-      <table class="lab-output__table">
-        <tbody>
-          <tr>
-            <td>镜像</td>
-            <td class="lab-output__mono">{{ snapshot.image }}</td>
-          </tr>
-          <tr>
-            <td>捕获时间</td>
-            <td>{{ snapshot.capturedAt }}</td>
-          </tr>
-          <tr>
-            <td>耗时 / 退出码</td>
-            <td>{{ snapshot.durationMs }} ms / exit {{ snapshot.exitCode }}</td>
-          </tr>
-        </tbody>
-      </table>
-      <details open>
-        <summary>断言</summary>
-        <table class="lab-output__table">
-          <tbody>
-            <tr v-for="(value, name) in snapshot.assertions" :key="name">
-              <td>{{ name }}</td>
-              <td>{{ value }}</td>
-            </tr>
-          </tbody>
-        </table>
+    <div class="lab-output__head">
+      <strong>{{ product }} / {{ lab }}</strong>
+      <code class="lab-output__mono">{{ reproCommand }}</code>
+      <button class="lab-output__copy" type="button" title="复制复现命令" @click="copyCommand">复制</button>
+    </div>
+    <template v-if="roles.length > 0">
+      <details v-for="role in roles" :key="role" :open="role === 'assert'">
+        <summary>{{ role }}.out.txt</summary>
+        <pre class="lab-output__log">{{ logs[role] }}</pre>
       </details>
-      <details>
-        <summary>归一化日志</summary>
-        <pre>{{ snapshot.body }}</pre>
-      </details>
-      <div class="lab-output__actions">
-        <code>{{ reproCommand }}</code>
-        <button type="button" @click="copyCommand">复制命令</button>
-      </div>
     </template>
-    <template v-else>
-      <div class="lab-output__missing">
-        快照待生成：运行 <code>{{ reproCommand }}</code> 后提交 outputs/{{ props.product }}/{{ props.lab }}.snapshot
-      </div>
-    </template>
+    <p v-else class="lab-output__empty">尚未收集输出日志：运行 <code>{{ reproCommand }}</code> 后生成。</p>
   </div>
 </template>
 
 <style scoped>
 .lab-output {
+  margin: 16px 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 8px;
-  padding: 12px 16px;
-  margin: 16px 0;
-  background: var(--vp-c-bg-soft);
+  overflow: hidden;
 }
 .lab-output__head {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   flex-wrap: wrap;
-}
-.lab-output__badge {
-  font-size: 12px;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 999px;
-}
-.lab-output__badge--verified {
-  background: rgba(16, 185, 129, 0.16);
-  color: #059669;
-}
-.lab-output__badge--failed {
-  background: rgba(239, 68, 68, 0.16);
-  color: #dc2626;
-}
-.lab-output__meta {
-  color: var(--vp-c-text-2);
-  font-size: 13px;
-}
-.lab-output__table {
-  width: 100%;
-  font-size: 13px;
-  margin: 8px 0;
-}
-.lab-output__table td {
-  padding: 4px 8px;
-  border: 1px solid var(--vp-c-divider);
+  padding: 8px 12px;
+  background: var(--vp-c-bg-soft);
 }
 .lab-output__mono {
-  font-family: var(--vp-font-family-mono);
-  word-break: break-all;
+  font-size: 12px;
 }
-.lab-output__actions {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  margin-top: 8px;
-}
-.lab-output__actions button {
+.lab-output__copy {
+  margin-left: auto;
+  font-size: 12px;
   border: 1px solid var(--vp-c-divider);
-  background: var(--vp-c-bg);
-  border-radius: 6px;
-  padding: 2px 10px;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+  padding: 2px 8px;
+}
+.lab-output summary {
+  padding: 6px 12px;
   cursor: pointer;
 }
-.lab-output__missing {
+.lab-output__log {
+  margin: 0;
+  padding: 12px;
+  max-height: 420px;
+  overflow: auto;
+  font-size: 12px;
+  line-height: 1.6;
+  background: var(--vp-code-block-bg);
+  color: var(--vp-code-block-text);
+}
+.lab-output__empty {
+  padding: 12px;
+  font-size: 13px;
   color: var(--vp-c-text-2);
 }
 </style>

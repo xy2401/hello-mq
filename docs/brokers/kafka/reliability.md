@@ -10,7 +10,7 @@
 | 1 | Leader 写入内存/页缓存 | Leader 崩溃且未同步到 Follower → 丢 |
 | all（-1） | ISR 全部副本写入 | 取决于 ISR 收缩与 `min.insync.replicas` |
 
-配套关系（规格 §7.2 强制点）：
+配套关系：
 
 - `acks=all` 必须配合副本数 ≥2 才有意义；ISR 只剩 Leader 时 all 退化为 1。`min.insync.replicas` 让 Broker 在 ISR 不足时拒绝写入（宁可不可用，不假确认）。
 - **Producer 重试**：网络抖动时客户端自动重发，非幂等配置下可能产生重复记录（同内容两个 offset）。
@@ -43,7 +43,7 @@ Kafka 没有单条 ACK；消费进度就是已提交 offset。
 5. 提交成功后才 commitSync（含该分区新位点）
 ```
 
-第 4 步成功、第 5 步前崩溃 → 重启后从旧 offset 重读 → 幂等表拦截。该窗口不可消除。**「提交 offset 等于业务数据库已成功提交」是规格 §7.2 的禁止表述**——两者是独立系统上的两个动作。本仓库 kafka basic 实验即按此实现：
+第 4 步成功、第 5 步前崩溃 → 重启后从旧 offset 重读 → 幂等表拦截。该窗口不可消除。**「提交 offset 等于业务数据库已成功提交」是错误表述**——两者是独立系统上的两个动作。本仓库 kafka basic 实验即按此实现：
 
 <LabOutput product="kafka" lab="basic" />
 
@@ -57,7 +57,7 @@ Transactional Producer 把一个事务内的多条 produce（可加 sendOffsetsT
 动手验证（3 条 commit 事务可见，2 条 abort 事务不可见）：
 
 ```bash
-npm run lab -- kafka idempotence-transaction
+bash demos/kafka/idempotence-transaction/run.sh
 ```
 
 <LabOutput product="kafka" lab="idempotence-transaction" />

@@ -8,7 +8,9 @@ import java.time.Duration;
 
 public final class Broker {
 
-  public static final String DEFAULT_URL = "nats://127.0.0.1:4222";
+  // 支持 HELLOMQ_NATS_URL 覆盖：compose 内客户端经服务名连接（如 nats://nats:4222）。
+  public static final String DEFAULT_URL =
+      System.getenv().getOrDefault("HELLOMQ_NATS_URL", "nats://127.0.0.1:4222");
 
   private Broker() {}
 

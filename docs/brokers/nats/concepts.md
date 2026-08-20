@@ -51,5 +51,5 @@
 
 - **Queue Group ≠ Kafka Consumer Group**：Queue Group 是 Core 层的订阅者负载分担，无位点、无存储；断线期间消息直接丢失。竞争消费的「可靠版」是 JetStream 共享 Consumer。
 - **Stream ≠ Kafka Topic**：Stream 按 subjects 捕获、整体复制（R3），没有分区内并行的扩展模型。
-- **Core publish ≠ JetStream publish**：前者字节进路由器即结束；后者要写入存储并收到 Ack。规格 §7.6 明确要求：两者的 API 与可靠性结论不可混写。
+- **Core publish ≠ JetStream publish**：前者字节进路由器即结束；后者要写入存储并收到 Ack。两者的 API 与可靠性结论不可混写。
 - **Interest/WorkQueue 保留策略**会让「被消费」影响删除——默认 Limits 策略下 ACK 不删除，与 Kafka 一致；不要跨策略泛化结论。

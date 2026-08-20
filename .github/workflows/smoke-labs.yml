@@ -48,27 +48,32 @@ jobs:
             lab: subscriptions
           - product: pulsar
             lab: redelivery-replay
+          - product: nats
+            lab: core-pubsub
+          - product: nats
+            lab: jetstream-replay
+          - product: redis-streams
+            lab: basic
+          - product: redis-streams
+            lab: consumer-crash
+          - product: artemis
+            lab: basic
+          - product: artemis
+            lab: retry-dlq
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-          cache: npm
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - run: npm ci
-      - name: build demos
-        run: mvn -B -f demos/pom.xml package -DskipTests
       - name: run lab
-        run: npm run lab -- ${{ matrix.product }} ${{ matrix.lab }}
+        run: bash "demos/${{ matrix.product }}/${{ matrix.lab }}/run.sh"
       - name: upload diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@v4
         with:
           name: lab-diagnostics-${{ matrix.product }}-${{ matrix.lab }}
           path: |
-            .lab/
+            demos/${{ matrix.product }}/${{ matrix.lab }}/
           if-no-files-found: ignore

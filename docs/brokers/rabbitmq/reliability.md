@@ -18,7 +18,7 @@ sequenceDiagram
 
 - **Publisher Confirm 只回答「Broker 收到了」**：它不保证消息被复制、被持久化到满意程度，更不代表任何消费者处理过。
 - **Consumer ACK 只回答「这个消费者处理完了」**：与生产端的确认完全独立。
-- 因此「Confirm 成功」不能作为业务成功的通知依据——这是规格 §7.1 明确的禁止表述之一。
+- 因此「Confirm 成功」不能作为业务成功的通知依据——这是错误表述之一。
 
 ## 生产端：Publisher Confirms
 
@@ -58,7 +58,7 @@ Prefetch 与 ACK 一起决定在途消息上限；崩溃后未 ACK 消息自动�
 第 4 步提交成功、第 5 步 ACK 前崩溃 → Broker 必然重投 → 幂等表拦截。该窗口不可消除，只能靠幂等表兜底。完整可复现实验：
 
 ```bash
-npm run lab -- rabbitmq consumer-crash
+bash demos/rabbitmq/consumer-crash/run.sh
 ```
 
 <LabOutput product="rabbitmq" lab="consumer-crash" />

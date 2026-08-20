@@ -1,0 +1,35 @@
+name: collect-docker-outputs
+
+on:
+  workflow_dispatch:
+
+jobs:
+  collect-and-build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: 📥 检出项目代码
+        uses: actions/checkout@v4
+
+      - name: ☕ 配置 Java 环境
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+
+      - name: 🐳 逐实验运行 demos/*/*/run.sh 收集输出日志
+        run: |
+          for script in demos/*/*/run.sh; do
+            bash "$script"
+          done
+
+      - name: 🚀 自动提交更新后的 *.out.txt 实验日志到 GitHub
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore(auto): update Docker lab output logs [skip ci]"
+          file_pattern: "demos/**/*.out.txt"

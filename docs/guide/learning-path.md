@@ -7,7 +7,7 @@
 无论选择哪条路径，都建议先完成两件事：
 
 1. 读完[基础原理](/fundamentals/)，掌握中性术语（Queue、Topic、Partition、Subscription、ACK、Offset 等），避免把不同产品的同名概念直接等价。
-2. 跑通 `npm run lab -- rabbitmq basic`，理解实验如何断言“生产确认、消费确认、业务落库”三个独立状态。
+2. 跑通 `bash demos/rabbitmq/basic/run.sh`，理解实验如何断言“生产确认、消费确认、业务落库”三个独立状态。
 
 ## 角色路径
 

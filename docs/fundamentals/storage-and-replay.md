@@ -51,7 +51,7 @@ flowchart LR
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq basic   # 队列模型：消费确认后队列深度归零，无回放入口
+bash demos/rabbitmq/basic/run.sh   # 队列模型：消费确认后队列深度归零，无回放入口
 ```
 
 Kafka/Pulsar 的回放实验在 Phase 2/3 落地。

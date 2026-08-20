@@ -2,7 +2,7 @@
 
 <VersionBadge logo="nats" product="NATS" broker="2.11.5" client="jnats 2.21.1" image="tag+digest@.env.versions" />
 
-> 本页结论：NATS 是分层设计的消息系统——Core NATS 提供极低延迟的易失发布订阅（发了就忘），JetStream 在其上叠加持久化日志与消费语义（Stream + Consumer + ACK）。两者的发送 API 与可靠性目标完全不同，任何结论都必须先说明说的是哪一层（规格 §7.6）。
+> 本页结论：NATS 是分层设计的消息系统——Core NATS 提供极低延迟的易失发布订阅（发了就忘），JetStream 在其上叠加持久化日志与消费语义（Stream + Consumer + ACK）。两者的发送 API 与可靠性目标完全不同，任何结论都必须先说明说的是哪一层。
 
 ## 定位与适用场景
 
@@ -61,8 +61,8 @@ flowchart LR
 - `nats jetstream-replay`（L2）：Durable Consumer 消费后，第二个 Consumer 从头回放同批消息，幂等表拦截全部重复；ACK 不删除 Stream 消息。
 
 ```bash
-npm run lab -- nats core-pubsub
-npm run lab -- nats jetstream-replay
+bash demos/nats/core-pubsub/run.sh
+bash demos/nats/jetstream-replay/run.sh
 ```
 
 ## 版本基线

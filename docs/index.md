@@ -141,9 +141,8 @@ features:
 git clone <repo-url> && cd hello-mq
 npm install
 
-npm run lab -- list                # 查看产品与实验
-npm run lab -- rabbitmq basic      # 启动 RabbitMQ，发 3 条、收 3 条并校验
-npm run lab -- rabbitmq clean      # 仅清理 hello-mq 实验资源
+bash demos/rabbitmq/basic/run.sh                 # 启动 RabbitMQ，发 3 条、收 3 条并校验
+for s in demos/*/*/run.sh; do bash "$s"; done    # 运行全部实验
 ```
 
 环境要求与完整说明见[快速开始](/guide/getting-started)。

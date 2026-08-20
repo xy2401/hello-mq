@@ -1,0 +1,119 @@
+# rocketmq/transaction 完整实验流程：Half Message 首查 UNKNOWN、回查后 COMMIT，消息恰好消费 1 次。
+# 拓扑经 mqadmin 由 run.sh 分阶段创建；回查参数见 ../broker.conf（transactionCheckInterval=2000）。
+# 独立运行：bash run.sh
+name: hello-mq-rocketmq-transaction
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-rocketmq.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+
+services:
+  namesrv:
+    image: ${ROCKETMQ_IMAGE:?ROCKETMQ_IMAGE must be set via --env-file ../.env.versions}
+    command: ["nameserver"]
+    environment:
+      # 官方脚本默认 namesrv 1g 堆；实验机资源有限，显式调小（HEAP_OPTS 由 runserver.sh 读取）。
+      HEAP_OPTS: "-Xms256m -Xmx256m -Xmn128m"
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 3 bash -c '</dev/tcp/127.0.0.1/9876'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+
+  broker:
+    image: ${ROCKETMQ_IMAGE:?ROCKETMQ_IMAGE must be set via --env-file ../.env.versions}
+    command: ["broker", "-c", "/home/rocketmq/conf/broker.conf"]
+    environment:
+      HEAP_OPTS: "-Xms512m -Xmx512m -Xmn256m -XX:MaxDirectMemorySize=512m"
+    volumes:
+      - ../broker.conf:/home/rocketmq/conf/broker.conf:ro
+    depends_on:
+      namesrv:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 3 bash -c '</dev/tcp/127.0.0.1/10911'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 15s
+
+  proxy:
+    image: ${ROCKETMQ_IMAGE:?ROCKETMQ_IMAGE must be set via --env-file ../.env.versions}
+    command: ["sh", "mqproxy", "-n", "namesrv:9876"]
+    environment:
+      HEAP_OPTS: "-Xms256m -Xmx256m -Xmn128m"
+    ports:
+      - "127.0.0.1:8081:8081"
+    depends_on:
+      broker:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "timeout 3 bash -c '</dev/tcp/127.0.0.1/8081'"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 10s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+
+  # setup 在 rocketmq jar 中为 noop（Topic/消费组由 run.sh 经 mqadmin 创建），声明以保持编排链对称。
+  setup:
+    <<: *java-base
+    depends_on:
+      proxy:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=transaction"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=transaction
+      - --topic=orders-txn
+      - --files=order-1001.json
+      - --txn=commit-after-unknown
+      - --fixtures=/app/fixtures
+      - --endpoints=proxy:8081
+
+  consumer:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-rocketmq.jar:/app/demo.jar:ro
+      - ../../shared/fixtures:/app/fixtures:ro
+      - idempotency:/data
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-txn
+      - --group=orders-txn-group
+      - --db=/data/idempotency.db
+      - --lab=transaction
+      - --expected=1
+      - --hard-timeout-ms=60000
+      - --endpoints=proxy:8081
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-rocketmq.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=transaction", "--db=/data/idempotency.db"]
+
+volumes:
+  idempotency:

@@ -52,7 +52,7 @@ flowchart LR
 
 - 「Quorum Queue 一定比 Classic 慢，所以别用」——多数派复制的延迟换的是「节点挂了消息还在」，生产消息系统几乎总是划算的。
 - 「Stream 就是更快版的队列」——消费不删除、cursor 语义、retention 策略都不同，用它之前先想清楚是否真的需要回放。
-- 「所有 RabbitMQ 队列都适合超长积压或日志回放」——这是规格 §7.1 的禁止表述：Classic/Quorum 是队列，超长积压与回放场景应评估 Stream 或日志型系统。
+- 「所有 RabbitMQ 队列都适合超长积压或日志回放」——这是错误表述：Classic/Quorum 是队列，超长积压与回放场景应评估 Stream 或日志型系统。
 
 ## 官方资料
 

@@ -12,7 +12,7 @@
 ## 一步运行实验
 
 ```bash
-npm run lab -- rocketmq basic
+bash demos/rocketmq/basic/run.sh
 ```
 
 该命令完成整个闭环：启动 namesrv/broker/proxy → `mqadmin` 建 Normal Topic `orders-basic` 与消费组 `orders-basic-group` → Producer 经 proxy 发 3 条 `OrderCreated.v1` → SimpleConsumer 拉取、业务事务提交后才 ack 并幂等落库 → 断言（含 Consume Diff=0）→ 自动停止并删除容器。
@@ -20,40 +20,35 @@ npm run lab -- rocketmq basic
 ## 手工走一遍（理解每一步）
 
 ```bash
-# 1. 启动三服务（compose 文件锁定镜像 digest；项目名与 lab.js 一致）
-docker compose -p hello-mq-rocketmq-basic --env-file .env.versions \
-  -f compose/rocketmq.compose.yml up -d
+cd demos/rocketmq/basic
 
-# 2. 等待 proxy 健康（轮询，而不是固定 sleep）
-node scripts/wait-for-service.js hello-mq-rocketmq-basic \
-  compose/rocketmq.compose.yml proxy 120 .env.versions
+# 1. 只启动 broker 侧（namesrv → broker → proxy；--wait 等 healthcheck 就绪）
+docker compose --env-file ../../.env.versions up -d --wait namesrv broker proxy
 
-# 3. 建 Topic 与消费组（broker 容器内 mqadmin；Topic 需声明 message.type）
-docker compose -p hello-mq-rocketmq-basic exec broker \
-  sh mqadmin -n namesrv:9876 updateTopic -c DefaultCluster \
+# 2. 建 Topic 与消费组（broker 容器内 mqadmin；Topic 需声明 message.type）
+docker compose exec broker sh mqadmin -n namesrv:9876 updateTopic -c DefaultCluster \
   -t orders-basic -r 4 -w 4 -a "+message.type=NORMAL"
-docker compose -p hello-mq-rocketmq-basic exec broker \
-  sh mqadmin -n namesrv:9876 updateSubGroup -c DefaultCluster -g orders-basic-group
+docker compose exec broker sh mqadmin -n namesrv:9876 updateSubGroup -c DefaultCluster -g orders-basic-group
 
-# 4. 构建并发送、消费（lab 内部同样调用这些目标）
-mvn -B -q -f demos/pom.xml -pl rocketmq -am package -DskipTests
-java -jar demos/rocketmq/target/hello-mq-rocketmq.jar produce --lab=basic \
-  --topic=orders-basic --files=order-1001.json,order-1002.json,order-1003.json
-java -jar demos/rocketmq/target/hello-mq-rocketmq.jar consume --lab=basic \
+# 3. 构建并发送、消费（宿主机客户端经 127.0.0.1:8081 连 proxy）
+mvn -B -q -f ../../pom.xml -pl rocketmq -am package -DskipTests
+java -jar ../target/hello-mq-rocketmq.jar produce --lab=basic \
+  --topic=orders-basic --files=order-1001.json,order-1002.json,order-1003.json \
+  --fixtures=../../shared/fixtures
+java -jar ../target/hello-mq-rocketmq.jar consume --lab=basic \
   --topic=orders-basic --group=orders-basic-group \
-  --db=.lab/rocketmq/basic/idempotency.db --expected=3
+  --db=/tmp/hello-mq-rocketmq-basic.db --expected=3
 
-# 5. 观察消费进度（Consume Diff Total 应为 0）
-docker compose -p hello-mq-rocketmq-basic exec broker \
-  sh mqadmin -n namesrv:9876 consumerProgress -g orders-basic-group
+# 4. 观察消费进度（Consume Diff Total 应为 0）
+docker compose exec broker sh mqadmin -n namesrv:9876 consumerProgress -g orders-basic-group
 
-# 6. 清理（仅删除本产品的 Compose Project）
-npm run lab -- rocketmq clean
+# 5. 清理（仅删除本实验的 Compose Project）
+docker compose --env-file ../../.env.versions down --volumes
 ```
 
 ## 预期输出
 
-每条日志都是统一的 key=value 结构（规格 §12.2）。生产端关键一行（brokerMessageId 可见）：
+每条日志都是统一的 key=value 结构。生产端关键一行（brokerMessageId 可见）：
 
 ```text
 [producer] ... destination=orders-basic seq=1 status=produced
@@ -79,7 +74,7 @@ npm run lab -- rocketmq clean
 
 ## 清理与安全
 
-- `npm run lab -- rocketmq clean` 只 down 本仓库的 RocketMQ Compose Project（`hello-mq-rocketmq-*`）。
+- run.sh 退出时的 `docker compose down --volumes` 只 down 本实验的 RocketMQ Compose Project（`hello-mq-rocketmq-basic`）。
 - 实验不挂持久卷：每次都是干净状态（见 compose 内注释）；生产存储与保留见 [存储与高可用](/brokers/rocketmq/storage-ha)。
 
 ## 下一步

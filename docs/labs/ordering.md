@@ -20,7 +20,7 @@ flowchart LR
 ## 实验一：同 key 有序（ordering-replay）
 
 ```bash
-npm run lab -- kafka ordering-replay
+bash demos/kafka/ordering-replay/run.sh
 ```
 
 步骤：Producer 用同一 key（`order-1001`）发送 6 条带序号消息 → 断言 6 条落在**同一分区**（`samePartitionOnProduce=1`）→ 消费组 g1 按序接收（`observedOrder=[1..6]`）→ 新消费组 g2 以 `auto.offset.reset=earliest` 从 offset 0 全量回放（`replayed=6`、`replayFromOffset0=0`）。
@@ -36,7 +36,7 @@ npm run lab -- kafka ordering-replay
 ## 实验二：消费组瓜分分区（consumer-group）
 
 ```bash
-npm run lab -- kafka consumer-group
+bash demos/kafka/consumer-group/run.sh
 ```
 
 步骤：先发 3 条到 3 分区 Topic → 组 A 两个消费者并行消费（空闲超时退出后合并统计：每条消息恰被组内一个消费者收到一次，两个消费者都观察到分区分配）→ 组 B 独立消费，同样收到全量 3 条。

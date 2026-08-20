@@ -58,7 +58,7 @@ flowchart TD
 ## 实验复现命令
 
 ```bash
-npm run lab -- rabbitmq retry-dlq   # 毒消息循环的识别与隔离
+bash demos/rabbitmq/retry-dlq/run.sh   # 毒消息循环的识别与隔离
 ```
 
 积压-恢复实验（消费者离线后追赶）在后续版本补充。

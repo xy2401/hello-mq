@@ -36,7 +36,7 @@ flowchart LR
 subscriptions 实验在同一 Topic（`persistent://public/default/orders-subs`）上依次验证四类：Exclusive 第二个消费者订阅即冲突；Shared 两个消费者各自收到 ≥1 条、合并去重后等于全量；Failover 主消费者收全量、备消费者 0 条，主退出后备接管新消息；Key_Shared 同 key 消息始终落在同一消费者：
 
 ```bash
-npm run lab -- pulsar subscriptions
+bash demos/pulsar/subscriptions/run.sh
 ```
 
 <LabOutput product="pulsar" lab="subscriptions" />
@@ -63,7 +63,7 @@ npm run lab -- pulsar subscriptions
 
 ## 常见误区
 
-- 「Shared 订阅同 key 也有序」——不保证任何顺序；同键有序必须 Key_Shared（或单分区 + Exclusive/Failover），这是规格 §7.4 禁止表述（见 [陷阱](/brokers/pulsar/pitfalls)）。
+- 「Shared 订阅同 key 也有序」——不保证任何顺序；同键有序必须 Key_Shared（或单分区 + Exclusive/Failover），这是错误表述（见 [陷阱](/brokers/pulsar/pitfalls)）。
 - 「多开消费者总能提速」——Exclusive/Failover 只有一个消费者干活；Shared/Key_Shared 受分区数与 key 分布约束，热点 key 会倾斜。
 - 「订阅名随便起、随时删」——cursor 与订阅名绑定；删订阅丢进度，同名重建从默认位置开始。
 - 「非分区 Topic 以后随时转分区」——形态转换需重建 Topic 并迁移生产/消费端，规划要趁早。

@@ -25,7 +25,7 @@ flowchart LR
 ### 运行与断言
 
 ```bash
-npm run lab -- rabbitmq routing
+bash demos/rabbitmq/routing/run.sh
 ```
 
 断言按队列核对收到数量、唯一 messageId 数量与消费后的队列深度。要点：同一条消息被复制到多个队列是发布订阅（Pub/Sub）语义；队列内部才是竞争消费。
@@ -57,7 +57,7 @@ flowchart LR
 ### 实验过程
 
 ```bash
-npm run lab -- rabbitmq retry-dlq
+bash demos/rabbitmq/retry-dlq/run.sh
 ```
 
 Producer 发送 order-1001、order-1002 与一条故意不符合 Schema 的毒消息（fixture `poison-message.json`，payload 缺少必填字段，业务写入必然抛异常）。Consumer：

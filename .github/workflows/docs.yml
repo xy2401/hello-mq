@@ -20,11 +20,7 @@ jobs:
       - name: docs build
         run: npm run docs:build
       - name: compose validate
-        run: |
-          docker compose -f compose/rabbitmq.compose.yml --env-file .env.versions config --quiet
-          docker compose -f compose/kafka.compose.yml --env-file .env.versions config --quiet
-          docker compose -f compose/rocketmq.compose.yml --env-file .env.versions config --quiet
-          docker compose -f compose/pulsar.compose.yml --env-file .env.versions config --quiet
+        run: npm run check:compose
 
   java-unit-test:
     runs-on: ubuntu-latest

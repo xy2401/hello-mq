@@ -52,7 +52,7 @@
 redelivery-replay 实验（`persistent://public/default/orders-redeliver`，Shared 订阅 + `maxRedeliverCount=2`）验证完整路径：毒消息（aggregateId=order-poison）被 `negativeAcknowledge` 反复重投，达到策略上限后进 DLQ（断言毒消息投递次数与 `dlqMessages=1`，正常消息不受阻塞）；随后用 `pulsar-admin reset-cursor` 把游标重置到 earliest 全量回放，断言再次收到全量消息（对比 [毒消息实验](/labs/poison-message) 的 RabbitMQ 组合式重试）：
 
 ```bash
-npm run lab -- pulsar redelivery-replay
+bash demos/pulsar/redelivery-replay/run.sh
 ```
 
 <LabOutput product="pulsar" lab="redelivery-replay" />

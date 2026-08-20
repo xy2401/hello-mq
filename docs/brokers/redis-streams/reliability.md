@@ -21,7 +21,7 @@ sequenceDiagram
   C->>R: XACK（移出 PEL）
 ```
 
-三层语义（规格 §4.2）：
+三层语义：
 
 | 层级 | 保证 | 边界 |
 | :--- | :--- | :--- |
@@ -31,7 +31,7 @@ sequenceDiagram
 
 ## 崩溃窗口与重投（consumer-crash 实验）
 
-`npm run lab -- redis-streams consumer-crash` 复现的时序：
+`bash demos/redis-streams/consumer-crash/run.sh` 复现的时序：
 
 1. consumer-1 读到第 1 条，业务提交成功，**XACK 前崩溃**（exit 137）。
 2. 该条目滞留 PEL：`XPENDING` 显示 1 条未确认、归属 consumer-1。

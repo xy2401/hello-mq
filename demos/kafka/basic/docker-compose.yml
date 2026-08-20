@@ -1,0 +1,98 @@
+# kafka/basic 完整实验流程：broker → 拓扑初始化 → 生产 → 消费 → 幂等库检查。
+# 独立运行：bash run.sh（或先 mvn -f demos/pom.xml package 后 docker compose --env-file ../.env.versions up）
+name: hello-mq-kafka-basic
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-kafka.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+
+services:
+  kafka:
+    image: ${KAFKA_IMAGE:?KAFKA_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-kafka
+    environment:
+      KAFKA_NODE_ID: "1"
+      KAFKA_PROCESS_ROLES: broker,controller
+      # 官方镜像示例 CLUSTER_ID（kafka-storage random-uuid 的文档样例值，非秘密）。
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093
+      # 实验客户端运行在 compose 网络内：advertise 服务名 kafka:9092（区别于 compose/kafka.compose.yml 的宿主机回环）。
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@localhost:9093
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
+      KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
+    ports:
+      - "127.0.0.1:9092:9092"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]
+      interval: 5s
+      timeout: 10s
+      retries: 30
+      start_period: 10s
+
+  setup:
+    <<: *java-base
+    depends_on:
+      kafka:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=basic", "--bootstrap=kafka:9092"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=basic
+      - --bootstrap=kafka:9092
+      - --topic=orders.basic
+      - --files=order-1001.json,order-1002.json,order-1003.json
+      - --fixtures=/app/fixtures
+
+  consumer:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-kafka.jar:/app/demo.jar:ro
+      - ../../shared/fixtures:/app/fixtures:ro
+      - idempotency:/data
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=basic
+      - --bootstrap=kafka:9092
+      - --topic=orders.basic
+      - --group=orders-basic-group
+      - --db=/data/idempotency.db
+      - --expected=3
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-kafka.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=basic", "--db=/data/idempotency.db"]
+
+volumes:
+  idempotency:

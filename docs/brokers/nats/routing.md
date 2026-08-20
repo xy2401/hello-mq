@@ -65,8 +65,8 @@ flowchart LR
 `core-pubsub` 实验演示「无订阅者即丢」与「先订阅再发布」的差异；`jetstream-replay` 演示同一 Stream 上两个独立 Consumer 的分发：
 
 ```bash
-npm run lab -- nats core-pubsub
-npm run lab -- nats jetstream-replay
+bash demos/nats/core-pubsub/run.sh
+bash demos/nats/jetstream-replay/run.sh
 ```
 
 ## 不保证什么

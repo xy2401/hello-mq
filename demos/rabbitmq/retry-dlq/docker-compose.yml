@@ -1,0 +1,84 @@
+# rabbitmq/retry-dlq 完整实验流程：毒消息经 TTL+DLX 有限重试（3 次）后进入 DLQ，正常消息不受影响。
+# 独立运行：bash run.sh
+name: hello-mq-rabbitmq-retry-dlq
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  rabbitmq:
+    image: ${RABBITMQ_IMAGE:?RABBITMQ_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    ports:
+      - "127.0.0.1:5672:5672"
+      - "127.0.0.1:15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 10s
+
+  # setup 由 run.sh 以一次性容器先行执行（拓扑需在 purge 前建好），这里声明便于
+  # docker compose up 单独复现场景时拉起。
+  setup:
+    <<: *java-base
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=retry-dlq", "--uri=amqp://guest:guest@rabbitmq:5672"]
+
+  producer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=retry-dlq
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.work
+      - --files=order-1001.json,order-1002.json,poison-message.json
+      - --fixtures=/app/fixtures
+
+  consumer:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=retry-dlq
+      - --uri=amqp://guest:guest@rabbitmq:5672
+      - --queue=orders.work
+      - --db=/data/idempotency.db
+      - --retry-mode
+      - --max-attempts=3
+      - --dlq=orders.dlq
+      - --expected-ok=2
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=retry-dlq", "--db=/data/idempotency.db"]
+
+volumes:
+  idempotency:

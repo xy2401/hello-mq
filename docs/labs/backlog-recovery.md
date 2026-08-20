@@ -4,7 +4,7 @@
 
 ## 适用场景
 
-- 对应规格 §5.1 的「消费者宕机 10 分钟」情景：消息去哪了？恢复后会发生什么？
+- 对应「消费者宕机 10 分钟」情景：消息去哪了？恢复后会发生什么？
 - 观察 durable 队列在无消费者时的行为：消息不会被丢弃，而是排队等待。
 - 建立「积压（backlog）→ 追赶（catch-up）→ 清零」的标准恢复叙事，为运维篇的积压定位决策树提供一手证据。
 
@@ -28,7 +28,7 @@ sequenceDiagram
 ## 实验步骤
 
 ```bash
-npm run lab -- rabbitmq backlog-recovery
+bash demos/rabbitmq/backlog-recovery/run.sh
 ```
 
 编排分两个阶段：

@@ -23,7 +23,7 @@ flowchart LR
 ## 实验步骤
 
 ```bash
-npm run lab -- rabbitmq basic
+bash demos/rabbitmq/basic/run.sh
 ```
 
 lab 入口会依次执行：启动 Broker → 声明队列 → 发送 3 条 `OrderCreated.v1`（fixture：order-1001/1002/1003）→ 消费者处理并落库 → 采集队列深度与 DB 行数 → 断言 → 停止容器。

@@ -55,8 +55,8 @@ flowchart LR
 `basic` 实验中的组内单消费者路径见 [快速开始](/brokers/redis-streams/quick-start)；多组广播可通过在同一 Stream 上创建第二个组并重复消费复现：
 
 ```bash
-docker compose -p hello-mq-redis-streams-basic -f compose/redis-streams.compose.yml \
-  exec redis redis-cli XGROUP CREATE orders.basic group-b 0
+# 在 demos/redis-streams/basic 目录执行（compose 项目运行期间）
+docker compose exec redis redis-cli XGROUP CREATE orders.basic group-b 0
 ```
 
 ## 不保证什么

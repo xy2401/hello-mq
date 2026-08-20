@@ -1,0 +1,124 @@
+# pulsar/redelivery-replay 完整实验流程：毒消息 negativeAck 重投达 maxRedeliver=2 后进 DLQ，
+# 正常消息业务提交；reset-cursor 到 earliest 后全量回放。
+# Pulsar 新订阅默认从 Latest 开始：主消费者与 DLQ 消费者必须先订阅再生产（DLQ 消息
+# 产生得很早），回放消费者必须在 reset-cursor 之后启动，均由 run.sh 分阶段编排。
+# 独立运行：bash run.sh
+name: hello-mq-pulsar-redelivery-replay
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-pulsar.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+
+services:
+  pulsar:
+    image: ${PULSAR_IMAGE:?PULSAR_IMAGE must be set via --env-file ../.env.versions}
+    command: ["bin/pulsar", "standalone", "-nss"]
+    environment:
+      # standalone 内嵌 broker + BookKeeper + ZooKeeper；实验机资源有限，显式压低堆与直接内存。
+      PULSAR_MEM: "-Xms512m -Xmx512m -XX:MaxDirectMemorySize=256m"
+      PULSAR_GC: "-XX:+UseG1GC"
+    ports:
+      - "127.0.0.1:6650:6650"
+      - "127.0.0.1:8080:8080"
+    # standalone 冷启动要初始化 BookKeeper ledger 与元数据，明显慢于普通 Broker。
+    healthcheck:
+      test: ["CMD", "bin/pulsar-admin", "brokers", "healthcheck"]
+      interval: 10s
+      timeout: 10s
+      retries: 30
+      start_period: 30s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+
+  setup:
+    <<: *java-base
+    depends_on:
+      pulsar:
+        condition: service_healthy
+    command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=redelivery-replay"]
+
+  # 主消费者：order-poison 反复 negativeAck，达 maxRedeliver=2 后进 DLQ；order-1001 正常提交。
+  consumer:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-redelivery
+      - --subscription=orders-redeliver-sub
+      - --sub-type=Shared
+      - --db=/data/idempotency.db
+      - --lab=redelivery-replay
+      - --fail-aggregate=order-poison
+      - --max-redeliver=2
+      - --idle-exit-ms=10000
+      - --service-url=pulsar://pulsar:6650
+
+  # DLQ 消费者：DLQ topic 命名 <topic>-<subscription>-DLQ；必须在毒消息进 DLQ 前完成订阅。
+  consumer-dlq:
+    <<: *java-base
+    depends_on:
+      setup:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-redelivery-orders-redeliver-sub-DLQ
+      - --subscription=orders-dlq-inspect-sub
+      - --sub-type=Exclusive
+      - --db=/data/idempotency-dlq.db
+      - --lab=redelivery-replay
+      - --consumer=dlq-1
+      - --expected=1
+      - --no-business
+      - --service-url=pulsar://pulsar:6650
+
+  producer:
+    <<: *java-base
+    depends_on:
+      consumer:
+        condition: service_started
+      consumer-dlq:
+        condition: service_started
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=redelivery-replay
+      - --topic=orders-redelivery
+      - --files=order-1001.json,poison-message.json
+      - --fixtures=/app/fixtures
+      - --service-url=pulsar://pulsar:6650
+
+  # 回放消费者：run.sh 先执行 reset-cursor 到 earliest 再启动本服务（depends_on 无法表达该顺序）。
+  consumer-replay:
+    <<: *java-base
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --topic=orders-redelivery
+      - --subscription=orders-redeliver-sub
+      - --sub-type=Shared
+      - --db=/data/idempotency-replay.db
+      - --lab=redelivery-replay
+      - --consumer=replay-1
+      - --expected=2
+      - --no-business
+      - --service-url=pulsar://pulsar:6650
+
+volumes:
+  idempotency:

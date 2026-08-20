@@ -5,7 +5,7 @@
 ## 适用场景
 
 - 理解 at-least-once 投递的具体作用范围：Broker 保证「至少投一次」，不保证「只投一次」。
-- 验证规格 §5.4 的幂等消费基准实现：DB 提交后才 ACK，崩溃窗口由幂等表兜底。
+- 验证幂等消费基准实现：DB 提交后才 ACK，崩溃窗口由幂等表兜底。
 - 这是 Phase 1 的退出条件实验：从零启动 RabbitMQ，复现「崩溃 → 重投 → 幂等拦截」。
 
 ## 崩溃窗口在哪里
@@ -29,7 +29,7 @@ sequenceDiagram
 ## 实验步骤
 
 ```bash
-npm run lab -- rabbitmq consumer-crash
+bash demos/rabbitmq/consumer-crash/run.sh
 ```
 
 编排分两轮：

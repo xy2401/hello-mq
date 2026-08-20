@@ -57,7 +57,7 @@ receive → 业务写库（事务提交）→ acknowledge
 - `artemis basic`（L1）：同步确认 → 业务提交 → acknowledge → 队列深度归零，验证 ack 即删除与幂等落库。
 - `artemis retry-dlq`（L2）：毒消息按 address-setting 重投 3 次后进入 `orders-dlq`，独立消费者收出核对。
 
-运行：`npm run lab -- artemis basic`、`npm run lab -- artemis retry-dlq`（验证快照尚未采集，输出以实际运行为准）。
+运行：`bash demos/artemis/basic/run.sh`、`bash demos/artemis/retry-dlq/run.sh`（验证快照尚未采集，输出以实际运行为准）。
 
 ## 边界
 

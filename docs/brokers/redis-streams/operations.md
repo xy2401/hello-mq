@@ -27,7 +27,7 @@ XINFO GROUPS 的 lag / PEL count 上升
     └── 补 XTRIM MAXLEN/MINID；确认没有慢组依赖已被裁剪的历史
 ```
 
-## 关键指标映射（规格 §12.1）
+## 关键指标映射
 
 | 指标类别 | Redis Streams 对应 |
 | :--- | :--- |
