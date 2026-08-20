@@ -14,7 +14,7 @@ Artemis 源自 HornetQ（后被 Apache 收编，ActiveMQ Classic 的下一代技
 - **服务端可靠性策略**：重试次数、重投间隔、死信地址、过期地址都是服务端 address-setting，不依赖客户端自觉（见 [可靠性](/brokers/artemis/reliability)）。
 - **不太适合**：需要按时间任意回放的日志型场景（确认即删除，无保留回放）、超大规模分区吞吐——单个 Queue 不做分区拆分（见 [存储与高可用](/brokers/artemis/storage-ha)）。
 
-> 边界提示：Artemis 与 ActiveMQ Classic（5.x）是两套代码库，配置与调优经验不通用；本分卷只讨论 Artemis。
+> 边界提示：Artemis 与 [ActiveMQ Classic](/brokers/activemq-classic/)（6.x）是两套代码库，配置与调优经验不通用；本分卷只讨论 Artemis。
 
 ## 架构速览
 

@@ -1,0 +1,19 @@
+[cli-tools] $ timeout 15 /opt/apache-activemq/bin/activemq consumer --destination queue://orders-cli --messageCount 1（空队列将阻塞至被 timeout 杀掉，预期 exit 124）
+INFO: Loading '/opt/apache-activemq/bin/setenv'
+INFO: Using java '/opt/java/openjdk/bin/java'
+Java Runtime: Eclipse Adoptium 17.0.17 /opt/java/openjdk
+  Heap sizes: current=67584k  free=65684k  max=1048576k
+    JVM args: -Xms64M -Xmx1G -Djava.util.logging.config.file=logging.properties -Djava.security.auth.login.config=/opt/apache-activemq/conf/login.config -Djetty.host=0.0.0.0 --add-reads=java.xml=java.logging --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.naming/javax.naming.spi=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED -Dactivemq.classpath=/opt/apache-activemq/conf: -Dactivemq.home=/opt/apache-activemq -Dactivemq.base=/opt/apache-activemq -Dactivemq.conf=/opt/apache-activemq/conf -Dactivemq.data=/opt/apache-activemq/data -Djolokia.conf=file:/opt/apache-activemq/conf/jolokia-access.xml
+Extensions classpath:
+  [/opt/apache-activemq/lib,/opt/apache-activemq/lib/camel,/opt/apache-activemq/lib/optional,/opt/apache-activemq/lib/web,/opt/apache-activemq/lib/extra]
+ACTIVEMQ_HOME: /opt/apache-activemq
+ACTIVEMQ_BASE: /opt/apache-activemq
+ACTIVEMQ_CONF: /opt/apache-activemq/conf
+ACTIVEMQ_DATA: /opt/apache-activemq/data
+ INFO | Connecting to URL: failover://tcp://localhost:61616 as user: null
+ INFO | Consuming queue://orders-cli
+ INFO | Sleeping between receives 0 ms
+ INFO | Running 1 parallel threads
+ INFO | Successfully connected to tcp://localhost:61616
+ INFO | consumer-1 wait until 1 messages are consumed
+[cli-tools] verify exitCode=124（124=被 timeout 杀掉，说明队列已空）

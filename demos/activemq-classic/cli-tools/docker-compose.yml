@@ -1,0 +1,22 @@
+# activemq-classic/cli-tools：只起单 broker，全部操作由镜像自带 /opt/apache-activemq/bin/activemq 完成，
+# 不引入任何客户端 SDK（镜像自带 producer/consumer 子命令，可纯 CLI 完成收发闭环；队列自动创建）。
+# 独立运行：bash run.sh
+name: hello-mq-activemq-classic-cli-tools
+
+services:
+  activemq:
+    image: ${ACTIVEMQ_CLASSIC_IMAGE:?ACTIVEMQ_CLASSIC_IMAGE must be set via --env-file ../../.env.versions}
+    hostname: hello-mq-activemq-classic
+    ports:
+      # CLI 全部在容器内执行，宿主机端口仅调试用；
+      # 为避免与同产品 basic 实验并发时抢占 61616/8161，这里错位为 16161/18161。
+      # 61616：OpenWire；8161：Web 控制台（jetty）
+      - "127.0.0.1:16161:61616"
+      - "127.0.0.1:18161:8161"
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/61616'"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s

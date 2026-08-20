@@ -1,0 +1,100 @@
+# activemq-classic/retry-dlq 完整实验流程：消费失败 session.rollback()，Broker 按客户端下发的
+# redeliveryPolicy 重投（共 3 次投递、固定 1s 间隔），耗尽后进 Classic 默认死信队列 ActiveMQ.DLQ，
+# 由 --no-business 的 dlq-consumer 收出核对。
+# 独立运行：bash run.sh
+name: hello-mq-activemq-classic-retry-dlq
+
+x-java-base: &java-base
+  image: ${TEMURIN_JRE_IMAGE:?TEMURIN_JRE_IMAGE must be set via --env-file ../.env.versions}
+  volumes:
+    - ../target/hello-mq-activemq-classic.jar:/app/demo.jar:ro
+    - ../../shared/fixtures:/app/fixtures:ro
+    - idempotency:/data
+  environment:
+    HELLOMQ_ACTIVEMQ_URL: tcp://activemq:61616
+
+services:
+  activemq:
+    image: ${ACTIVEMQ_CLASSIC_IMAGE:?ACTIVEMQ_CLASSIC_IMAGE must be set via --env-file ../.env.versions}
+    hostname: hello-mq-activemq-classic
+    ports:
+      # 61616：OpenWire（默认允许匿名）；8161：Web 控制台（admin/admin）
+      - "127.0.0.1:61616:61616"
+      - "127.0.0.1:8161:8161"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -c 'exec 3<>/dev/tcp/127.0.0.1/61616'"]
+      interval: 5s
+      timeout: 5s
+      retries: 24
+      start_period: 10s
+    # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
+
+  producer:
+    <<: *java-base
+    depends_on:
+      activemq:
+        condition: service_healthy
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - produce
+      - --lab=retry-dlq
+      - --queue=orders-retry
+      - --files=order-1001.json,poison-message.json
+      - --fixtures=/app/fixtures
+
+  # 重试策略经连接 URL 的 jms.redeliveryPolicy.* 参数下发（Classic 客户端声明、Broker 执行）：
+  # maximumRedeliveries=2 表示初始投递后最多重投 2 次，即共 3 次投递（与 artemis 的
+  # max-delivery-attempts=3 语义对齐）；固定 1s 间隔。耗尽后消息转入默认死信 ActiveMQ.DLQ。
+  consumer:
+    <<: *java-base
+    environment:
+      HELLOMQ_ACTIVEMQ_URL: tcp://activemq:61616?jms.redeliveryPolicy.maximumRedeliveries=2&jms.redeliveryPolicy.initialRedeliveryDelay=1000
+    depends_on:
+      producer:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=retry-dlq
+      - --queue=orders-retry
+      - --db=/data/idempotency.db
+      - --expected=1
+      - --fail-aggregate=order-poison
+      - --max-attempts=3
+
+  inspect-db:
+    <<: *java-base
+    volumes:
+      - ../target/hello-mq-activemq-classic.jar:/app/demo.jar:ro
+      - idempotency:/data:ro
+    depends_on:
+      consumer:
+        condition: service_completed_successfully
+    command: ["java", "-jar", "/app/demo.jar", "inspect-db", "--lab=retry-dlq", "--db=/data/idempotency.db"]
+
+  # DLQ 观察：毒消息耗尽投递次数后进入 Classic 默认死信队列 ActiveMQ.DLQ，
+  # 用 --no-business 消费者收出并核对。
+  dlq-consumer:
+    <<: *java-base
+    depends_on:
+      inspect-db:
+        condition: service_completed_successfully
+    command:
+      - java
+      - -jar
+      - /app/demo.jar
+      - consume
+      - --lab=retry-dlq
+      - --queue=ActiveMQ.DLQ
+      - --db=/data/idempotency-dlq.db
+      - --expected=1
+      - --hard-timeout-ms=30000
+      - --consumer=dlq-inspect
+      - --no-business
+
+volumes:
+  idempotency:

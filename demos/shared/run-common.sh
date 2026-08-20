@@ -73,7 +73,8 @@ field_log() {
 
 service_exit_code() {
   local cid
-  cid="$(compose ps -q "$1")"
+  # --all：compose v2 的 ps 默认只列运行中容器，一次性服务已退出必须带 --all 才能取到 ID
+  cid="$(compose ps -q --all "$1" | tail -n 1)"
   docker inspect -f '{{.State.ExitCode}}' "$cid"
 }
 

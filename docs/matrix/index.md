@@ -2,7 +2,7 @@
 
 > 本页结论：横向矩阵只回答「在什么条件下各产品如何实现某项能力」，不回答「谁更好」。每个单元格 = 五级标记 + 一句结论 + 详情链接；所有结论核对日期 checkedAt: 2026-08-19。
 
-本章节对七个产品做同维度横向比较：四个 P0——**RabbitMQ、Kafka、RocketMQ、Pulsar**，两个 P1——**Redis Streams、NATS（Core + JetStream）**，一个 P2——**ActiveMQ Artemis**（分卷与实验编排已就绪，快照未采集，矩阵单元格以官方文档为依据）。阅读前建议先看对应产品分卷的[总览](/brokers/rabbitmq/)与[核心概念映射](/brokers/rabbitmq/concepts)，矩阵不重复讲解概念本身。
+本章节对八个产品做同维度横向比较：四个 P0——**RabbitMQ、Kafka、RocketMQ、Pulsar**，两个 P1——**Redis Streams、NATS（Core + JetStream）**，两个 P2——**ActiveMQ Artemis**（分卷与实验编排已就绪，快照未采集，矩阵单元格以官方文档为依据）与 **ActiveMQ Classic**（3 个实验快照已采集，矩阵单元格以实验快照与官方文档为依据）。阅读前建议先看对应产品分卷的[总览](/brokers/rabbitmq/)与[核心概念映射](/brokers/rabbitmq/concepts)，矩阵不重复讲解概念本身。
 
 ## 矩阵阅读方法
 
@@ -23,6 +23,7 @@
 | <ProductLogo product="redis" /> Redis Streams | 8.2.1 | [/brokers/redis-streams/](/brokers/redis-streams/) |
 | <ProductLogo product="nats" /> NATS | 2.11.5 | [/brokers/nats/](/brokers/nats/) |
 | ActiveMQ Artemis | 2.44.0 | [/brokers/artemis/](/brokers/artemis/) |
+| ActiveMQ Classic | 6.2.0 | [/brokers/activemq-classic/](/brokers/activemq-classic/) |
 
 镜像均以 tag+digest 双锁定，见 `demos/.env.versions` 与[版本政策](/reference/version-policy)。
 
@@ -50,10 +51,10 @@
 
 ## 交互能力速览
 
-下表为五大能力在七个产品中的实现层级速览（可点击单元格中的「证据」跳转详细页）；逐项结论与前置条件见各专题矩阵页。
+下表为五大能力在八个产品中的实现层级速览（可点击单元格中的「证据」跳转详细页）；逐项结论与前置条件见各专题矩阵页。
 
 <CapabilityMatrix
-  :columns="['RabbitMQ 4.1.4', 'Kafka 4.3.1', 'RocketMQ 5.5.0', 'Pulsar 4.2.4', 'Redis Streams 8.2.1', 'NATS 2.11.5', 'Artemis 2.44.0']"
+  :columns="['RabbitMQ 4.1.4', 'Kafka 4.3.1', 'RocketMQ 5.5.0', 'Pulsar 4.2.4', 'Redis Streams 8.2.1', 'NATS 2.11.5', 'Artemis 2.44.0', 'Classic 6.2.0']"
   :rows="[
     {
       capability: '端到端 exactly-once',
@@ -65,6 +66,7 @@
         { level: 'business', note: '幂等表 + 手动 XACK 组合', link: '/matrix/delivery-semantics' },
         { level: 'business', note: 'JetStream 显式 Ack + 业务幂等表；Msg-Id 去重仅在重发窗口内', link: '/matrix/delivery-semantics' },
         { level: 'business', note: 'XA 事务只保证 Broker 内原子；跨系统仍需业务幂等', link: '/matrix/delivery-semantics' },
+        { level: 'business', note: 'SESSION_TRANSACTED 事务消费只保证 Broker 内原子；跨系统仍需业务幂等', link: '/matrix/delivery-semantics' },
       ],
     },
     {
@@ -77,6 +79,7 @@
         { level: 'composed', note: '单 Stream 天然 FIFO（无分区）；组内并行消费会破坏处理顺序', link: '/matrix/ordering' },
         { level: 'composed', note: '单 Stream 有序（无分区）；顺序消费需单消费者', link: '/matrix/ordering' },
         { level: 'composed', note: '单队列 FIFO；同组有序需 _AMQ_GROUP_ID（同组串行单消费者）', link: '/matrix/ordering' },
+        { level: 'composed', note: '单队列 FIFO；同组有序需 JMSXGroupID（Message Groups）', link: '/matrix/ordering' },
       ],
     },
     {
@@ -89,6 +92,7 @@
         { level: 'composed', note: 'PEL + XCLAIM/XAUTOCLAIM 重领；DLQ 需业务转写另一 Stream', link: '/matrix/retry-dlq' },
         { level: 'composed', note: 'AckWait + MaxDeliver 原生重投；耗尽后丢弃，DLQ 需自建', link: '/matrix/retry-dlq' },
         { level: 'native', note: 'address-setting 重试（max-delivery-attempts+退避）+ dead-letter-address', link: '/matrix/retry-dlq' },
+        { level: 'native', note: 'redeliveryPolicy（URL 声明、Broker 执行）+ 默认共享 ActiveMQ.DLQ（零配置）', link: '/matrix/retry-dlq' },
       ],
     },
     {
@@ -101,6 +105,7 @@
         { level: 'business', note: '无内建：常用 ZSET 到期表 + 轮询转出', link: '/matrix/delayed-messages' },
         { level: 'business', note: '无内建：需外部调度器到点发布', link: '/matrix/delayed-messages' },
         { level: 'native', note: '_AMQ_SCHED_DELAY 属性指定延迟毫秒数', link: '/matrix/delayed-messages' },
+        { level: 'business', note: '无原生延迟投递（与 Artemis 不同），需业务侧到点重发', link: '/matrix/delayed-messages' },
       ],
     },
     {
@@ -113,6 +118,7 @@
         { level: 'native', note: 'XACK 不删除；新建消费组从 0-0 或按 Entry ID 重读（受 XTRIM 限制）', link: '/matrix/replay-retention' },
         { level: 'native', note: 'JetStream 按 sequence/时间戳创建新消费者回放', link: '/matrix/replay-retention' },
         { level: 'none', note: 'ack 即删，队列无日志可回放', link: '/matrix/replay-retention' },
+        { level: 'none', note: '确认即删（KahaDB 只存未消费消息），无回放语义', link: '/matrix/replay-retention' },
       ],
     },
   ]"
@@ -126,15 +132,15 @@
 
 同一概念在不同产品中的名字与边界不同，比较前先对齐术语：
 
-| 中性术语 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS | Artemis |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 存储消息的实体 | Queue（[concepts](/brokers/rabbitmq/concepts)） | Topic 的 Partition（[concepts](/brokers/kafka/concepts)） | CommitLog + MessageQueue 索引（[concepts](/brokers/rocketmq/concepts)） | Partition + BookKeeper ledger（[concepts](/brokers/pulsar/concepts)） | Stream：单 key 追加日志（[concepts](/brokers/redis-streams/concepts)） | JetStream Stream：File/Memory 存储（[concepts](/brokers/nats/concepts)） | Address 下的 Queue：journal 存储（[concepts](/brokers/artemis/concepts)） |
-| 逻辑分类 | Exchange + Binding 决定去向，Queue 实际存储 | Topic | Topic | Topic | Stream key | Subject（层级通配 `*`/`>`） | Address（anycast/multicast 路由类型） |
-| 顺序/并行的最小单元 | 单个 Queue | Partition | MessageGroup（FIFO）/ MessageQueue | Partition + 订阅类型 | 单个 Stream（无分区） | 单个 Stream（无分区） | 单个 Queue（或 Message Group 内） |
-| 竞争消费单位 | 同一 Queue 上的多个 consumer | Consumer Group（组内瓜分分区） | Consumer Group（集群消费模式） | Subscription（Shared/Failover/Key_Shared） | Consumer Group（组内 XREADGROUP 竞争分发） | Core Queue Group / JetStream Consumer | 同一 Queue 上的多个 consumer（round-robin） |
-| 独立订阅（广播） | 多条 Binding 到多个 Queue | 多个 Consumer Group 各自位点 | 广播消费模式 / 多个 Consumer Group | 多个 Subscription 各自游标 | 多个 Consumer Group 各自 last-delivered-id | 多个订阅者；JetStream 多个 Consumer 各自位点 | multicast Address 每订阅一个 Queue |
-| 消费位点 | 不暴露位点（ACK 即删，无可回退游标） | Offset | Consumer Offset（可按时间重置） | Cursor（reset-cursor） | last-delivered-id + PEL（XGROUP SETID 可改） | Consumer sequence（DeliverPolicy 可定起点） | 不暴露位点（ack 即删，无可回退游标） |
-| 隔离边界 | Virtual Host | 无原生租户层级（ACL/Quota 组合） | 无原生租户层级（ACL） | Tenant / Namespace | 无原生租户层级（ACL/DB 编号弱隔离） | Account（原生多账号隔离） | 无原生租户层级（角色/地址 ACL） |
+| 中性术语 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS | Artemis | ActiveMQ Classic |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| 存储消息的实体 | Queue（[concepts](/brokers/rabbitmq/concepts)） | Topic 的 Partition（[concepts](/brokers/kafka/concepts)） | CommitLog + MessageQueue 索引（[concepts](/brokers/rocketmq/concepts)） | Partition + BookKeeper ledger（[concepts](/brokers/pulsar/concepts)） | Stream：单 key 追加日志（[concepts](/brokers/redis-streams/concepts)） | JetStream Stream：File/Memory 存储（[concepts](/brokers/nats/concepts)） | Address 下的 Queue：journal 存储（[concepts](/brokers/artemis/concepts)） | Queue/Topic 目的地：KahaDB 存储（[concepts](/brokers/activemq-classic/concepts)） |
+| 逻辑分类 | Exchange + Binding 决定去向，Queue 实际存储 | Topic | Topic | Topic | Stream key | Subject（层级通配 `*`/`>`） | Address（anycast/multicast 路由类型） | Queue/Topic 目的地（无 Exchange，按目的地名直连） |
+| 顺序/并行的最小单元 | 单个 Queue | Partition | MessageGroup（FIFO）/ MessageQueue | Partition + 订阅类型 | 单个 Stream（无分区） | 单个 Stream（无分区） | 单个 Queue（或 Message Group 内） | 单个 Queue（或 Message Group JMSXGroupID 内） |
+| 竞争消费单位 | 同一 Queue 上的多个 consumer | Consumer Group（组内瓜分分区） | Consumer Group（集群消费模式） | Subscription（Shared/Failover/Key_Shared） | Consumer Group（组内 XREADGROUP 竞争分发） | Core Queue Group / JetStream Consumer | 同一 Queue 上的多个 consumer（round-robin） | 同一 Queue 上的多个 consumer（竞争分发） |
+| 独立订阅（广播） | 多条 Binding 到多个 Queue | 多个 Consumer Group 各自位点 | 广播消费模式 / 多个 Consumer Group | 多个 Subscription 各自游标 | 多个 Consumer Group 各自 last-delivered-id | 多个订阅者；JetStream 多个 Consumer 各自位点 | multicast Address 每订阅一个 Queue | Topic 上每个 durable subscription 各留一份 |
+| 消费位点 | 不暴露位点（ACK 即删，无可回退游标） | Offset | Consumer Offset（可按时间重置） | Cursor（reset-cursor） | last-delivered-id + PEL（XGROUP SETID 可改） | Consumer sequence（DeliverPolicy 可定起点） | 不暴露位点（ack 即删，无可回退游标） | 不暴露位点（确认即删，无可回退游标） |
+| 隔离边界 | Virtual Host | 无原生租户层级（ACL/Quota 组合） | 无原生租户层级（ACL） | Tenant / Namespace | 无原生租户层级（ACL/DB 编号弱隔离） | Account（原生多账号隔离） | 无原生租户层级（角色/地址 ACL） | 无原生租户层级（JAAS + 目的地 ACL） |
 
 术语的中性定义与「不可直接等价之处」详见[统一术语表](/reference/glossary)。
 
