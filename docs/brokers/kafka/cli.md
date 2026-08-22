@@ -7,16 +7,23 @@
 Kafka 镜像自带 `/opt/kafka/bin/` 目录下共 **43 个文件**，覆盖集群管理、消费者组、主题操作、日志分析等全部运维场景：
 
 ```bash
-$ ls /opt/kafka/bin/
-connect-distributed.sh
-connect-mirror-maker.sh
-connect-plugin-path.sh
-connect-standalone.sh
-kafka-acls.sh
-kafka-broker-api-versions.sh
-kafka-client-metrics.sh
-...
-trogdor.sh
+$ ls /opt/kafka/bin
+connect-distributed.sh       kafka-consumer-perf-test.sh  kafka-replica-verification.sh
+connect-mirror-maker.sh      kafka-delegation-tokens.sh   kafka-run-class.sh
+connect-plugin-path.sh       kafka-delete-records.sh      kafka-server-start.sh
+connect-standalone.sh        kafka-dump-log.sh            kafka-server-stop.sh
+kafka-acls.sh                kafka-e2e-latency.sh         kafka-share-consumer-perf-test.sh
+kafka-broker-api-versions.sh kafka-features.sh            kafka-share-groups.sh
+kafka-client-metrics.sh      kafka-get-offsets.sh         kafka-storage.sh
+kafka-cluster.sh             kafka-groups.sh              kafka-streams-application-reset.sh
+kafka-configs.sh             kafka-jmx.sh                 kafka-streams-groups.sh
+kafka-console-consumer.sh    kafka-leader-election.sh     kafka-topics.sh
+kafka-console-producer.sh    kafka-log-dirs.sh            kafka-transactions.sh
+kafka-console-share-consumer.sh kafka-metadata-quorum.sh   kafka-verifiable-consumer.sh
+kafka-consumer-groups.sh     kafka-metadata-shell.sh      kafka-verifiable-producer.sh
+kafka-consumer-perf-test.sh  kafka-producer-perf-test.sh  kafka-verifiable-share-consumer.sh
+kafka-delegation-tokens.sh   kafka-reassign-partitions.sh trogdor.sh
+kafka-delete-records.sh      kafka-replica-verification.sh
 ```
 
 主要分类：
