@@ -7,20 +7,13 @@
 Artemis 采用**统一入口设计**：只有单一二进制文件 `artemis`（以及 Windows 版的 `artemis.cmd`），所有功能通过子命令实现：
 
 ```bash
-$ bin/artemis --help
-Usage: artemis [options] <command> [<command-options>]
-
-Available commands:
-    broker          Broker management
-    check           Node checks
-    create          Create a new instance
-    daemon          Daemon operations
-    log             Log file operations
-    ...
-    queue           Queue management
-    producer        Message producer
-    consumer        Message consumer
-    browser         Message browser
+$ ls /opt/activemq-artemis/bin
+artemis
+artemis.cmd
+lib
+Apache ActiveMQ Artemis 2.44.0
+ActiveMQ Artemis home: /opt/activemq-artemis
+ActiveMQ Artemis instance: null
 ```
 
 **bin 目录仅包含**：`artemis`, `artemis.cmd`, `lib/` (JAR 库)

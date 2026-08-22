@@ -4,24 +4,29 @@
 
 ## 命令清单
 
-Pulsar 镜像 `/pulsar/bin/` 目录下共 **19 个命令**（包括二进制文件和 shell 脚本）：
+Pulsar 镜像 `/pulsar/bin/` 目录下共 **20 个文件**（包括 Python 脚本、二进制文件和 shell 脚本）：
 
 ```bash
-$ bin/pulsar-admin --help
-Usage: pulsar-admin [options] <command> [command options]
-
-Available commands:
-  brokers          Broker management commands
-  cluster          Cluster management commands
-  ...
-  topics           Topic management commands
-  subscriptions    Subscription management commands
-  tenant           Tenant management commands
-  namespaces       Namespace management commands
-  functions        Function management commands
-  plugin           Plugin management commands
-  ...
-  client           Client tools (produce/consume)
+$ ls /pulsar/bin
+apply-config-from-env-with-prefix.py
+apply-config-from-env.py
+bookkeeper
+function-localrunner
+gen-yml-from-env.py
+generate-zookeeper-config.sh
+proto
+pulsar
+pulsar-admin
+pulsar-admin-common.sh
+pulsar-client
+pulsar-daemon
+pulsar-managed-ledger-admin
+pulsar-perf
+pulsar-shell
+pulsar-zookeeper-ruok.sh
+update-ini-from-env.py
+update-rocksdb-conf-from-env.py
+watch-znode.py
 ```
 
 主要工具：

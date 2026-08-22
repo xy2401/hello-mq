@@ -7,13 +7,13 @@
 镜像内置 `redis-cli` 及辅助二进制文件，位于 `/usr/local/bin/`：
 
 ```bash
-$ docker exec hello-mq-redis-1 which redis-cli redis-server redis-benchmark ...
-/usr/local/bin/redis-cli
-/usr/local/bin/redis-server
-/usr/local/bin/redis-sentinel
-/usr/local/bin/redis-benchmark
-/usr/local/bin/redis-check-rdb
-/usr/local/bin/redis-check-aof
+$ docker exec hello-mq-redis-1 ls /usr/local/bin | grep ^redis
+redis-benchmark
+redis-check-aof
+redis-check-rdb
+redis-cli
+redis-sentinel
+redis-server
 ```
 
 **共 6 个二进制**，全部功能通过 `redis-cli` 提供。

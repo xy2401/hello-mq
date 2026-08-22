@@ -10,21 +10,24 @@ RabbitMQ 的自带 CLI 能力**有限**：4.x 版本已移除 `rabbitmqctl add_q
 
 ## 命令清单
 
-镜像 `/usr/sbin/` 目录下共 **10 个二进制文件**：
+镜像 `/opt/rabbitmq/sbin/` 目录下共 **10 个脚本文件**：
 
 ```bash
-$ docker exec hello-mq-rabbit-1 ls /usr/sbin/rabbit*
-/usr/sbin/rabbitmq-upgrade
-/usr/sbin/rabbitmqctl
-/usr/sbin/rabbitmq-diagnostics
-/usr/sbin/rabbitmq-plugins
-/usr/sbin/rabbitmq-env
-/usr/sbin/rabbitmq-config
-...
+$ docker exec hello-mq-rabbit-1 ls /opt/rabbitmq/sbin
+rabbitmq-defaults
+rabbitmq-diagnostics
+rabbitmq-env
+rabbitmq-plugins
+rabbitmq-queues
+rabbitmq-server
+rabbitmq-streams
+rabbitmq-upgrade
+rabbitmqctl
+vmware-rabbitmq
 ```
 
 其中：
-- **运维命令**：`rabbitmqctl`, `rabbitmq-diagnostics`, `rabbitmq-plugins`
+- **运维命令**：`rabbitmqctl`, `rabbitmq-diagnostics`, `rabbitmq-plugins`  
 - **队列声明**：仅支持 `rabbitmqadmin declare queue`（management 插件自带）
 - **消息收发**：**无自带命令**，必须走 HTTP API
 
