@@ -4,11 +4,19 @@
 
 ## 命令清单
 
-Kafka 镜像自带 `/opt/kafka/bin/` 目录下共 **43 个 shell 脚本**，覆盖集群管理、消费者组、主题操作、日志分析等全部运维场景：
+Kafka 镜像自带 `/opt/kafka/bin/` 目录下共 **43 个文件**，覆盖集群管理、消费者组、主题操作、日志分析等全部运维场景：
 
 ```bash
-$ ls /opt/kafka/bin/*.sh | wc -l
-43
+$ ls /opt/kafka/bin/
+connect-distributed.sh
+connect-mirror-maker.sh
+connect-plugin-path.sh
+connect-standalone.sh
+kafka-acls.sh
+kafka-broker-api-versions.sh
+kafka-client-metrics.sh
+...
+trogdor.sh
 ```
 
 主要分类：
