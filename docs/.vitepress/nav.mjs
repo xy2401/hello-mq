@@ -111,6 +111,7 @@ export const sidebar = {
       text: 'RabbitMQ',
       items: [
         { text: '总览', link: '/brokers/rabbitmq/' },
+        { text: 'CLI 工具', link: '/brokers/rabbitmq/cli' },
         { text: '快速开始', link: '/brokers/rabbitmq/quick-start' },
         { text: '核心概念映射', link: '/brokers/rabbitmq/concepts' },
         { text: '路由与分发', link: '/brokers/rabbitmq/routing' },
@@ -126,6 +127,7 @@ export const sidebar = {
       text: 'Kafka',
       items: [
         { text: '总览', link: '/brokers/kafka/' },
+        { text: 'CLI 工具', link: '/brokers/kafka/cli' },
         { text: '快速开始', link: '/brokers/kafka/quick-start' },
         { text: '核心概念映射', link: '/brokers/kafka/concepts' },
         { text: '分区与分发', link: '/brokers/kafka/routing' },
@@ -141,6 +143,7 @@ export const sidebar = {
       text: 'RocketMQ',
       items: [
         { text: '总览', link: '/brokers/rocketmq/' },
+        { text: 'CLI 工具', link: '/brokers/rocketmq/cli' },
         { text: '快速开始', link: '/brokers/rocketmq/quick-start' },
         { text: '核心概念映射', link: '/brokers/rocketmq/concepts' },
         { text: '路由与分发', link: '/brokers/rocketmq/routing' },
@@ -156,6 +159,7 @@ export const sidebar = {
       text: 'Pulsar',
       items: [
         { text: '总览', link: '/brokers/pulsar/' },
+        { text: 'CLI 工具', link: '/brokers/pulsar/cli' },
         { text: '快速开始', link: '/brokers/pulsar/quick-start' },
         { text: '核心概念映射', link: '/brokers/pulsar/concepts' },
         { text: '订阅与分发', link: '/brokers/pulsar/routing' },
@@ -171,6 +175,7 @@ export const sidebar = {
       text: 'Redis Streams',
       items: [
         { text: '总览', link: '/brokers/redis-streams/' },
+        { text: 'CLI 工具', link: '/brokers/redis-streams/cli' },
         { text: '快速开始', link: '/brokers/redis-streams/quick-start' },
         { text: '核心概念映射', link: '/brokers/redis-streams/concepts' },
         { text: '路由与分发', link: '/brokers/redis-streams/routing' },
@@ -186,6 +191,7 @@ export const sidebar = {
       text: 'NATS',
       items: [
         { text: '总览', link: '/brokers/nats/' },
+        { text: 'CLI 工具', link: '/brokers/nats/cli' },
         { text: '快速开始', link: '/brokers/nats/quick-start' },
         { text: '核心概念映射', link: '/brokers/nats/concepts' },
         { text: '路由与分发', link: '/brokers/nats/routing' },
@@ -201,6 +207,7 @@ export const sidebar = {
       text: 'ActiveMQ Artemis',
       items: [
         { text: '总览', link: '/brokers/artemis/' },
+        { text: 'CLI 工具', link: '/brokers/artemis/cli' },
         { text: '快速开始', link: '/brokers/artemis/quick-start' },
         { text: '核心概念映射', link: '/brokers/artemis/concepts' },
         { text: '路由与分发', link: '/brokers/artemis/routing' },
@@ -216,6 +223,7 @@ export const sidebar = {
       text: 'ActiveMQ Classic',
       items: [
         { text: '总览', link: '/brokers/activemq-classic/' },
+        { text: 'CLI 工具', link: '/brokers/activemq-classic/cli' },
         { text: '快速开始', link: '/brokers/activemq-classic/quick-start' },
         { text: '核心概念映射', link: '/brokers/activemq-classic/concepts' },
         { text: '路由与分发', link: '/brokers/activemq-classic/routing' },

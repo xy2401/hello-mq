@@ -15,7 +15,6 @@ const base = defineConfig({
     logo: '/logo.svg',
     nav,
     sidebar,
-    search: { provider: 'local' },
     outline: { level: [2, 3], label: '本页目录' },
     lastUpdated: { text: '最后更新' },
     docFooter: { prev: '上一篇', next: '下一篇' },
