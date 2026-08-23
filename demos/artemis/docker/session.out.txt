@@ -1,6 +1,6 @@
 ---
 status: verified
-capturedAt: "2026-08-20T00:00:00.000Z"
+capturedAt: "2026-08-23T15:19:49.324Z"
 dockerImage: "apache/activemq-artemis:2.44.0@sha256:0305c26f19eda00c0506d0953cfe265600a72ac1b17f7934412120c01a595cff"
 exitCode: 0
 ---
@@ -9,7 +9,7 @@ exitCode: 0
 Connection brokerURL = tcp://localhost:61616
 Running NodeCheck
 Checking that the node is started ... success
-Checks run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.085 sec - NodeCheck
+Checks run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.083 sec - NodeCheck
 
 ## create
 [cli-tools] $ /opt/activemq-artemis/bin/artemis queue create --name orders-cli --address orders-cli --anycast --durable --auto-create-address --silent --user admin --password hello-mq-artemis --url tcp://localhost:61616
@@ -23,19 +23,19 @@ Producer ActiveMQQueue[orders-cli], thread=0 Started to calculate elapsed time .
 
 Producer ActiveMQQueue[orders-cli], thread=0 Produced: 1 messages
 Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in second : 0 s
-Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 59 milli seconds
+Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 18 milli seconds
 Connection brokerURL = tcp://localhost:61616
 Producer ActiveMQQueue[orders-cli], thread=0 Started to calculate elapsed time ...
 
 Producer ActiveMQQueue[orders-cli], thread=0 Produced: 1 messages
 Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in second : 0 s
-Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 64 milli seconds
+Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 17 milli seconds
 Connection brokerURL = tcp://localhost:61616
 Producer ActiveMQQueue[orders-cli], thread=0 Started to calculate elapsed time ...
 
 Producer ActiveMQQueue[orders-cli], thread=0 Produced: 1 messages
 Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in second : 0 s
-Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 36 milli seconds
+Producer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 17 milli seconds
 
 ## consume
 [cli-tools] $ /opt/activemq-artemis/bin/artemis consumer --destination queue://orders-cli --message-count 3 --receive-timeout 10000 --verbose --user admin --password hello-mq-artemis --url tcp://localhost:61616
@@ -45,17 +45,17 @@ Connection brokerURL = tcp://localhost:61616
 Consumer:: filter = null
 Consumer ActiveMQQueue[orders-cli], thread=0 wait 10000ms until 3 messages are consumed
 Consumer ActiveMQQueue[orders-cli], thread=0 Received order-cli-1
-JMS Message ID:ID:2d6855cd-9cb2-11f1-88ed-c298a3ddb3fa
+JMS Message ID:ID:a6e67567-9f05-11f1-b327-be38a569daa5
 Received text sized at 11
 Consumer ActiveMQQueue[orders-cli], thread=0 Received order-cli-2
-JMS Message ID:ID:2f557fd9-9cb2-11f1-b87a-c298a3ddb3fa
+JMS Message ID:ID:a7d2d1a9-9f05-11f1-9c5e-be38a569daa5
 Received text sized at 11
 Consumer ActiveMQQueue[orders-cli], thread=0 Received order-cli-3
-JMS Message ID:ID:3126e40a-9cb2-11f1-805e-c298a3ddb3fa
+JMS Message ID:ID:a8bce2e1-9f05-11f1-b0ec-be38a569daa5
 Received text sized at 11
 Consumer ActiveMQQueue[orders-cli], thread=0 Consumed: 3 messages
 Consumer ActiveMQQueue[orders-cli], thread=0 Elapsed time in second : 0 s
-Consumer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 28 milli seconds
+Consumer ActiveMQQueue[orders-cli], thread=0 Elapsed time in milli second : 16 milli seconds
 Consumer ActiveMQQueue[orders-cli], thread=0 Consumed: 3 messages
 Consumer ActiveMQQueue[orders-cli], thread=0 Consumer thread finished
 
