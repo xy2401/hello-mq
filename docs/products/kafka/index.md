@@ -8,10 +8,10 @@
 
 Kafka 是日志型（Log-based）消息系统的代表：
 
-- **事件流与回放**：消息按 retention 保留，多个消费组可各自从头重读（[实验](/matrix/experiment/ordering)）。
+- **事件流与回放**：消息按 retention 保留，多个消费组可各自从头重读（[实验](/playground/ordering)）。
 - **高吞吐持久化管道**：顺序写盘 + 批量 + 零拷贝，适合大量事件的接入与分发。
 - **同键有序的任务流**：同一 key 的消息进同一分区，分区内顺序消费。
-- **不太适合**：单条消息级别的灵活路由（没有 Exchange/Binding 概念）、需要「消费即删除」的竞争队列语义——Kafka 的删除由 retention 决定，与消费进度无关（对比 RabbitMQ，见 [消息模型](/concepts/models)）。
+- **不太适合**：单条消息级别的灵活路由（没有 Exchange/Binding 概念）、需要「消费即删除」的竞争队列语义——Kafka 的删除由 retention 决定，与消费进度无关（对比 RabbitMQ，见 [消息模型](/#mq-models)）。
 
 ## 架构速览
 
@@ -47,7 +47,7 @@ flowchart LR
 | 重试/DLQ | 无 Broker 内置消费重试；Retry Topic/DLQ 是应用或框架层模式 |
 | 延迟消息 | 无内置延迟消息，需应用层实现 |
 | 高可用 | 分区多副本 + ISR；KRaft 管理元数据，无需 ZooKeeper |
-| 回放 | 原生支持：按 offset/时间戳重置消费位点（[实验](/matrix/experiment/ordering)） |
+| 回放 | 原生支持：按 offset/时间戳重置消费位点（[实验](/playground/ordering)） |
 
 ## 学习路径
 
@@ -57,7 +57,7 @@ flowchart LR
 4. [可靠性](/products/kafka/reliability)：acks、幂等生产、offset 提交窗口与事务边界。
 5. [存储与高可用](/products/kafka/storage-ha)：日志、retention/compaction、副本与 KRaft。
 6. [运维与观测](/products/kafka/operations)、[陷阱与检查表](/products/kafka/pitfalls)。
-7. 动手实验：[basic](/products/kafka/quick-start)、[consumer-group](/matrix/experiment/ordering)、[ordering-replay](/matrix/experiment/ordering)、[idempotence-transaction](/products/kafka/reliability)、[cli-tools](/products/kafka/operations)。
+7. 动手实验：[basic](/products/kafka/quick-start)、[consumer-group](/playground/ordering)、[ordering-replay](/playground/ordering)、[idempotence-transaction](/products/kafka/reliability)、[cli-tools](/products/kafka/operations)。
 
 ## 版本基线
 

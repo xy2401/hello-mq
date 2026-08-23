@@ -151,12 +151,12 @@ CLI 的长项是**快、零依赖、贴近排障现场**：容器起来就能用
 | 能力 | CLI 现状 | 谁来实现 |
 | :--- | :--- | :--- |
 | 事务（跨分区原子写、事务消息） | 无 | SDK：见[投递语义](/matrix/delivery-semantics) |
-| 幂等消费 | 无 | 业务代码：见[幂等消费](/patterns/idempotent-consumer) |
-| 重试、退避、DLQ 接线 | 无（最多手工搬运） | SDK/框架配置：见[重试与 DLQ](/patterns/retry-and-dlq) |
-| 类型化载荷与 Schema 演进 | 只有字符串/字节 | 客户端序列化：见 [Schema 演进](/patterns/schema-evolution) |
+| 幂等消费 | 无 | 业务代码：见[幂等消费](/reference/patterns/idempotent-consumer) |
+| 重试、退避、DLQ 接线 | 无（最多手工搬运） | SDK/框架配置：见[重试与 DLQ](/reference/patterns/retry-and-dlq) |
+| 类型化载荷与 Schema 演进 | 只有字符串/字节 | 客户端序列化：见 [Schema 演进](/reference/patterns/schema-evolution) |
 | 批量、连接复用、背压、监听器 | 无 | SDK 运行时能力 |
 
-分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/products/rabbitmq/quick-start)与[实验总览](/matrix/experiment/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
+分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/products/rabbitmq/quick-start)与[实验总览](/playground/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
 
 ## 怎么复现
 

@@ -39,9 +39,9 @@ sequenceDiagram
 
 Relay「发布成功但标记失败」会重发同一条消息，所以整条链是 at-least-once。Outbox 必须与接收侧模式配套：
 
-- 接收端：[幂等消费](/patterns/idempotent-consumer)（`processed_messages` 唯一键拦截重复）；
-- 毒消息：[重试与 DLQ](/patterns/retry-and-dlq)；
-- 全链路用 `traceId`/`correlationId` 串联排障（见[可观测性](/operations/observability)）。
+- 接收端：[幂等消费](/reference/patterns/idempotent-consumer)（`processed_messages` 唯一键拦截重复）；
+- 毒消息：[重试与 DLQ](/reference/patterns/retry-and-dlq)；
+- 全链路用 `traceId`/`correlationId` 串联排障（见[可观测性](/reference/operations/observability)）。
 
 ## 与其他机制的关系
 
@@ -59,7 +59,7 @@ Relay「发布成功但标记失败」会重发同一条消息，所以整条链
 - 「Outbox 就是 exactly-once」——它给的是「业务成功 ⇒ 最终至少发一次」；exactly-once 要靠接收端幂等合成。
 - 「Relay 可以在事务提交前就开始发」——事务可能回滚，发出去的消息收不回来。
 - 「双写（代码里先写库再 send）加个重试就够了」——进程崩溃时重试机会都没有；失败窗口的形状见上文表格。
-- 「outbox 表可以无限堆积」——已发送记录要归档/清理，否则扫表越来越慢（见[容量规划](/operations/capacity-planning)）。
+- 「outbox 表可以无限堆积」——已发送记录要归档/清理，否则扫表越来越慢（见[容量规划](/reference/operations/capacity-planning)）。
 
 ## 官方资料与模式参考
 

@@ -24,7 +24,7 @@ docker compose -p <project> exec kafka \
 
 | 指标 | 含义 | 异常信号 |
 | :--- | :--- | :--- |
-| Consumer Group Lag | 分区最新 offset − 已提交 offset | 持续增长 = 消费跟不上（积压），见 [背压与积压](/concepts/backpressure) |
+| Consumer Group Lag | 分区最新 offset − 已提交 offset | 持续增长 = 消费跟不上（积压），见 [背压与积压](/#mq-backpressure) |
 | UnderReplicatedPartitions | Follower 落后、不在 ISR 的分区数 | >0 表示副本同步异常，可用性在退化 |
 | ActiveControllerCount / ISR 收缩速率 | 元数据与副本健康 | Leader 频繁切换、ISR 频繁抖动 = 节点/网络不稳 |
 | RequestHandler/Network 空闲率 | Broker 处理能力 | 接近 0 = Broker 饱和 |

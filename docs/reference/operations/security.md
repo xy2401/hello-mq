@@ -28,11 +28,11 @@
 | Payload 敏感数据分类与脱敏 | 个人信息/凭证/支付数据在消息体内加密或只传引用 ID；信封字段（如 aggregateId）同样评估敏感性 |
 | 加密边界说明 | 传输加密（TLS）只保护链路；静态加密依赖 Broker 所在存储（磁盘加密/云 KMS），不等于 Broker 原生能力；字段级加密在应用层完成，与两者独立叠加 |
 | 审计与轮换 | 记录管理操作与权限变更；证书/密钥设轮换周期与到期告警，轮换与客户端 truststore 更新要同时演练 |
-| Demo 默认账号禁用 | guest/guest、匿名访问、PLAINTEXT 默认端口清单进入[生产检查表](/operations/production-checklist)禁止项 |
+| Demo 默认账号禁用 | guest/guest、匿名访问、PLAINTEXT 默认端口清单进入[生产检查表](/reference/operations/production-checklist)禁止项 |
 
 ## 实验环境的约定（本仓库豁免项）
 
-[实验约定](/guide/lab-conventions) 规定学习环境的安全形态：
+[实验约定](/reference/lab-conventions) 规定学习环境的安全形态：
 
 - 所有 Broker 端口（5672/15672、9092、RocketMQ/Pulsar 对应端口）仅绑定 `127.0.0.1`，管理界面不暴露公网。
 - RabbitMQ 使用默认 `guest/guest`——该账号被 Broker 自身限制为仅 localhost 可用；Kafka 实验使用 PLAINTEXT，不开认证。

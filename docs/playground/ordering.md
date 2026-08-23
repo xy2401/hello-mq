@@ -60,7 +60,7 @@ bash demos/kafka/consumer-group/run.sh
 | 回放 | 原生：位点重置/新组 earliest | 不适用（ACK 即删；Streams 除外） | 原生：reset-cursor 到 earliest/时间戳（redelivery-replay 实验验证） |
 | 多订阅 | 多消费组各自位点 | 多队列各自绑定 | 同一 topic 可并存多个订阅（Exclusive/Shared/Failover/Key_Shared），各自独立游标 |
 
-统一结论（对应 [顺序语义](/concepts/ordering)）：三家都只提供**局部顺序**；「全局顺序」需要牺牲并行度，且都要在消费端保持单线程处理同一顺序单位。Pulsar 的额外维度是订阅类型：Shared 换吞吐但无跨消费者顺序，Key_Shared 才能同时兼得同键有序与并行（见 [subscriptions 实验](/products/pulsar/routing)）。
+统一结论（对应 [顺序语义](/#mq-ordering)）：三家都只提供**局部顺序**；「全局顺序」需要牺牲并行度，且都要在消费端保持单线程处理同一顺序单位。Pulsar 的额外维度是订阅类型：Shared 换吞吐但无跨消费者顺序，Key_Shared 才能同时兼得同键有序与并行（见 [subscriptions 实验](/products/pulsar/routing)）。
 
 ## 断言汇总
 

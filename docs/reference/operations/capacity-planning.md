@@ -21,7 +21,7 @@
 
 - **峰值而不是均值**：按日均值规划的系统必然在大促/活动日写满磁盘。
 - **副本数不是浪费**：它是可靠性配置的一部分（Kafka replication factor、Pulsar 副本/写 ack 配置、RabbitMQ quorum 复制），减副本换容量是在拿数据安全换空间。
-- 存储型系统（Kafka/RocketMQ/Pulsar）按保留期计；队列型（RabbitMQ）正常情况队列接近空，积压时可能瞬时吞掉全部内存/磁盘——两者都要设水位（见[故障剧本](/operations/failure-playbook)）。
+- 存储型系统（Kafka/RocketMQ/Pulsar）按保留期计；队列型（RabbitMQ）正常情况队列接近空，积压时可能瞬时吞掉全部内存/磁盘——两者都要设水位（见[故障剧本](/reference/operations/failure-playbook)）。
 
 ## 第二笔账：吞吐余量与积压预算
 
@@ -34,7 +34,7 @@
     → 需要额外 5,000 × 300 / 600 = 2,500 msg/s 的余量
 ```
 
-积压预算直接转化为[可观测性](/operations/observability)里的告警阈值：`mq_backlog` 超过预算即告警。
+积压预算直接转化为[可观测性](/reference/operations/observability)里的告警阈值：`mq_backlog` 超过预算即告警。
 
 ## 第三笔账：消费者扩容路径（四产品不同）
 
@@ -45,7 +45,7 @@
 | RocketMQ | message queue | 与 Kafka 类似：队列数限制组内并行度 | 同上 |
 | Pulsar | 订阅类型 + 分区 | Shared/Key_Shared 订阅可多消费者；单 topic 到顶后改分区 topic | 先看订阅类型，再看分区 |
 
-共性结论：**「加消费者」不一定能扩容**。Kafka/RocketMQ 受分区/队列数约束（见[工作队列](/patterns/work-queue)的分发形状一节），扩容方案要先回答并行度单位够不够。
+共性结论：**「加消费者」不一定能扩容**。Kafka/RocketMQ 受分区/队列数约束（见[工作队列](/reference/patterns/work-queue)的分发形状一节），扩容方案要先回答并行度单位够不够。
 
 ## 压测记录规范
 
@@ -60,12 +60,12 @@
 两条红线：
 
 1. **报告标题必须是「该固定环境下的实验结果」**，不得使用「产品绝对性能排名」式表述——不同环境下的数字不可比，排名没有意义。
-2. **不把单机 Demo 数字当生产基准**。本仓库实验（见[实验室](/matrix/experiment/)）运行在单节点 Docker、无认证、小数据量条件下，其价值是验证语义与失败模式（证据等级 E2，见[证据政策](/reference/evidence-policy)），不是吞吐能力证明。
+2. **不把单机 Demo 数字当生产基准**。本仓库实验（见[实验室](/playground/)）运行在单节点 Docker、无认证、小数据量条件下，其价值是验证语义与失败模式（证据等级 E2，见[证据政策](/reference/evidence-policy)），不是吞吐能力证明。
 
 ## 常见误区
 
 - 「Demo 里跑到 10 万 msg/s，生产照这个规划」——Demo 环境无副本、无 TLS、消息极小、页缓存全热，与生产形状完全不同。
-- 「积压了先加消费者」——并行度单位（分区/队列）不够时加了也无效；先走[积压决策树](/operations/observability)。
+- 「积压了先加消费者」——并行度单位（分区/队列）不够时加了也无效；先走[积压决策树](/reference/operations/observability)。
 - 「磁盘按当前用量规划」——保留期 × 副本数的乘法效应和峰值突增都会击穿「当前用量」外推。
 
 ## 官方资料

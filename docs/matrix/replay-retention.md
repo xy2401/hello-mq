@@ -17,12 +17,12 @@
 
 | 能力 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS | Artemis |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 历史回放 | ➖ 不适用：ACK 即删，没有可回读的历史（RabbitMQ Streams 是例外，不在本仓库范围）（[storage-ha](/products/rabbitmq/storage-ha)） | ✅ 原生：按 offset 或时间戳 seek/重置消费位点，多消费组可各自回放（[storage-ha](/products/kafka/storage-ha)，[实验](/matrix/experiment/ordering)） | ✅ 原生：重置消费位点（按时间戳/最大最小位点），保留期内可重读（[storage-ha](/products/rocketmq/storage-ha)） | ✅ 原生：reset-cursor 按时间戳或 message ID 重置订阅游标（[storage-ha](/products/pulsar/storage-ha)） | ✅ 原生：新建消费组从 0-0 起读，或 XGROUP SETID/XRANGE 按 Entry ID 重读（受 XTRIM 限制）（[storage-ha](/products/redis-streams/storage-ha)） | ✅ 原生：按 DeliverByStartSequence/DeliverByStartTime 创建新消费者回放（[storage-ha](/products/nats/storage-ha)） | ➖ 不适用：acknowledge 即删，没有可回读的历史；需要留档只能业务侧或多队列复制（[storage-ha](/products/artemis/storage-ha)） |
+| 历史回放 | ➖ 不适用：ACK 即删，没有可回读的历史（RabbitMQ Streams 是例外，不在本仓库范围）（[storage-ha](/products/rabbitmq/storage-ha)） | ✅ 原生：按 offset 或时间戳 seek/重置消费位点，多消费组可各自回放（[storage-ha](/products/kafka/storage-ha)，[实验](/playground/ordering)） | ✅ 原生：重置消费位点（按时间戳/最大最小位点），保留期内可重读（[storage-ha](/products/rocketmq/storage-ha)） | ✅ 原生：reset-cursor 按时间戳或 message ID 重置订阅游标（[storage-ha](/products/pulsar/storage-ha)） | ✅ 原生：新建消费组从 0-0 起读，或 XGROUP SETID/XRANGE 按 Entry ID 重读（受 XTRIM 限制）（[storage-ha](/products/redis-streams/storage-ha)） | ✅ 原生：按 DeliverByStartSequence/DeliverByStartTime 创建新消费者回放（[storage-ha](/products/nats/storage-ha)） | ➖ 不适用：acknowledge 即删，没有可回读的历史；需要留档只能业务侧或多队列复制（[storage-ha](/products/artemis/storage-ha)） |
 | 位点控制粒度 | ➖ Broker 不暴露消费位点 | ✅ 分区级 offset，任意位置 seek（[concepts](/products/kafka/concepts)） | 🔧 消费组 × Topic × 队列级别重置，粒度为队列（[concepts](/products/rocketmq/concepts)） | ✅ 订阅级游标，可到具体 message ID（[concepts](/products/pulsar/concepts)） | ✅ 消费组级 last-delivered-id，XGROUP SETID 可到任意 Entry ID（[concepts](/products/redis-streams/concepts)） | ✅ 消费者级 sequence，可精确到单条消息或时间点（[concepts](/products/nats/concepts)） | ➖ Broker 不暴露消费位点 |
 | 多订阅独立回放 | ➖ 消息一旦被某队列 ACK 即消失，不存在多订阅各自重读 | ✅ 每个 Consumer Group 独立位点，互不影响（[concepts](/products/kafka/concepts)） | ✅ 每个 Consumer Group 独立消费位点（[concepts](/products/rocketmq/concepts)） | ✅ 每个 Subscription 独立游标，可单独重置（[concepts](/products/pulsar/concepts)） | ✅ 每个 Consumer Group 独立位点，可各自回放（[concepts](/products/redis-streams/concepts)） | ✅ 每个 Consumer 独立位点，可单独重建回放（[concepts](/products/nats/concepts)） | ➖ 消息一旦被 acknowledge 即从队列消失，不存在多订阅各自重读 |
 | 回放对生产者的影响 | ➖ | ✅ 回放是纯读操作，不移动日志、不影响其他消费组（[storage-ha](/products/kafka/storage-ha)） | ✅ 重置位点不影响 CommitLog 与其他消费组（[storage-ha](/products/rocketmq/storage-ha)） | ✅ reset-cursor 只动该订阅游标（[storage-ha](/products/pulsar/storage-ha)） | ✅ 新建组/XGROUP SETID 只动该组位点，不改 Stream 内容（[storage-ha](/products/redis-streams/storage-ha)） | ✅ 新建回放消费者不影响既有消费者（[storage-ha](/products/nats/storage-ha)） | ➖ |
 
-> 积压恢复与回放是两回事：积压是消费者追赶未消费消息，回放是主动把位点拨回已消费过的历史。积压定位见[背压与积压](/concepts/backpressure)，积压恢复实验见 [backlog-recovery](/matrix/experiment/backlog-recovery)。
+> 积压恢复与回放是两回事：积压是消费者追赶未消费消息，回放是主动把位点拨回已消费过的历史。积压定位见[背压与积压](/#mq-backpressure)，积压恢复实验见 [backlog-recovery](/playground/backlog-recovery)。
 
 ## 脚注：同名异义
 
@@ -33,5 +33,5 @@
 ## 相关页面
 
 - 存储层如何支撑保留与高可用：[存储与高可用、扩展与并行](/matrix/storage-ha-scaling)
-- 基础概念：[存储与回放](/concepts/storage-and-replay)
-- 动手实验：[顺序、消费组与回放（Kafka）](/matrix/experiment/ordering)
+- 基础概念：[存储与回放](/#mq-storage-and-replay)
+- 动手实验：[顺序、消费组与回放（Kafka）](/playground/ordering)

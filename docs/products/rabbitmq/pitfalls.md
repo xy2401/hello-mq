@@ -34,7 +34,7 @@
 
 ## 反模式清单
 
-- 用 NACK+requeue 当无限重试：毒消息卡队头，CPU 空转。→ 用 [TTL+DLX 重试环](/matrix/experiment/poison-message)。
+- 用 NACK+requeue 当无限重试：毒消息卡队头，CPU 空转。→ 用 [TTL+DLX 重试环](/playground/poison-message)。
 - 一个队列塞所有事件类型，消费者里 if/else 分发：路由责任上移到 Exchange。
 - 把 Broker 事务当跨系统事务：事务消息不覆盖下游数据库/HTTP 副作用。→ Outbox + 幂等消费。
 - 消费者处理几秒还开 autoAck + 大 prefetch：丢失窗口与负载不均双重放大。
@@ -45,7 +45,7 @@
 
 - [ ] 生产端：Publisher Confirms 开启，nack/超时有补偿路径（重试或 Outbox）。
 - [ ] 消费端：手动 ACK，业务事务提交后才 ACK；prefetch 已按处理能力设置。
-- [ ] 幂等：`messageId` 唯一键表与业务写入同事务；已验证重投场景（本仓库 [consumer-crash 实验](/matrix/experiment/consumer-crash) 可复用为验收用例）。
+- [ ] 幂等：`messageId` 唯一键表与业务写入同事务；已验证重投场景（本仓库 [consumer-crash 实验](/playground/consumer-crash) 可复用为验收用例）。
 - [ ] 失败路径：最大重试次数 + DLQ + DLQ 告警；毒消息有处理预案。
 - [ ] 队列类型：生产可靠队列使用 Quorum Queue（≥3 副本），并理解多数派不可用时队列不可用。
 - [ ] 资源：内存/磁盘 watermark 与告警配置；积压增长趋势有监控。

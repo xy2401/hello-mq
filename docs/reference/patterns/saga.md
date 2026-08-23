@@ -53,7 +53,7 @@ sequenceDiagram
 ## 补偿的性质
 
 - 补偿是**业务级撤销**（恢复库存额度、订单置为取消、冲正积分），不是数据库 ROLLBACK——已发出的短信、已打印的面单无法物理撤销，这类步骤要么放到 Saga 末尾，要么接受不可逆。
-- 补偿**必须幂等**：补偿命令同样会重复投递，按[幂等消费](/patterns/idempotent-consumer)处理。
+- 补偿**必须幂等**：补偿命令同样会重复投递，按[幂等消费](/reference/patterns/idempotent-consumer)处理。
 - 补偿**也可能失败**：补偿失败 → 重试 → 超限进 DLQ → 人工介入。Saga 的终态不止「成功/已补偿」，还有「补偿中/需人工」，状态机必须显式建模。
 - 补偿顺序一般与执行顺序相反，但设计时要逐对验证（先恢复库存还是先取消订单，取决于业务约束）。
 
@@ -63,10 +63,10 @@ Saga 的每一步都靠消息驱动，因此它不替代本页其他模式，而
 
 | 依赖 | 作用 | 对应页面 |
 | :--- | :--- | :--- |
-| 业务成功必发出 | 本地事务与发事件同事务（Outbox），或 RocketMQ 事务消息回查 | [Outbox](/patterns/outbox) |
-| 重复投递去重 | 每个参与者按 messageId/业务键幂等 | [幂等消费](/patterns/idempotent-consumer) |
-| 步骤失败处理 | 瞬时故障有限重试，毒消息进 DLQ 告警 | [重试与 DLQ](/patterns/retry-and-dlq) |
-| 链路追踪 | 同一 traceId 贯穿执行与补偿，否则无法定位「卡在哪一步」 | [可观测性](/operations/observability) |
+| 业务成功必发出 | 本地事务与发事件同事务（Outbox），或 RocketMQ 事务消息回查 | [Outbox](/reference/patterns/outbox) |
+| 重复投递去重 | 每个参与者按 messageId/业务键幂等 | [幂等消费](/reference/patterns/idempotent-consumer) |
+| 步骤失败处理 | 瞬时故障有限重试，毒消息进 DLQ 告警 | [重试与 DLQ](/reference/patterns/retry-and-dlq) |
+| 链路追踪 | 同一 traceId 贯穿执行与补偿，否则无法定位「卡在哪一步」 | [可观测性](/reference/operations/observability) |
 
 ## 保证成立的条件 / 不保证什么
 

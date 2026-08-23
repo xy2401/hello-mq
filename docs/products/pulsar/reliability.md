@@ -37,7 +37,7 @@
 5. 数据库提交成功后才 acknowledge（individual）
 ```
 
-第 4 步成功、第 5 步前崩溃 → 消息重投 → 幂等表拦截。**「ack 等于业务数据库已成功提交」不成立**——两者是独立系统上的两个动作，窗口不可消除。崩溃重投的通用分析见 [消费者崩溃实验](/matrix/experiment/consumer-crash)。basic 实验即按此实现：
+第 4 步成功、第 5 步前崩溃 → 消息重投 → 幂等表拦截。**「ack 等于业务数据库已成功提交」不成立**——两者是独立系统上的两个动作，窗口不可消除。崩溃重投的通用分析见 [消费者崩溃实验](/playground/consumer-crash)。basic 实验即按此实现：
 
 <LabOutput product="pulsar" lab="basic" />
 
@@ -49,7 +49,7 @@
 - 不配置 DeadLetterPolicy 时，失败消息**无限重投**——backlog 不降、日志刷错，是最常见的配置缺失。
 - DLQ 是普通 Topic：需要独立的订阅去消费、告警与人工处置。
 
-redelivery-replay 实验（`persistent://public/default/orders-redeliver`，Shared 订阅 + `maxRedeliverCount=2`）验证完整路径：毒消息（aggregateId=order-poison）被 `negativeAcknowledge` 反复重投，达到策略上限后进 DLQ（断言毒消息投递次数与 `dlqMessages=1`，正常消息不受阻塞）；随后用 `pulsar-admin reset-cursor` 把游标重置到 earliest 全量回放，断言再次收到全量消息（对比 [毒消息实验](/matrix/experiment/poison-message) 的 RabbitMQ 组合式重试）：
+redelivery-replay 实验（`persistent://public/default/orders-redeliver`，Shared 订阅 + `maxRedeliverCount=2`）验证完整路径：毒消息（aggregateId=order-poison）被 `negativeAcknowledge` 反复重投，达到策略上限后进 DLQ（断言毒消息投递次数与 `dlqMessages=1`，正常消息不受阻塞）；随后用 `pulsar-admin reset-cursor` 把游标重置到 earliest 全量回放，断言再次收到全量消息（对比 [毒消息实验](/playground/poison-message) 的 RabbitMQ 组合式重试）：
 
 ```bash
 bash demos/pulsar/redelivery-replay/run.sh

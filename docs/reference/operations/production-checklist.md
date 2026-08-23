@@ -14,36 +14,36 @@
 ## 2. 生产侧：可靠投递
 
 - [ ] 生产者启用并正确处理发布确认（publisher confirm / acks=all + 幂等 producer / sendResult 回调）。
-- [ ] 「业务写入 + 消息发送」不是裸双写：采用 [Outbox](/patterns/outbox)（或 RocketMQ 事务消息等等价机制），明确失败窗口归属。
+- [ ] 「业务写入 + 消息发送」不是裸双写：采用 [Outbox](/reference/patterns/outbox)（或 RocketMQ 事务消息等等价机制），明确失败窗口归属。
 - [ ] 消息使用统一信封：messageId 全局唯一、eventType 语义化、schemaVersion、traceId/correlationId 全链路。
-- [ ] 契约变更走兼容演进流程（见 [Schema 演进](/patterns/schema-evolution)）；破坏性变更有升版本与共存过渡方案。
+- [ ] 契约变更走兼容演进流程（见 [Schema 演进](/reference/patterns/schema-evolution)）；破坏性变更有升版本与共存过渡方案。
 
 ## 3. 消费侧：幂等、重试与 DLQ
 
-- [ ] 消费者按 [§5.4 基准实现](/patterns/idempotent-consumer)：幂等键与业务写入同事务，确认动作在事务提交之后。
+- [ ] 消费者按 [§5.4 基准实现](/reference/patterns/idempotent-consumer)：幂等键与业务写入同事务，确认动作在事务提交之后。
 - [ ] 手动确认（ACK / 手动提交 offset），确认时机有明确代码位置与注释。
-- [ ] 重试有上限与延迟策略；毒消息路径验证过（参考实验[毒消息、重试与 DLQ](/matrix/experiment/poison-message)）。
+- [ ] 重试有上限与延迟策略；毒消息路径验证过（参考实验[毒消息、重试与 DLQ](/playground/poison-message)）。
 - [ ] DLQ 已建立且有告警：深度、新增速率、最老消息年龄；回放流程演练过一次。
-- [ ] 崩溃重投已演练（参考实验[消费者崩溃与重投](/matrix/experiment/consumer-crash)）：确认重复只产生 duplicate_skipped，不产生重复业务写入。
+- [ ] 崩溃重投已演练（参考实验[消费者崩溃与重投](/playground/consumer-crash)）：确认重复只产生 duplicate_skipped，不产生重复业务写入。
 
 ## 4. 观测与告警
 
-- [ ] 六组统一指标全部可查：生产确认率、消费与积压（mq_backlog）、重投率、DLQ 深度、端到端事件年龄、Broker 资源（见[可观测性](/operations/observability)）。
+- [ ] 六组统一指标全部可查：生产确认率、消费与积压（mq_backlog）、重投率、DLQ 深度、端到端事件年龄、Broker 资源（见[可观测性](/reference/operations/observability)）。
 - [ ] 日志包含 §12.2 统一字段，traceId/correlationId 贯穿 Producer 与 Consumer。
 - [ ] 积压预算已设定并接入告警；告警有责任人。
-- [ ] 故障处置走[故障剧本](/operations/failure-playbook)，值班同学知道四张表的位置。
+- [ ] 故障处置走[故障剧本](/reference/operations/failure-playbook)，值班同学知道四张表的位置。
 
 ## 5. 安全基线
 
 - [ ] 生产启用 TLS 且验证服务端身份；管理端口与数据端口分离并限制访问。
-- [ ] 每个服务独立身份，按 Topic/Queue 最小授权（见[安全基线](/operations/security)三件套对照表）。
+- [ ] 每个服务独立身份，按 Topic/Queue 最小授权（见[安全基线](/reference/operations/security)三件套对照表）。
 - [ ] Demo 默认账号与匿名访问已禁用（guest/guest、PLAINTEXT 无认证等——实验环境豁免项在生产全部是禁止项）。
 - [ ] 秘密不进仓库、URL、日志与快照；Payload 敏感字段已分类脱敏。
 - [ ] 证书/密钥轮换流程与审计日志就位。
 
 ## 6. 容量与压测
 
-- [ ] 存储按「峰值速率 × 保留期 × 副本数 × 冗余系数」计算过（见[容量规划](/operations/capacity-planning)）。
+- [ ] 存储按「峰值速率 × 保留期 × 副本数 × 冗余系数」计算过（见[容量规划](/reference/operations/capacity-planning)）。
 - [ ] 吞吐余量 ≥ 2 倍峰值；消费者扩容路径已验证（并行度单位：分区/队列/消费者关系）。
 - [ ] 压测报告记录完整环境，标题为「该固定环境下的实验结果」；未把单机 Demo 数字当生产基准。
 - [ ] 磁盘/内存水位双阈值告警（预警线 + 强制动作线）。

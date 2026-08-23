@@ -27,7 +27,7 @@ npm run docs:preview  # 预览构建产物
 bash demos/rabbitmq/basic/run.sh    # 启动 RabbitMQ、发 3 条、收 3 条、校验断言
 ```
 
-实验会自动完成（见[实验约定](/guide/lab-conventions)）：
+实验会自动完成（见[实验约定](/reference/lab-conventions)）：
 
 1. jar 缺失时先构建 Demo（`mvn package`）。
 2. 以独立 Compose Project `hello-mq-rabbitmq-basic` 启动完整流程；broker 健康后由 `depends_on` 依次驱动 setup → producer → consumer → inspect-db。
@@ -48,6 +48,6 @@ npm run check           # check-project + docs:build
 
 ## 下一步
 
-- 理解概念：[基础原理](/concepts/)
-- 动手实验：[实验室总览](/matrix/experiment/)
+- 理解概念：[基础原理](/#mq-fundamentals)
+- 动手实验：[实验室总览](/playground/)
 - 产品学习：[RabbitMQ 分卷](/products/rabbitmq/)

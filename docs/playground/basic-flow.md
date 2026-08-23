@@ -37,7 +37,7 @@ lab 入口会依次执行：启动 Broker → 声明队列 → 发送 3 条 `Ord
 
 ## 故障流程
 
-本实验是 L1 冒烟，不注入故障。崩溃与重投场景见 [消费者崩溃与重投](/matrix/experiment/consumer-crash)。
+本实验是 L1 冒烟，不注入故障。崩溃与重投场景见 [消费者崩溃与重投](/playground/consumer-crash)。
 
 ## 保证成立的条件
 

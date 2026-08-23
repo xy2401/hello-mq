@@ -24,7 +24,7 @@ docker compose -p <project> exec broker \
 
 | 指标 | 含义 | 异常信号 |
 | :--- | :--- | :--- |
-| Consume Diff（堆积） | 队列最新消息位 − 消费组已消费位 | 持续增长 = 消费跟不上（积压），见 [背压与积压](/concepts/backpressure) |
+| Consume Diff（堆积） | 队列最新消息位 − 消费组已消费位 | 持续增长 = 消费跟不上（积压），见 [背压与积压](/#mq-backpressure) |
 | 重试队列深度 | `%RETRY%<组>` 中待重投的消息 | 增长 = 消费失败率上升 |
 | DLQ 深度 | `%DLQ%<组>` 中耗尽重试的消息 | >0 = 有毒消息/逻辑缺陷需人工介入 |
 | 发送 TPS / 失败率 | Broker 接收能力 | 失败率升高 = 容量或网络异常 |

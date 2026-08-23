@@ -69,7 +69,7 @@ RabbitMQ 无内置消费重试。推荐模式（本仓库 retry-dlq 实验验证
 
 - 工作队列 DLX → 重试队列（TTL 延迟）→ 回环到工作队列；
 - 消费者用 `x-death` 计数限制最大尝试次数；
-- 超限显式投递 DLQ 并告警。详见 [毒消息、重试与 DLQ](/matrix/experiment/poison-message)。
+- 超限显式投递 DLQ 并告警。详见 [毒消息、重试与 DLQ](/playground/poison-message)。
 
 ## 顺序与重试的关系
 

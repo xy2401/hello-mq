@@ -20,7 +20,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 消费失败后的顺序 | 🔧 nack+requeue 会把消息重新排入队列，打破原 FIFO；TTL+DLX 重试同样使消息乱序重入（[reliability](/products/rabbitmq/reliability)） | ✅ Broker 不重投：失败后从已提交位点重读，分区内顺序保持，但可能重复处理（[reliability](/products/kafka/reliability)） | ✅ FIFO 消费失败会挂起该顺序组等待重试，保序但可能阻塞后续同组消息；普通消息失败进重试队列，不阻塞但乱序（[reliability](/products/rocketmq/reliability)） | 🔧 Shared 重投可能换消费者、乱序；Key_Shared 同 key 重投仍绑定同一 key 的顺序约束；Exclusive/Failover 顺序保持（[reliability](/products/pulsar/reliability)） | 🔧 失败消息留在 PEL，被 claim 后可能由另一消费者乱序处理；日志本身顺序不变（[reliability](/products/redis-streams/reliability)） | 🔧 AckWait 超时后消息重投到队尾附近，可能晚于后续消息被处理；日志本身顺序不变（[reliability](/products/nats/reliability)） | 🔧 重投消息按 address-setting 延迟后重新入队，可能晚于后续消息被处理；Message Group 仍绑定原消费者（[reliability](/products/artemis/reliability)） | 🔧 rollback/断开触发按 redeliveryPolicy 重投重新入队，可能晚于后续消息被处理；Message Group 仍绑定原消费者（[reliability](/products/activemq-classic/reliability)） |
 | 生产者发送重试与乱序 | 🔧 无内置发送排序保证，乱序风险需业务容忍或串行发送（[pitfalls](/products/rabbitmq/pitfalls)） | ✅ 幂等 Producer（enable.idempotence=true）保证重试写入不打乱分区内顺序（[reliability](/products/kafka/reliability)） | 🔧 需 FIFO 发送语义配合（同 MessageGroup 串行确认），乱发则无保序（[reliability](/products/rocketmq/reliability)） | 🔧 同分区并发发送可能乱序，需同 key 串行发送或顺序保证配置（[pitfalls](/products/pulsar/pitfalls)） | 🔧 单 Stream 内并发 XADD 按完成顺序编号：同 key 需串行发送（[pitfalls](/products/redis-streams/pitfalls)） | 🔧 同 Stream 并发发布按到达顺序编号：同 key 需串行发布或接受乱序（[pitfalls](/products/nats/pitfalls)） | 🔧 同队列并发发送按到达顺序入队：同 key 需串行发送或接受乱序（[pitfalls](/products/artemis/pitfalls)） | 🔧 同队列并发发送按到达顺序入队：同 key 需串行发送或接受乱序（[pitfalls](/products/activemq-classic/pitfalls)） |
-| 毒消息对顺序的阻塞 | 🔧 队头毒消息反复 requeue 会卡住整个队列（[labs](/matrix/experiment/poison-message)） | ✅ 位点继续前移由应用决定：跳过则不阻塞，重试则整分区暂停（[reliability](/products/kafka/reliability)） | 🔧 FIFO 队列中一条坏消息挂起整组，需人工介入或跳过策略（[pitfalls](/products/rocketmq/pitfalls)） | 🔧 Key_Shared 下一个 key 反复失败会卡住该 key 的消息流（[pitfalls](/products/pulsar/pitfalls)） | 🔧 毒消息留在 PEL 反复被 claim，需业务转写死信 Stream 或 XDEL 移除（[pitfalls](/products/redis-streams/pitfalls)） | 🔧 MaxDeliver 耗尽后消息被放弃不再阻塞；未设上限则反复重投（[pitfalls](/products/nats/pitfalls)） | ✅ max-delivery-attempts 耗尽后自动转入 dead-letter-address，不再阻塞队列（[reliability](/products/artemis/reliability)） | ✅ maximumRedeliveries 耗尽后自动转入默认 ActiveMQ.DLQ，不再阻塞队列（[reliability](/products/activemq-classic/reliability)） |
+| 毒消息对顺序的阻塞 | 🔧 队头毒消息反复 requeue 会卡住整个队列（[labs](/playground/poison-message)） | ✅ 位点继续前移由应用决定：跳过则不阻塞，重试则整分区暂停（[reliability](/products/kafka/reliability)） | 🔧 FIFO 队列中一条坏消息挂起整组，需人工介入或跳过策略（[pitfalls](/products/rocketmq/pitfalls)） | 🔧 Key_Shared 下一个 key 反复失败会卡住该 key 的消息流（[pitfalls](/products/pulsar/pitfalls)） | 🔧 毒消息留在 PEL 反复被 claim，需业务转写死信 Stream 或 XDEL 移除（[pitfalls](/products/redis-streams/pitfalls)） | 🔧 MaxDeliver 耗尽后消息被放弃不再阻塞；未设上限则反复重投（[pitfalls](/products/nats/pitfalls)） | ✅ max-delivery-attempts 耗尽后自动转入 dead-letter-address，不再阻塞队列（[reliability](/products/artemis/reliability)） | ✅ maximumRedeliveries 耗尽后自动转入默认 ActiveMQ.DLQ，不再阻塞队列（[reliability](/products/activemq-classic/reliability)） |
 
 ## 消费并行与顺序的互斥
 
@@ -46,5 +46,5 @@
 ## 相关页面
 
 - 失败后的处理：[重试与 DLQ](/matrix/retry-dlq)
-- 基础概念：[顺序语义](/concepts/ordering)
-- 动手实验：[顺序、消费组与回放（Kafka）](/matrix/experiment/ordering)
+- 基础概念：[顺序语义](/#mq-ordering)
+- 动手实验：[顺序、消费组与回放（Kafka）](/playground/ordering)

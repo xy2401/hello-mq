@@ -70,7 +70,7 @@ ack 是逐条（individual）或累积（cumulative）的显式动作；`negativ
 
 ### 8. 顺序语义
 
-顺序只在**单分区**内成立。分区 Topic 中同 key 进同一分区；消费侧 Exclusive/Failover 保持单分区顺序，Key_Shared 保持同 key 顺序，**Shared 不保证任何顺序**（见 [陷阱](/products/pulsar/pitfalls)）。详见 [顺序语义](/concepts/ordering)。
+顺序只在**单分区**内成立。分区 Topic 中同 key 进同一分区；消费侧 Exclusive/Failover 保持单分区顺序，Key_Shared 保持同 key 顺序，**Shared 不保证任何顺序**（见 [陷阱](/products/pulsar/pitfalls)）。详见 [顺序语义](/#mq-ordering)。
 
 ### 9. 失败处理
 

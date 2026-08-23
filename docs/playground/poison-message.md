@@ -82,7 +82,7 @@ Producer 发送 order-1001、order-1002 与一条故意不符合 Schema 的毒�
 
 - 重试延迟由 retry 队列 TTL 决定；TTL 到期是从队头开始计算的（队列级 TTL），不适合做大量差异化延迟的调度器。
 - 进入 DLQ 不代表消息「处理失败的原因」被记录；生产实践应同时把失败原因写入日志或旁路存储，DLQ 只保留原始消息。
-- DLX、TTL、x-death 都是组合使用的队列特性，与 Kafka 的 retry topic 模式、RocketMQ 的 Broker 内置重试不是同一机制，不可互相类比（见 [投递语义矩阵](/concepts/delivery-semantics) 与后续横向矩阵）。
+- DLX、TTL、x-death 都是组合使用的队列特性，与 Kafka 的 retry topic 模式、RocketMQ 的 Broker 内置重试不是同一机制，不可互相类比（见 [投递语义矩阵](/#mq-delivery-semantics) 与后续横向矩阵）。
 - 毒消息进 DLQ 后业务侧仍需告警与人工回放；DLQ 不是「删掉就没事」的垃圾桶。
 
 ## 常见误区

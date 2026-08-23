@@ -41,7 +41,7 @@ hello-mq/
 │   ├── nats/           # 同上
 │   ├── activemq-classic/       # 同上（经典目的地、可靠消息模式）
 │   └── artemis/        # 同上（含 broker.xml）
-├── docs/               # VitePress 文档站（guide/fundamentals/brokers/labs/...）
+├── docs/               # VitePress 文档站（首页基础、products、matrix、playground、reference）
 └── scripts/            # check-project.js 静态检查
 ```
 

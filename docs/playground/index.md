@@ -10,14 +10,14 @@
 
 | 产品 | 实验 | 等级 | 验证目标 |
 | :--- | :--- | :--- | :--- |
-| RabbitMQ | [basic](/matrix/experiment/basic-flow) | L1 | durable 队列 + Publisher Confirms + 手动 ACK + 幂等落库的最小闭环 |
-| RabbitMQ | [routing](/matrix/experiment/poison-message#routing) | L1 | Topic Exchange 按路由键把同一事件分发给不同绑定 |
-| RabbitMQ | [consumer-crash](/matrix/experiment/consumer-crash) | L2 | 消费者在业务提交后、ACK 前崩溃 → 重投递 → 幂等表拦截 |
-| RabbitMQ | [retry-dlq](/matrix/experiment/poison-message) | L2 | 毒消息经 TTL+DLX 重试环最终进入死信队列 |
-| RabbitMQ | [backlog-recovery](/matrix/experiment/backlog-recovery) | L2 | 无消费者时消息积压，消费者恢复后追赶清零 |
+| RabbitMQ | [basic](/playground/basic-flow) | L1 | durable 队列 + Publisher Confirms + 手动 ACK + 幂等落库的最小闭环 |
+| RabbitMQ | [routing](/playground/poison-message#routing) | L1 | Topic Exchange 按路由键把同一事件分发给不同绑定 |
+| RabbitMQ | [consumer-crash](/playground/consumer-crash) | L2 | 消费者在业务提交后、ACK 前崩溃 → 重投递 → 幂等表拦截 |
+| RabbitMQ | [retry-dlq](/playground/poison-message) | L2 | 毒消息经 TTL+DLX 重试环最终进入死信队列 |
+| RabbitMQ | [backlog-recovery](/playground/backlog-recovery) | L2 | 无消费者时消息积压，消费者恢复后追赶清零 |
 | Kafka | [basic](/products/kafka/quick-start) | L1 | acks=all + 幂等生产 + 手动提交 offset + 幂等落库的最小闭环 |
-| Kafka | [consumer-group](/matrix/experiment/ordering) | L2 | 同组两个消费者瓜分分区，独立组各自全量接收 |
-| Kafka | [ordering-replay](/matrix/experiment/ordering) | L2 | 同 key 消息进同一分区且保序，新消费组从 earliest 全量回放 |
+| Kafka | [consumer-group](/playground/ordering) | L2 | 同组两个消费者瓜分分区，独立组各自全量接收 |
+| Kafka | [ordering-replay](/playground/ordering) | L2 | 同 key 消息进同一分区且保序，新消费组从 earliest 全量回放 |
 | Kafka | [idempotence-transaction](/products/kafka/reliability) | L2 | 事务提交消息对 read_committed 可见，中止事务消息不可见 |
 | RocketMQ | [basic](/products/rocketmq/quick-start) | L1 | Normal topic + SimpleConsumer + 幂等落库的最小闭环 |
 | RocketMQ | [fifo-delay](/products/rocketmq/routing) | L2 | FIFO topic 同 MessageGroup 保序，延迟消息按设定时间投递 |
@@ -33,7 +33,7 @@
 | ActiveMQ Artemis | [basic](/products/artemis/quick-start) | L1 | JMS 收发 + 手动确认 + 幂等落库的最小闭环 |
 | ActiveMQ Artemis | [retry-dlq](/products/artemis/reliability) | L2 | 服务端重投达上限进入死信地址 |
 
-等级定义见 [实验约定](/guide/lab-conventions)：L0 静态检查、L1 单节点冒烟、L2 可靠性行为、L3/L4 默认不执行。
+等级定义见 [实验约定](/reference/lab-conventions)：L0 静态检查、L1 单节点冒烟、L2 可靠性行为、L3/L4 默认不执行。
 
 ## 运行方式
 
@@ -54,7 +54,7 @@ for s in demos/*/*/run.sh; do bash "$s"; done
 
 1. 用项目名隔离的 Compose Project（`hello-mq-<product>-<lab>`）启动完整流程（broker → setup → producer → consumer → inspect-db）；
 2. 由 `depends_on` 的 `service_healthy` / `service_completed_successfully` 条件等待与排序，而不是固定等待；
-3. producer/consumer 以容器服务运行（digest 锁定的 JRE 镜像挂载本机构建的 jar，见 [实验约定](/guide/lab-conventions)）；
+3. producer/consumer 以容器服务运行（digest 锁定的 JRE 镜像挂载本机构建的 jar，见 [实验约定](/reference/lab-conventions)）；
 4. 执行业务级断言（数量、幂等表行数、队列深度、重投次数），PASS/FAIL 写入 `assert.out.txt`；
 5. 结束后自动停止并删除容器，把各角色日志写入实验目录 `<服务>.out.txt`。
 
@@ -72,6 +72,6 @@ for s in demos/*/*/run.sh; do bash "$s"; done
 
 ## 下一步
 
-- [基础收发流程](/matrix/experiment/basic-flow)：最短闭环。
-- [消费者崩溃与重投](/matrix/experiment/consumer-crash)：Phase 1 的核心实验。
-- [毒消息、重试与 DLQ](/matrix/experiment/poison-message)：失败路径。
+- [基础收发流程](/playground/basic-flow)：最短闭环。
+- [消费者崩溃与重投](/playground/consumer-crash)：Phase 1 的核心实验。
+- [毒消息、重试与 DLQ](/playground/poison-message)：失败路径。

@@ -46,7 +46,7 @@
 
 ### Broker 资源与 Business 端到端
 
-- **Broker**：入站/出站速率、存储大小、磁盘/内存/网络水位、连接数、不可用分区/副本状态（RabbitMQ quorum 成员、Kafka under-replicated partitions、Pulsar unassigned bundles 等）。磁盘水位告警直接关联[故障剧本](/operations/failure-playbook)。
+- **Broker**：入站/出站速率、存储大小、磁盘/内存/网络水位、连接数、不可用分区/副本状态（RabbitMQ quorum 成员、Kafka under-replicated partitions、Pulsar unassigned bundles 等）。磁盘水位告警直接关联[故障剧本](/reference/operations/failure-playbook)。
 - **Business**：端到端事件年龄（`now − occurredAt`，消费成功时刻计算）、重复拦截数（幂等表 `duplicate_skipped` 计数）、业务应用成功数。端到端延迟是唯一能回答「用户视角慢不慢」的指标，信封里的 `occurredAt`就是为它准备的。
 
 ## 积压定位决策树
@@ -66,9 +66,9 @@ flowchart TD
   E -- "否" --> F{"重投率是否升高？"}
   H -- "是" --> E
   H -- "否（全量均匀积压）" --> G{"Broker 是否限流/资源瓶颈？"}
-  F -- "是（毒消息循环/下游故障）" --> F1["查失败日志与 DLQ 新增速率\n参见 /patterns/retry-and-dlq"]
+  F -- "是（毒消息循环/下游故障）" --> F1["查失败日志与 DLQ 新增速率\n参见 /reference/patterns/retry-and-dlq"]
   F -- "否" --> G2["单条处理延迟上升\n剖析消费逻辑与下游依赖"]
-  G -- "是（Broker 限流）" --> G1["查磁盘/内存水位、连接数\n参见 /operations/capacity-planning"]
+  G -- "是（Broker 限流）" --> G1["查磁盘/内存水位、连接数\n参见 /reference/operations/capacity-planning"]
   G -- "否" --> G2
 ```
 
@@ -95,9 +95,9 @@ status durationMs errorType
 1. **注入**：Producer 把当前 `traceId`/`correlationId` 写入消息（信封字段）或 Broker header。
 2. **提取**：Consumer 从消息中取出并写入 MDC/日志上下文，消费期间所有日志自动携带。
 3. **Span 划分**：Producer send 是一个 Span，Broker 存储是边界（不是 Span），Consumer 处理是另一个 Span——两者通过信封字段链接而非直接父子。
-4. **重试延续原 Trace**：重试消息沿用原 `traceId`，`attempt` 字段递增；这样一次失败-重试-成功的全过程可在同一 trace 下检索。请求-应答的应答消息同样延续 `correlationId`（见[请求-应答](/patterns/request-reply)）。
+4. **重试延续原 Trace**：重试消息沿用原 `traceId`，`attempt` 字段递增；这样一次失败-重试-成功的全过程可在同一 trace 下检索。请求-应答的应答消息同样延续 `correlationId`（见[请求-应答](/reference/patterns/request-reply)）。
 
-没有 `traceId` 的日志在多消费者、多重试的系统里无法定位「这条消息到底被谁处理了几次」——这是[幂等消费](/patterns/idempotent-consumer)排障的第一依赖。
+没有 `traceId` 的日志在多消费者、多重试的系统里无法定位「这条消息到底被谁处理了几次」——这是[幂等消费](/reference/patterns/idempotent-consumer)排障的第一依赖。
 
 ## 告警的最小集合
 
@@ -105,9 +105,9 @@ status durationMs errorType
 | :--- | :--- | :--- |
 | 积压超预算 | mq_backlog 超过容量规划阈值 | 走积压决策树 |
 | 生产确认率下降 | 确认率 < 阈值持续 N 分钟 | 查 Broker 可用性与网络 |
-| DLQ 新增/深度 | 深度 > 0 增速异常 或 深度超阈 | 见[故障剧本·重投风暴](/operations/failure-playbook) |
+| DLQ 新增/深度 | 深度 > 0 增速异常 或 深度超阈 | 见[故障剧本·重投风暴](/reference/operations/failure-playbook) |
 | 端到端事件年龄 | P95 超业务时限 | 先定位积压还是处理慢 |
-| Broker 磁盘水位 | 超过水位线 | 见[故障剧本·磁盘水位](/operations/failure-playbook) |
+| Broker 磁盘水位 | 超过水位线 | 见[故障剧本·磁盘水位](/reference/operations/failure-playbook) |
 
 ## 官方资料
 

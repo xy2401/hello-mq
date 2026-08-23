@@ -25,12 +25,12 @@
    真相：BookKeeper 集群仍然要规划磁盘水位、quorum 参数（E/Qw/Qa）、ledger 保留与写入反压（backlog quota、broker 限流）。分离改变的是**扩容方式**——加 Broker 不用搬数据、加 bookie 独立扩存储——不是消灭容量约束。容量估算见 [存储与高可用](/products/pulsar/storage-ha)。
 
 3. **「Shared 订阅 = 同 key 有序」**
-   真相：Shared 在消费者间轮转分摊消息，**不保证任何顺序**，同 key 消息可能被不同消费者乱序处理。同 key 有序要用 Key_Shared（同 key 粘连同一消费者），或退化为单分区 + Exclusive/Failover（牺牲并行度）。四类型语义见 [订阅与分发](/products/pulsar/routing)，顺序总论见 [顺序语义](/concepts/ordering)。
+   真相：Shared 在消费者间轮转分摊消息，**不保证任何顺序**，同 key 消息可能被不同消费者乱序处理。同 key 有序要用 Key_Shared（同 key 粘连同一消费者），或退化为单分区 + Exclusive/Failover（牺牲并行度）。四类型语义见 [订阅与分发](/products/pulsar/routing)，顺序总论见 [顺序语义](/#mq-ordering)。
 
 其他常见错误类比：
 
 - 「Subscription = Kafka Consumer Group」——都持有消费进度，但订阅绑定单个 Topic 且有四种分发语义；消费组可订阅多 Topic 且只有「组内瓜分」一种语义。
-- 「Topic = 队列，ack 了就删」——ack 只移动 cursor，数据删除由 TTL/retention 决定；队列语义不可互译（见 [消息模型](/concepts/models)）。
+- 「Topic = 队列，ack 了就删」——ack 只移动 cursor，数据删除由 TTL/retention 决定；队列语义不可互译（见 [消息模型](/#mq-models)）。
 - 「Broker 无状态 = 可以不关心 Broker 容量」——连接数、订阅扇出、消息编解码都消耗 Broker CPU/内存，计算层同样会饱和。
 
 ## 反模式清单

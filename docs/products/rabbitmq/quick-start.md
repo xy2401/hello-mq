@@ -62,4 +62,4 @@ docker compose --env-file ../../.env.versions down --volumes
 ## 下一步
 
 - 概念不熟：读 [核心概念映射](/products/rabbitmq/concepts)。
-- 想看失败路径：直接做 [消费者崩溃与重投](/matrix/experiment/consumer-crash) 实验。
+- 想看失败路径：直接做 [消费者崩溃与重投](/playground/consumer-crash) 实验。

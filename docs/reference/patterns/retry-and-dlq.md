@@ -13,7 +13,7 @@
 
 <LabOutput product="rabbitmq" lab="retry-dlq" />
 
-实验拓扑与断言细节见[毒消息、重试与 DLQ](/matrix/experiment/poison-message)。
+实验拓扑与断言细节见[毒消息、重试与 DLQ](/playground/poison-message)。
 
 ## 三机制对比（RabbitMQ / RocketMQ / Kafka）
 
@@ -30,15 +30,15 @@
 ## 重试预算与退避
 
 - **区分故障类型**：下游超时按瞬时故障重试；Schema 校验失败这类确定性错误应尽早转 DLQ，不要浪费重试预算（毒消息实验里 attempt 1 即可判定）。
-- **带延迟的重试**：立即重试往往打在同一个故障点上；指数退避或固定档位能显著降低[重投风暴](/operations/failure-playbook)风险。
+- **带延迟的重试**：立即重试往往打在同一个故障点上；指数退避或固定档位能显著降低[重投风暴](/reference/operations/failure-playbook)风险。
 - **上限必须显式**：`max-attempts` 是系统参数而不是代码品味；改上限要同步评估 DLQ 增量与告警阈值。
-- **重试也要幂等**：每次重试都可能撞上「业务已提交、确认未发出」窗口，重试路径必须复用[幂等消费](/patterns/idempotent-consumer)流程。
+- **重试也要幂等**：每次重试都可能撞上「业务已提交、确认未发出」窗口，重试路径必须复用[幂等消费](/reference/patterns/idempotent-consumer)流程。
 
 ## DLQ 治理
 
 DLQ 只完成「隔离」，治理闭环在 DLQ 之外：
 
-1. **告警**：DLQ 深度、新增速率、最老消息年龄都要有阈值告警（指标定义见[可观测性](/operations/observability)）。
+1. **告警**：DLQ 深度、新增速率、最老消息年龄都要有阈值告警（指标定义见[可观测性](/reference/operations/observability)）。
 2. **留证**：进 DLQ 时同步记录失败原因、attempt 历史、原始 traceId——DLQ 里只有消息本体，原因在日志里。
 3. **回放**：修复问题后从 DLQ 重放是常规操作；回放等价于重新投递，接收端幂等仍然必须成立。
 4. **保留期**：DLQ 消息应有保留策略，超期归档到冷存储，而不是静默删除。
@@ -46,7 +46,7 @@ DLQ 只完成「隔离」，治理闭环在 DLQ 之外：
 ## 保证成立的条件 / 不保证什么
 
 - 条件：重试次数可观测（x-death / Broker 计数 / 应用头字段）；DLQ 有告警与回放流程；重试路径幂等。
-- 不保证：重试后消息仍保持原队列顺序；进入 DLQ 的消息会被自动处理；RabbitMQ 队列级 TTL 能表达任意精细的逐条延迟（到期从队头计算，见[毒消息实验](/matrix/experiment/poison-message)「不保证什么」）。
+- 不保证：重试后消息仍保持原队列顺序；进入 DLQ 的消息会被自动处理；RabbitMQ 队列级 TTL 能表达任意精细的逐条延迟（到期从队头计算，见[毒消息实验](/playground/poison-message)「不保证什么」）。
 
 ## 常见误区
 

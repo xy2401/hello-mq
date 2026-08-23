@@ -6,7 +6,7 @@
 
 - 每个 Topic（分区）背后是一个 **managed ledger**：一串只追加的 **ledger（段）**，消息以 **entry** 为单位追加写入。
 - ledger 写满（大小/时间滚动）后封口（sealed），新写入开新 ledger；封口后的 ledger 只读、可独立迁移与卸载。
-- 消费**不删除数据**：订阅 cursor 只是位点，删除只由 TTL/retention 决定——这是回放的基础（对比见 [消息模型](/concepts/models)）。
+- 消费**不删除数据**：订阅 cursor 只是位点，删除只由 TTL/retention 决定——这是回放的基础（对比见 [消息模型](/#mq-models)）。
 
 ## BookKeeper quorum：多数派持久化
 
@@ -36,7 +36,7 @@
 | Retention（时间/大小） | 在 TTL 之外**额外保留**数据（含未消费的 backlog） | 0 = 不额外保留 | 回放、审计、事件溯源 |
 
 - 策略以 **Namespace** 为单位设置（`pulsar-admin namespaces set-retention` 等）。
-- 关键关系：**backlog 是保留的前提**——retention 保证未消费数据不被提前删除；回放的前提则是数据仍在保留窗口内（backlog 过大 + retention 过短 = 真的错过消息，见 [背压与积压](/concepts/backpressure)）。
+- 关键关系：**backlog 是保留的前提**——retention 保证未消费数据不被提前删除；回放的前提则是数据仍在保留窗口内（backlog 过大 + retention 过短 = 真的错过消息，见 [背压与积压](/#mq-backpressure)）。
 - 另有 backlog quota：给 Namespace 的积压量设上限，超限可选拒绝写入或按策略淘汰——这是消费跟不上时的显式背压手段。
 
 ## Tiered Storage（offload）简介

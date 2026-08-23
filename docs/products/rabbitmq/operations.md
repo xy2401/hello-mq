@@ -22,14 +22,14 @@ docker compose -p <project> exec rabbitmq \
 
 | 指标 | 含义 | 异常信号 |
 | :--- | :--- | :--- |
-| `messages_ready` | 队列中等待投递的消息数 | 持续增长 = 消费跟不上（积压），见 [背压与积压](/concepts/backpressure) |
+| `messages_ready` | 队列中等待投递的消息数 | 持续增长 = 消费跟不上（积压），见 [背压与积压](/#mq-backpressure) |
 | `messages_unacknowledged` | 已投递未 ACK 的在途消息 | 堆积 = 消费者卡死/处理过慢/忘记 ACK |
 | publish/deliver/ack 速率 | 生产与消费吞吐曲线 | deliver 归零而 ready 增长 = 消费者断连 |
 | 内存/磁盘 watermark | 节点资源告警线 | 触发后 Broker 流控（blocking producers），全局变慢 |
 
 补充观测点：
 
-- **redeliver 速率**：突增通常意味着消费者崩溃或处理异常（对照 [consumer-crash 实验](/matrix/experiment/consumer-crash) 的 `redelivered=true` 日志）。
+- **redeliver 速率**：突增通常意味着消费者崩溃或处理异常（对照 [consumer-crash 实验](/playground/consumer-crash) 的 `redelivered=true` 日志）。
 - **连接/Channel 数**：连接泄漏与 Channel 暴涨是常见故障。
 - **DLQ 深度**：DLQ 有消息 = 有失败需要人工处理，应直接告警。
 

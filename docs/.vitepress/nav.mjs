@@ -2,40 +2,40 @@
 // 链接规则：'/x/y' → docs/x/y.md；'/x/' → docs/x/index.md。
 
 export const nav = [
-  // 前 5 个典型消息队列全部平铺在主导航
-  { text: 'RabbitMQ', link: '/products/rabbitmq/' },
-  { text: 'Kafka', link: '/products/kafka/' },
-  { text: 'RocketMQ', link: '/products/rocketmq/' },
-  { text: 'Pulsar', link: '/products/pulsar/' },
-  { text: 'Redis Streams', link: '/products/redis-streams/' },
-  // 第 6 个起在「更多」下拉中展开选择
+  { text: '首页', link: '/' },
   {
-    text: '更多',
+    text: '产品',
     items: [
+      { text: '产品总览', link: '/products/' },
+      { text: 'RabbitMQ', link: '/products/rabbitmq/' },
+      { text: 'Kafka', link: '/products/kafka/' },
+      { text: 'RocketMQ', link: '/products/rocketmq/' },
+      { text: 'Pulsar', link: '/products/pulsar/' },
+      { text: 'Redis Streams', link: '/products/redis-streams/' },
       { text: 'NATS JetStream', link: '/products/nats/' },
       { text: 'ActiveMQ Artemis', link: '/products/artemis/' },
       { text: 'ActiveMQ Classic', link: '/products/activemq-classic/' },
     ],
   },
-  { text: '基础概念', link: '/concepts/' },
   { text: '对比矩阵', link: '/matrix/' },
+  { text: '试验场', link: '/playground/' },
+  { text: '参考资料', link: '/reference/' },
 ]
 
-const conceptsSidebar = [
+const referenceSidebar = [
   {
-    text: '基础概念',
+    text: '实践入口',
     items: [
-      { text: '总览', link: '/concepts/' },
-      { text: '为什么需要异步消息', link: '/concepts/why-messaging' },
-      { text: '消息模型', link: '/concepts/models' },
-      { text: '投递语义', link: '/concepts/delivery-semantics' },
-      { text: '顺序语义', link: '/concepts/ordering' },
-      { text: '存储与回放', link: '/concepts/storage-and-replay' },
-      { text: '背压与积压', link: '/concepts/backpressure' },
+      { text: '参考资料总览', link: '/reference/' },
+      { text: '快速开始', link: '/reference/getting-started' },
+      { text: '学习路径', link: '/reference/learning-path' },
+      { text: '实验约定', link: '/reference/lab-conventions' },
+      { text: '消息模式', link: '/reference/patterns/' },
+      { text: '生产运维', link: '/reference/operations/production-checklist' },
     ],
   },
   {
-    text: '参考',
+    text: '治理与证据',
     items: [
       { text: '统一术语表', link: '/reference/glossary' },
       { text: '版本政策', link: '/reference/version-policy' },
@@ -68,12 +68,12 @@ const experimentSidebar = [
   {
     text: '实验手册',
     items: [
-      { text: '实验总览', link: '/matrix/experiment/' },
-      { text: '基础收发流程', link: '/matrix/experiment/basic-flow' },
-      { text: '消费者崩溃与重投', link: '/matrix/experiment/consumer-crash' },
-      { text: '毒消息、重试与 DLQ', link: '/matrix/experiment/poison-message' },
-      { text: '顺序、消费组与回放（Kafka）', link: '/matrix/experiment/ordering' },
-      { text: '积压与追赶（RabbitMQ）', link: '/matrix/experiment/backlog-recovery' },
+      { text: '实验总览', link: '/playground/' },
+      { text: '基础收发流程', link: '/playground/basic-flow' },
+      { text: '消费者崩溃与重投', link: '/playground/consumer-crash' },
+      { text: '毒消息、重试与 DLQ', link: '/playground/poison-message' },
+      { text: '顺序、消费组与回放（Kafka）', link: '/playground/ordering' },
+      { text: '积压与追赶（RabbitMQ）', link: '/playground/backlog-recovery' },
     ],
   },
 ]
@@ -115,8 +115,7 @@ function productDetailSidebar(productName, base) {
 }
 
 export const sidebar = {
-  '/concepts/': conceptsSidebar,
-  '/reference/': conceptsSidebar,
+  '/reference/': referenceSidebar,
   '/products/rabbitmq/': productDetailSidebar('RabbitMQ', '/products/rabbitmq'),
   '/products/kafka/': productDetailSidebar('Kafka', '/products/kafka'),
   '/products/rocketmq/': productDetailSidebar('RocketMQ', '/products/rocketmq'),
@@ -126,6 +125,6 @@ export const sidebar = {
   '/products/artemis/': productDetailSidebar('ActiveMQ Artemis', '/products/artemis'),
   '/products/activemq-classic/': productDetailSidebar('ActiveMQ Classic', '/products/activemq-classic'),
   '/products/': productsSidebar,
-  '/matrix/experiment/': experimentSidebar,
+  '/playground/': experimentSidebar,
   '/matrix/': matrixSidebar,
 }

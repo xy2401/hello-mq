@@ -16,7 +16,7 @@ flowchart LR
 - **CommitLog**：所有 Topic 的消息统一、顺序追加写入同一日志文件——顺序写盘是吞吐关键。
 - **ConsumeQueue**：每个 Topic 的每个 MessageQueue 一份逻辑索引（偏移 + 大小 + Tag 哈希），消费时据此定位 CommitLog。
 - **IndexFile**：按消息 Key 建哈希索引，支持按 Key 检索（对应 Key 的「查消息」用途，见 [路由与分发](/products/rocketmq/routing)）。
-- 消息写入后**不因消费而删除**：删除只由保留期触发（本仓库 `deleteWhen=04`、`fileReservedTime=48`）。这是与队列型 Broker 的根本区别（见 [消息模型](/concepts/models)）。
+- 消息写入后**不因消费而删除**：删除只由保留期触发（本仓库 `deleteWhen=04`、`fileReservedTime=48`）。这是与队列型 Broker 的根本区别（见 [消息模型](/#mq-models)）。
 - 刷盘时机由 `flushDiskType` 决定：本仓库 `ASYNC_FLUSH`（异步刷盘，靠副本兜底）；`SYNC_FLUSH` 为同步刷盘。
 
 ## 复制与高可用

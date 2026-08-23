@@ -12,7 +12,7 @@ Pulsar 的差异化在「分层」：服务层（Broker）、存储层（BookKee
 - **海量 Topic 与弹性伸缩**：Broker 无状态，增减节点不搬数据；存储容量独立于计算扩容（但**不等于免容量规划**，见 [陷阱](/products/pulsar/pitfalls)）。
 - **事件流与回放**：消息按 retention/TTL 保留，订阅游标（cursor）可重置到任意位置重读（[实验](/products/pulsar/reliability)）。
 - **一个 Topic 多种消费拓扑**：Exclusive/Failover/Shared/Key_Shared 四种订阅类型，同一份数据同时支撑保序单消费、竞争消费与分片并行（[实验](/products/pulsar/routing)）。
-- **不太适合**：RabbitMQ 式按内容/模式灵活路由（没有 Exchange/Binding 抽象）；追求最小依赖的轻量部署——standalone 单容器内嵌三个角色，冷启动明显偏慢（对比见 [消息模型](/concepts/models)）。
+- **不太适合**：RabbitMQ 式按内容/模式灵活路由（没有 Exchange/Binding 抽象）；追求最小依赖的轻量部署——standalone 单容器内嵌三个角色，冷启动明显偏慢（对比见 [消息模型](/#mq-models)）。
 
 ## 架构速览
 

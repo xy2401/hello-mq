@@ -20,7 +20,7 @@
 | 复制/可用性状态 | ✅ Quorum Queue 成员与 raft 状态（[operations](/products/rabbitmq/operations)） | ✅ ISR 数量、Under-Replicated/Offline 分区（[operations](/products/kafka/operations)） | 🔧 主从同步状态、DLedger/Controller 选主状态（[operations](/products/rocketmq/operations)） | ✅ bookie 状态、ledger 副本健康（[operations](/products/pulsar/operations)） | ✅ INFO replication 角色与 lag；Sentinel 状态（[operations](/products/redis-streams/operations)） | ✅ JetStream 集群 Raft 状态与 Stream 副本健康（/jsz）（[operations](/products/nats/operations)） | 🔧 live/backup 配对状态与集群节点拓扑（管理 API/hawtio）（[operations](/products/artemis/operations)） |
 | 特色状态观测 | 连接/Channel 数、内存/磁盘告警阈值 | 分区 Leader 分布、请求延迟 | 事务回查次数、发送/消费 TPS（[operations](/products/rocketmq/operations)） | 游标位置、unacked 消息数、限流（[operations](/products/pulsar/operations)） | 内存用量（maxmemory）、键空间统计、XINFO CONSUMERS（[operations](/products/redis-streams/operations)） | 连接数、账号限额、慢消费者告警（[operations](/products/nats/operations)） | 队列 paging 状态、地址内存用量、连接与会话数（[operations](/products/artemis/operations)） |
 
-> 七产品的积压定位决策树是同一个：生产突增 → 消费者变慢 → 消费者离线 → 分区/队列不均 → 毒消息循环 → Broker 限流。指标映射与决策树详见[运维观测分卷](/operations/observability)。
+> 七产品的积压定位决策树是同一个：生产突增 → 消费者变慢 → 消费者离线 → 分区/队列不均 → 毒消息循环 → Broker 限流。指标映射与决策树详见[运维观测分卷](/reference/operations/observability)。
 
 ## Schema 生态
 
@@ -28,7 +28,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | Schema 管理 | ➖ 无内置：契约靠应用约定或外部 Schema 仓库（[pitfalls](/products/rabbitmq/pitfalls)） | 🧩 非 Kafka 本体：配合第三方 Schema Registry（如 Confluent/Apicurio）做兼容性校验（[pitfalls](/products/kafka/pitfalls)） | ➖ 无内置 Schema Registry：靠 Tag/属性与业务约定（[pitfalls](/products/rocketmq/pitfalls)） | ✅ 原生 Schema Registry：为 Topic 注册 Schema 并做兼容性策略校验（[concepts](/products/pulsar/concepts)） | ➖ 无内置：Stream 字段是无类型键值对，契约靠应用约定（[pitfalls](/products/redis-streams/pitfalls)） | ➖ 无内置：Payload 是字节流，契约靠应用约定或外部 Registry（[pitfalls](/products/nats/pitfalls)） | ➖ 无内置：JMS/字节消息无类型契约，靠应用约定或外部 Registry（[pitfalls](/products/artemis/pitfalls)） |
 
-> Schema 演进（新增可选字段兼容、破坏性变更升版本）是跨产品的通用要求，见 [schema-evolution 模式](/patterns/schema-evolution)与[消息契约规则](/guide/lab-conventions)。
+> Schema 演进（新增可选字段兼容、破坏性变更升版本）是跨产品的通用要求，见 [schema-evolution 模式](/reference/patterns/schema-evolution)与[消息契约规则](/reference/lab-conventions)。
 
 ## 脚注：同名异义
 

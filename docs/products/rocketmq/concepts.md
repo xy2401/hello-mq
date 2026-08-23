@@ -62,7 +62,7 @@ RocketMQ 的「路由」= Topic 寻址 + Tag 过滤 + MessageQueue 分担 + Mess
 
 ### 7. 投递语义
 
-at-least-once 是标准姿势（业务提交后才 ack）；崩溃窗口下的重投靠幂等表拦截。端到端 exactly-once 不成立（见 [投递语义](/concepts/delivery-semantics)）。
+at-least-once 是标准姿势（业务提交后才 ack）；崩溃窗口下的重投靠幂等表拦截。端到端 exactly-once 不成立（见 [投递语义](/#mq-delivery-semantics)）。
 
 ### 8. 顺序语义
 
@@ -70,7 +70,7 @@ at-least-once 是标准姿势（业务提交后才 ack）；崩溃窗口下的�
 
 ### 9. 失败处理
 
-Broker 内置消费重试与 DLQ：失败按消费组重试策略（次数 + 间隔）重投，达到上限进 `%DLQ%<消费组名>`。详见 [可靠性](/products/rocketmq/reliability) 与 [retry-dlq 实验](/matrix/experiment/poison-message)。
+Broker 内置消费重试与 DLQ：失败按消费组重试策略（次数 + 间隔）重投，达到上限进 `%DLQ%<消费组名>`。详见 [可靠性](/products/rocketmq/reliability) 与 [retry-dlq 实验](/playground/poison-message)。
 
 ### 10. 高可用与扩展
 

@@ -8,10 +8,10 @@
 
 RocketMQ 介于日志型与队列型之间，偏「业务消息平台」：
 
-- **业务事件与订单流**：内置事务消息、延迟/定时消息、消费重试与 DLQ，贴近电商类业务链路（[实验](/matrix/experiment/index)）。
+- **业务事件与订单流**：内置事务消息、延迟/定时消息、消费重试与 DLQ，贴近电商类业务链路（[实验](/playground/index)）。
 - **同键有序的任务流**：FIFO Topic + MessageGroup，同一业务键的消息按序消费。
 - **多消费组广播/分担**：同一 Topic 可被多个消费组独立消费，组内按 MessageQueue 分担。
-- **不太适合**：把 Broker 内消费重试当日常限流/背压手段（重试是失败恢复，不是流控，见 [陷阱](/products/rocketmq/pitfalls)）；「消费即删除」的纯竞争队列语义也不是它的主场——消息由保留期清理，与消费进度解耦（对比见 [消息模型](/concepts/models)）。
+- **不太适合**：把 Broker 内消费重试当日常限流/背压手段（重试是失败恢复，不是流控，见 [陷阱](/products/rocketmq/pitfalls)）；「消费即删除」的纯竞争队列语义也不是它的主场——消息由保留期清理，与消费进度解耦（对比见 [消息模型](/#mq-models)）。
 
 ## 架构速览
 
@@ -49,7 +49,7 @@ flowchart LR
 | :--- | :--- |
 | 投递语义 | at-least-once（业务提交后才 ack）；端到端 exactly-once 不成立，靠幂等消费兜底 |
 | 顺序 | 同一 MessageGroup 在同一队列内有序；跨队列无全局顺序保证 |
-| 重试/DLQ | Broker 内置：消费失败按组重试策略重投，达上限进 `%DLQ%<组名>`（[实验](/matrix/experiment/poison-message)） |
+| 重试/DLQ | Broker 内置：消费失败按组重试策略重投，达上限进 `%DLQ%<组名>`（[实验](/playground/poison-message)） |
 | 延迟消息 | 内置定时/延迟消息（`setDeliveryTimestamp`），Broker 到点才投递 |
 | 事务消息 | Half Message + 本地事务 + 回查（check-back）：保证「本地事务结果与消息投递一致」，不覆盖下游副作用 |
 | 高可用 | 主从复制 / DLedger（Raft）/ 5.x Controller 模式（原理见 [存储与高可用](/products/rocketmq/storage-ha)） |

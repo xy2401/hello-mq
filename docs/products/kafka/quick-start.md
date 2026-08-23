@@ -74,4 +74,4 @@ docker compose --env-file ../../.env.versions down --volumes
 ## 下一步
 
 - 概念不熟：读 [核心概念映射](/products/kafka/concepts)。
-- 想看顺序与回放：[顺序、消费组与回放实验](/matrix/experiment/ordering)。
+- 想看顺序与回放：[顺序、消费组与回放实验](/playground/ordering)。

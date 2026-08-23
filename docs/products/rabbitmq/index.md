@@ -11,7 +11,7 @@ RabbitMQ 是消息队列（Message Queue）家族的典型代表：
 - **任务分发**：把耗时任务放入队列，由多个 Worker 竞争消费（Work Queue）。
 - **事件广播**：通过 Fanout/Topic Exchange 把一条事件复制给多个独立订阅者。
 - **复杂路由**：Routing Key + 多种 Exchange 类型支持按模式分发。
-- **不太适合**：超长保留期的日志回放、按任意位点重读历史——消息在 ACK 后即从队列移除，这是队列语义而非日志语义（对比 Kafka，见 [消息模型](/concepts/models)）。
+- **不太适合**：超长保留期的日志回放、按任意位点重读历史——消息在 ACK 后即从队列移除，这是队列语义而非日志语义（对比 Kafka，见 [消息模型](/#mq-models)）。
 
 ## 架构速览
 
@@ -42,7 +42,7 @@ flowchart LR
 | :--- | :--- |
 | 投递语义 | at-most-once（自动 ACK）/ at-least-once（手动 ACK + Confirms）；无跨系统 exactly-once |
 | 顺序 | 单队列内 FIFO；重试、requeue 会打乱顺序 |
-| 重试/DLQ | 无内置消费重试；TTL + DLX 组合模式（[实验](/matrix/experiment/poison-message)） |
+| 重试/DLQ | 无内置消费重试；TTL + DLX 组合模式（[实验](/playground/poison-message)） |
 | 延迟消息 | 队列级/消息级 TTL + DLX 组合；per-message TTL 按队头计算 |
 | 高可用 | Quorum Queue（Raft 多数派复制）；Classic Queue 镜像模式已弃用 |
 | 回放 | 不适用（队列语义，ACK 后删除）；RabbitMQ Streams 是例外 |
@@ -55,7 +55,7 @@ flowchart LR
 4. [可靠性](/products/rabbitmq/reliability)：两段确认与崩溃窗口。
 5. [存储与高可用](/products/rabbitmq/storage-ha)：三种队列与 Quorum 权衡。
 6. [运维与观测](/products/rabbitmq/operations)、[陷阱与检查表](/products/rabbitmq/pitfalls)。
-7. 动手实验：[basic](/matrix/experiment/basic-flow)、[consumer-crash](/matrix/experiment/consumer-crash)、[routing 与 retry-dlq](/matrix/experiment/poison-message)、[cli-tools](/products/rabbitmq/operations)。
+7. 动手实验：[basic](/playground/basic-flow)、[consumer-crash](/playground/consumer-crash)、[routing 与 retry-dlq](/playground/poison-message)、[cli-tools](/products/rabbitmq/operations)。
 
 ## 版本基线
 

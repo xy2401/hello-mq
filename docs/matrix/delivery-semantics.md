@@ -32,7 +32,7 @@
 | at-least-once | ✅ Confirms + 持久化 + 手动 ACK 组合，业务必须预期重复（[reliability](/products/rabbitmq/reliability)） | ✅ acks=all + 手动提交位点 + 幂等生产（[reliability](/products/kafka/reliability)） | ✅ 默认即 at-least-once：同步发送 + 内置重试重投（[reliability](/products/rocketmq/reliability)） | ✅ 手动 ack + 重投机制，业务必须预期重复（[reliability](/products/pulsar/reliability)） | ✅ AOF/复制 + 消费组 + 手动 XACK + claim 机制，业务必须预期重复（[reliability](/products/redis-streams/reliability)） | ✅ JetStream File 存储 + PublishAck + 显式 Ack + AckWait 重投（[reliability](/products/nats/reliability)） | ✅ 持久消息 + journal 落盘 + 阻塞发送 + CLIENT_ACKNOWLEDGE，业务必须预期重复（[reliability](/products/artemis/reliability)） | ✅ persistent + 同步 send + SESSION_TRANSACTED/CLIENT_ACKNOWLEDGE，业务必须预期重复（[reliability](/products/activemq-classic/reliability)） |
 | exactly-once | ➖ 无 Broker 级端到端 exactly-once；用幂等消费达成业务等效（[reliability](/products/rabbitmq/reliability)） | ✅ 仅限 Kafka 内部：幂等 + 事务（EOS）覆盖 produce→process→produce 同一集群；写外部系统不成立（[reliability](/products/kafka/reliability)） | ➖ 无端到端 exactly-once；事务消息解决的是「发送与本地事务原子」（[reliability](/products/rocketmq/reliability)） | ➖ 消费端到端仍需幂等；事务提供的是跨分区原子操作而非外部系统 exactly-once（[reliability](/products/pulsar/reliability)） | ➖ 无端到端 exactly-once：XACK 与业务写入是两个系统，需幂等表兜底（[reliability](/products/redis-streams/reliability)） | ➖ 无端到端 exactly-once：Msg-Id 去重只在发布窗口内，消费端仍需幂等（[reliability](/products/nats/reliability)） | ➖ 无端到端 exactly-once：XA 保证的是 Broker 内操作原子，业务副作用仍需幂等（[reliability](/products/artemis/reliability)） | ➖ 无端到端 exactly-once：本地事务只保证 Broker 内原子，业务副作用仍需幂等（[reliability](/products/activemq-classic/reliability)） |
 
-> at-least-once 意味着业务**必须预期重复**，而不是「偶尔可能重复」：数据库提交成功、ACK 前崩溃就会重投。幂等消费基准实现见[消费者崩溃与重投实验](/matrix/experiment/consumer-crash)。
+> at-least-once 意味着业务**必须预期重复**，而不是「偶尔可能重复」：数据库提交成功、ACK 前崩溃就会重投。幂等消费基准实现见[消费者崩溃与重投实验](/playground/consumer-crash)。
 
 ## 事务矩阵
 
@@ -40,7 +40,7 @@
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | 事务机制 | ✅ channel 事务（txSelect/txCommit）：把多条发布原子提交；性能差且不覆盖消费侧，生产多用 Publisher Confirms 替代（[reliability](/products/rabbitmq/reliability)） | ✅ 事务 API：幂等 Producer + 多分区原子写 + 消费位点提交，消费端 read_committed 隔离（[reliability](/products/kafka/reliability)） | ✅ 事务消息：Half Message → 本地事务 → Commit/Rollback，状态不确定时 Broker 事务回查（[reliability](/products/rocketmq/reliability)） | ✅ Pulsar Transactions：跨 Topic/Partition 原子发送与 ack（[reliability](/products/pulsar/reliability)） | ➖ 无消息事务：MULTI/EXEC 只是单实例内的命令批量原子执行，不协调业务事务与消息投递（[reliability](/products/redis-streams/reliability)） | ➖ 无事务：JetStream 不提供跨 Stream 原子写或「本地事务⇔投递」协调（[reliability](/products/nats/reliability)） | ✅ 双层：JMS 本地事务（session commit/rollback 批量原子）+ XA 两阶段提交（可协调外部 XA 资源）（[reliability](/products/artemis/reliability)） | ✅ JMS 本地事务（SESSION_TRANSACTED）：同一 session 的发送/确认批量原子；XA 不在本仓库覆盖（[reliability](/products/activemq-classic/reliability)） |
 | 原子边界 | 仅「同一 channel 上多条发布要么都进 Broker 要么都不进」 | 一次事务内的多分区写入 + offset 提交，边界在 Kafka 集群内 | 「本地事务执行结果」与「消息最终投递/丢弃」二者原子 | 一个事务内的跨分区/跨 Topic 写入与消费确认 | ➖ 不适用 | ➖ 不适用 | 本地事务：同一 session 的发送/确认批量原子；XA：Broker 操作与外部 XA 资源（如数据库）一起两阶段提交 | 仅「同一 session 的多条发送/消费确认要么都提交要么都回滚」，边界在单 Broker 内 |
-| 涉及外部系统 | ➖ 不包含任何业务副作用 | ➖ 写外部数据库需 Outbox/幂等消费，EOS 不延伸出集群 | ➖ 下游仍需可靠消费 + 幂等；回查只保证本地事务状态被最终确认 | ➖ 外部副作用仍需业务协调 | ➖ 一律走 Outbox + 幂等消费（[patterns](/patterns/outbox)） | ➖ 一律走 Outbox + 幂等消费（[patterns](/patterns/outbox)） | 🔧 XA 可把数据库 XA 资源纳入同一事务（八个产品中唯一），但要求全部参与方支持 XA，且有性能与恢复复杂度代价；消费端副作用仍需幂等 | ➖ 本地事务不含业务副作用；写外部库需 Outbox/幂等消费（[patterns](/patterns/outbox)） |
+| 涉及外部系统 | ➖ 不包含任何业务副作用 | ➖ 写外部数据库需 Outbox/幂等消费，EOS 不延伸出集群 | ➖ 下游仍需可靠消费 + 幂等；回查只保证本地事务状态被最终确认 | ➖ 外部副作用仍需业务协调 | ➖ 一律走 Outbox + 幂等消费（[patterns](/reference/patterns/outbox)） | ➖ 一律走 Outbox + 幂等消费（[patterns](/reference/patterns/outbox)） | 🔧 XA 可把数据库 XA 资源纳入同一事务（八个产品中唯一），但要求全部参与方支持 XA，且有性能与恢复复杂度代价；消费端副作用仍需幂等 | ➖ 本地事务不含业务副作用；写外部库需 Outbox/幂等消费（[patterns](/reference/patterns/outbox)） |
 | 典型用途 | 批量发布的原子性（少用） | 集群内 consume-transform-produce 管道 | 「本地事务成功 ⇔ 消息一定投递」的最终一致场景 | 跨分区原子写、流处理 Exactly-once 管道内部 | 不适用 | 不适用 | 批量发送原子提交；「DB 写入 ⇔ 消息发送」强一致的 XA 场景 | 批量消费原子提交（业务落库后才 commit）；消费端恰好一次仍靠幂等 |
 
 ## 脚注：同名异义
@@ -53,4 +53,4 @@
 
 - 顺序保证：[顺序矩阵](/matrix/ordering)
 - 失败后的重试与 DLQ：[重试与 DLQ](/matrix/retry-dlq)
-- 基础概念：[投递语义](/concepts/delivery-semantics)、[消息模型](/concepts/models)
+- 基础概念：[投递语义](/#mq-delivery-semantics)、[消息模型](/#mq-models)

@@ -70,7 +70,7 @@
 | 需要「本地事务 ⇔ 消息投递」原子 | RocketMQ 事务消息（Half Message + 回查） |
 | 需要集群内 consume-transform-produce 的 EOS | Kafka 事务（幂等 + EOS，边界仅限 Kafka 内部） |
 | 需要跨分区原子写 | Pulsar Transactions / Kafka 事务 |
-| 跨外部数据库的「分布式事务」 | 默认不直接提供，一律用 Outbox + 幂等消费落地（见[模式](/patterns/outbox)）；例外：Artemis XA 可把数据库 XA 资源纳入同一两阶段提交，但要求全部参与方支持 XA 且接受其性能与恢复复杂度 |
+| 跨外部数据库的「分布式事务」 | 默认不直接提供，一律用 Outbox + 幂等消费落地（见[模式](/reference/patterns/outbox)）；例外：Artemis XA 可把数据库 XA 资源纳入同一两阶段提交，但要求全部参与方支持 XA 且接受其性能与恢复复杂度 |
 
 ### 团队熟悉度
 
@@ -140,10 +140,10 @@ P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」�
 
 ## 通用风险验证清单（任何候选都要过）
 
-1. 重复：at-least-once 下幂等消费是否拦截全部重复（[实验](/matrix/experiment/consumer-crash)）。
-2. 顺序：失败重试后业务完成顺序是否符合预期（[实验](/matrix/experiment/ordering)）。
-3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[实验](/matrix/experiment/poison-message)）。
-4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[实验](/matrix/experiment/backlog-recovery)）。
+1. 重复：at-least-once 下幂等消费是否拦截全部重复（[实验](/playground/consumer-crash)）。
+2. 顺序：失败重试后业务完成顺序是否符合预期（[实验](/playground/ordering)）。
+3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[实验](/playground/poison-message)）。
+4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[实验](/playground/backlog-recovery)）。
 5. 副本：少数派节点故障时的可用性与数据完整性（各产品 storage-ha 页）。
 6. 默认值陷阱：对照各产品[陷阱与检查表](/products/rabbitmq/pitfalls)。
 

@@ -5,7 +5,7 @@
 ## 适用场景
 
 - 一份数据多个下游：每个下游建一个订阅（审计、索引、通知各自全量）。
-- 任务型竞争消费：Shared 订阅内多消费者分摊（[背压与积压](/concepts/backpressure)）。
+- 任务型竞争消费：Shared 订阅内多消费者分摊（[背压与积压](/#mq-backpressure)）。
 - 同键有序 + 水平扩展：Key_Shared 按业务键粘连消费者。
 - 保序单消费/主备：Exclusive/Failover。
 

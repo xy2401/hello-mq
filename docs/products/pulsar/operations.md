@@ -41,7 +41,7 @@ docker compose -p hello-mq-pulsar-basic exec pulsar \
 
 | 指标（Prometheus 示例名） | 含义 | 异常信号 |
 | :--- | :--- | :--- |
-| `pulsar_msg_backlog`（按订阅） | 该订阅未消费消息数 | 持续增长 = 消费跟不上生产（积压），见 [背压与积压](/concepts/backpressure) |
+| `pulsar_msg_backlog`（按订阅） | 该订阅未消费消息数 | 持续增长 = 消费跟不上生产（积压），见 [背压与积压](/#mq-backpressure) |
 | `pulsar_rate_in` / `pulsar_rate_out` | Topic 进/出消息速率 | out 骤降而 in 平稳 = 消费侧故障 |
 | `pulsar_storage_size` | Topic 占用存储 | 逼近磁盘水位 = 该调 retention/TTL 或扩容 bookie |
 | 未 ack 消息数 / 重投速率 | 消费处理健康度 | 重投速率飙升 = 毒消息循环或下游超时 |

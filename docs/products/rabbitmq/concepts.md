@@ -63,11 +63,11 @@ Producer、Exchange、Queue、Consumer、Message。无「Topic 即队列」概�
 
 ### 8. 顺序语义
 
-单队列内 FIFO；但 NACK+requeue、DLX 回环、多消费者乱序 ACK 都会打乱顺序。需要严格顺序时通常单队列 + 单消费者，并接受吞吐上限。详见 [顺序语义](/concepts/ordering)。
+单队列内 FIFO；但 NACK+requeue、DLX 回环、多消费者乱序 ACK 都会打乱顺序。需要严格顺序时通常单队列 + 单消费者，并接受吞吐上限。详见 [顺序语义](/#mq-ordering)。
 
 ### 9. 失败处理
 
-无内置消费重试。模式：TTL + DLX 重试环、延迟重投、DLQ 隔离。见 [毒消息实验](/matrix/experiment/poison-message)。
+无内置消费重试。模式：TTL + DLX 重试环、延迟重投、DLQ 隔离。见 [毒消息实验](/playground/poison-message)。
 
 ### 10. 高可用与扩展
 
@@ -87,7 +87,7 @@ Quorum Queue（Raft 多数派）为现代默认；Classic Queue 单副本；Stre
 | :--- | :--- |
 | Broker 层 | Quorum Queue 多数派落盘后确认；或单节点下消息已持久化且节点存活 |
 | Client 层 | Producer 开启 Confirms 并处理 nack；Consumer 手动 ACK，处理完成才确认 |
-| Business 层 | 业务写入与幂等记录同事务；DB 提交后才 ACK（崩溃窗口见 [实验](/matrix/experiment/consumer-crash)） |
+| Business 层 | 业务写入与幂等记录同事务；DB 提交后才 ACK（崩溃窗口见 [实验](/playground/consumer-crash)） |
 
 ## 官方资料
 
