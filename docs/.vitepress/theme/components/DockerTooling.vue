@@ -1,69 +1,71 @@
 <template>
   <div v-if="entry" class="docker-tooling-container">
-    <!-- Hero / Status Header Card -->
-    <div class="dt-hero">
-      <div class="dt-hero-header">
-        <div class="dt-title-area">
-          <div class="dt-badge-row">
-            <span class="dt-product-tag">{{ entry.name }}</span>
-            <span class="dt-status-pill" :class="`status-${statusKey}`">
-              <span class="status-pulse"></span>
-              {{ statusLabel }}
-            </span>
-            <span v-if="meta.capturedAt" class="dt-meta-tag">
-              🕒 {{ formattedCaptureTime }}
-            </span>
-          </div>
-          <h2 id="docker-tools" class="dt-title">{{ entry.name }} 构建、运行与 Docker 工具证据</h2>
-          <p v-if="entry.note" class="dt-note">{{ entry.note }}</p>
-        </div>
+    <!-- Compact Header Bar -->
+    <div class="dt-header-bar">
+      <div class="dt-badge-row">
+        <span class="dt-product-tag">{{ entry.name }}</span>
+        <span class="dt-status-pill" :class="`status-${statusKey}`">
+          <span class="status-pulse"></span>
+          {{ statusLabel }}
+        </span>
+        <span v-if="meta.capturedAt" class="dt-meta-time">
+          🕒 快照采集: {{ formattedCaptureTime }}
+        </span>
       </div>
-
-      <!-- Quick Metrics Grid -->
-      <div class="dt-metrics-grid">
-        <div class="dt-metric-card">
-          <span class="dt-metric-label">运行模式</span>
-          <span class="dt-metric-value"><code class="code-pill">{{ entry.mode || 'container' }}</code></span>
-        </div>
-        <div class="dt-metric-card">
-          <span class="dt-metric-label">镜像 / 环境</span>
-          <span class="dt-metric-value dt-ellipsis" :title="imageSummary">{{ imageSummary }}</span>
-        </div>
-        <div class="dt-metric-card">
-          <span class="dt-metric-label">关键工具</span>
-          <span class="dt-metric-value dt-ellipsis" :title="entry.keyTools?.join(' · ')">
-            {{ entry.keyTools?.join(' · ') || '标准环境' }}
-          </span>
-        </div>
-        <div class="dt-metric-card">
-          <span class="dt-metric-label">快照断言</span>
-          <span class="dt-metric-value" :class="{ 'dt-text-pass': isAllPassed }">
-            {{ isAllPassed ? '✅ 全部通过 (Pass)' : '⏳ 待完整采集' }}
-          </span>
-        </div>
-      </div>
+      <p v-if="entry.note" class="dt-header-note">{{ entry.note }}</p>
     </div>
 
-    <!-- Command Pipelines -->
-    <div class="dt-pipelines">
-      <div v-if="entry.buildCommand" class="dt-pipeline-card">
-        <div class="dt-pipeline-header">
-          <span class="dt-pipeline-label">🔨 构建 / 检查指令</span>
-          <button class="dt-copy-btn" @click="copyText(entry.buildCommand, 'build')">
-            {{ copiedTarget === 'build' ? '已复制 ✓' : '复制命令' }}
-          </button>
+    <!-- Compact Spec & Commands Strip -->
+    <div class="dt-spec-strip">
+      <!-- Image & Key Tools Row -->
+      <div class="dt-meta-row">
+        <div class="dt-meta-item">
+          <span class="dt-meta-label">🐳 镜像:</span>
+          <span class="dt-meta-val dt-images-inline">
+            <span v-for="(img, i) in entry.images" :key="i" class="dt-img-pill">
+              <span class="dt-img-role">{{ img.role }}:</span>
+              <code>{{ img.tag }}</code>
+            </span>
+          </span>
         </div>
-        <pre class="dt-pipeline-code"><code>{{ entry.buildCommand }}</code></pre>
+
+        <div v-if="entry.keyTools?.length" class="dt-meta-item">
+          <span class="dt-meta-label">🛠️ 关键工具:</span>
+          <span class="dt-meta-val dt-tools-inline">
+            <code v-for="t in entry.keyTools" :key="t" class="dt-inline-tool">{{ t }}</code>
+          </span>
+        </div>
       </div>
 
-      <div v-if="entry.runCommand || entry.queryCommand || entry.connectCommand" class="dt-pipeline-card">
-        <div class="dt-pipeline-header">
-          <span class="dt-pipeline-label">🚀 运行 / 交互指令</span>
-          <button class="dt-copy-btn" @click="copyText(entry.runCommand || entry.queryCommand || entry.connectCommand, 'run')">
-            {{ copiedTarget === 'run' ? '已复制 ✓' : '复制命令' }}
+      <!-- Compact Command Lines -->
+      <div
+        v-if="entry.buildCommand || entry.runCommand || entry.queryCommand || entry.connectCommand"
+        class="dt-cmd-rows"
+      >
+        <div v-if="entry.buildCommand" class="dt-cmd-row">
+          <span class="dt-cmd-tag">🔨 构建/检查</span>
+          <code class="dt-cmd-text" :title="entry.buildCommand">{{ entry.buildCommand }}</code>
+          <button class="dt-mini-copy" @click="copyText(entry.buildCommand, 'build')">
+            {{ copiedTarget === 'build' ? '已复制 ✓' : '复制' }}
           </button>
         </div>
-        <pre class="dt-pipeline-code"><code>{{ entry.runCommand || entry.queryCommand || entry.connectCommand }}</code></pre>
+
+        <div
+          v-if="entry.runCommand || entry.queryCommand || entry.connectCommand"
+          class="dt-cmd-row"
+        >
+          <span class="dt-cmd-tag">🚀 运行/交互</span>
+          <code
+            class="dt-cmd-text"
+            :title="entry.runCommand || entry.queryCommand || entry.connectCommand"
+          >{{ entry.runCommand || entry.queryCommand || entry.connectCommand }}</code>
+          <button
+            class="dt-mini-copy"
+            @click="copyText(entry.runCommand || entry.queryCommand || entry.connectCommand, 'run')"
+          >
+            {{ copiedTarget === 'run' ? '已复制 ✓' : '复制' }}
+          </button>
+        </div>
       </div>
     </div>
 
@@ -140,10 +142,13 @@
 
           <!-- Inventory Chips Mode -->
           <div v-if="inventoryView === 'chips'" class="dt-inventory-chips-wrap">
-            <div v-if="inventoryMeta.os || inventoryMeta.arch || inventoryMeta.size || inventoryMeta.path" class="dt-env-meta-bar">
+            <div
+              v-if="inventoryMeta.os || inventoryMeta.arch || inventoryMeta.size || inventoryMeta.path"
+              class="dt-env-meta-bar"
+            >
               <span v-if="inventoryMeta.os" class="dt-env-item">🐧 <strong>系统:</strong> {{ inventoryMeta.os }}</span>
               <span v-if="inventoryMeta.arch" class="dt-env-item">⚙️ <strong>架构:</strong> {{ inventoryMeta.arch }}</span>
-              <span v-if="inventoryMeta.size" class="dt-env-item">💾 <strong>大小:</strong> {{ inventoryMeta.size }}</span>
+              <span v-if="inventoryMeta.size" class="dt-env-item">💾 <strong>体积:</strong> {{ inventoryMeta.size }}</span>
               <span v-if="inventoryMeta.path" class="dt-env-item dt-env-path">📁 <strong>PATH:</strong> <code>{{ inventoryMeta.path }}</code></span>
             </div>
 
@@ -337,11 +342,6 @@ const formattedCaptureTime = computed(() => {
   }
 });
 
-const imageSummary = computed(() => {
-  if (!entry.value?.images?.length) return '官方镜像';
-  return entry.value.images.map((i: any) => `${i.role || 'image'}: ${i.tag}`).join(' · ');
-});
-
 // Inventory analysis (extract tools, OS, arch, size, PATH)
 const inventoryMeta = computed(() => {
   const body = inventoryCleanBody.value;
@@ -443,17 +443,13 @@ function copyText(text: string, targetKey: string) {
 
 <style scoped>
 .docker-tooling-container {
-  margin: 1.5rem 0 3rem;
+  margin: 1rem 0 2.5rem;
   font-family: inherit;
 }
 
-/* Hero Section */
-.dt-hero {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 16px;
-  background: var(--vp-c-bg-soft);
-  padding: 1.5rem;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+/* Header Bar */
+.dt-header-bar {
+  margin-bottom: 0.75rem;
 }
 
 .dt-badge-row {
@@ -461,13 +457,12 @@ function copyText(text: string, targetKey: string) {
   flex-wrap: wrap;
   align-items: center;
   gap: 0.5rem;
-  margin-bottom: 0.6rem;
 }
 
 .dt-product-tag {
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.2rem 0.6rem;
+  padding: 0.15rem 0.55rem;
   border-radius: 6px;
   background: var(--vp-c-brand-soft);
   color: var(--vp-c-brand-1);
@@ -479,7 +474,7 @@ function copyText(text: string, targetKey: string) {
   gap: 0.35rem;
   font-size: 0.75rem;
   font-weight: 700;
-  padding: 0.2rem 0.65rem;
+  padding: 0.15rem 0.6rem;
   border-radius: 999px;
   background: var(--vp-c-warning-soft);
   color: var(--vp-c-warning-1);
@@ -502,145 +497,157 @@ function copyText(text: string, targetKey: string) {
   color: var(--vp-c-text-2);
 }
 
-.dt-meta-tag {
+.dt-meta-time {
   font-size: 0.75rem;
   color: var(--vp-c-text-2);
   margin-left: auto;
 }
 
-.dt-title {
-  margin: 0.2rem 0 0.5rem;
-  font-size: 1.35rem;
-  font-weight: 700;
-  border: 0;
-  color: var(--vp-c-text-1);
-}
-
-.dt-note {
-  margin: 0 0 1rem;
-  font-size: 0.9rem;
+.dt-header-note {
+  margin: 0.35rem 0 0;
+  font-size: 0.85rem;
   color: var(--vp-c-text-2);
 }
 
-/* Metrics Grid */
-.dt-metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 0.75rem;
-  margin-top: 1rem;
-}
-
-.dt-metric-card {
-  display: flex;
-  flex-direction: column;
-  gap: 0.3rem;
-  padding: 0.75rem 0.9rem;
+/* Compact Spec Strip */
+.dt-spec-strip {
   border: 1px solid var(--vp-c-divider);
   border-radius: 10px;
-  background: var(--vp-c-bg);
+  background: var(--vp-c-bg-soft);
+  padding: 0.65rem 0.85rem;
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
-.dt-metric-label {
-  font-size: 0.72rem;
+.dt-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem 1.5rem;
+  font-size: 0.8rem;
+}
+
+.dt-meta-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.dt-meta-label {
   font-weight: 600;
   color: var(--vp-c-text-2);
-  text-transform: uppercase;
-  letter-spacing: 0.03em;
+  white-space: nowrap;
 }
 
-.dt-metric-value {
-  font-size: 0.88rem;
-  font-weight: 600;
+.dt-meta-val {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  flex-wrap: wrap;
+}
+
+.dt-img-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.75rem;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  padding: 0.05rem 0.4rem;
+  border-radius: 4px;
+}
+
+.dt-img-role {
+  color: var(--vp-c-text-3);
+  font-size: 0.7rem;
+  text-transform: capitalize;
+}
+
+.dt-img-pill code {
+  font-size: 0.75rem;
+}
+
+.dt-inline-tool {
+  font-size: 0.72rem;
+  padding: 0.05rem 0.35rem;
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
   color: var(--vp-c-text-1);
 }
 
-.dt-text-pass {
-  color: var(--vp-c-success-1);
+/* Compact Command Rows */
+.dt-cmd-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--vp-c-divider);
 }
 
-.code-pill {
-  padding: 0.15rem 0.4rem;
-  font-size: 0.8rem;
-  border-radius: 4px;
-  background: var(--vp-c-bg-soft);
+.dt-cmd-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.78rem;
 }
 
-.dt-ellipsis {
+.dt-cmd-tag {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--vp-c-text-2);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.dt-cmd-text {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--vp-font-family-mono);
+  font-size: 0.76rem;
+  color: var(--vp-c-brand-1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* Pipelines */
-.dt-pipelines {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  margin: 1.25rem 0;
+.dt-mini-copy {
+  flex-shrink: 0;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
-.dt-pipeline-card {
+.dt-mini-copy:hover {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+
+/* Workbench & Tabs */
+.dt-workbench {
   border: 1px solid var(--vp-c-divider);
   border-radius: 12px;
   background: var(--vp-c-bg-soft);
   overflow: hidden;
 }
 
-.dt-pipeline-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.6rem 0.9rem;
-  background: var(--vp-c-bg-elv);
-  border-bottom: 1px solid var(--vp-c-divider);
-}
-
-.dt-pipeline-label {
-  font-size: 0.82rem;
-  font-weight: 700;
-  color: var(--vp-c-text-1);
-}
-
-.dt-copy-btn, .dt-terminal-copy-btn {
-  font-size: 0.72rem;
-  font-weight: 600;
-  padding: 0.2rem 0.55rem;
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 5px;
-  background: var(--vp-c-bg);
-  color: var(--vp-c-text-2);
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.dt-copy-btn:hover, .dt-terminal-copy-btn:hover {
-  background: var(--vp-c-brand-soft);
-  color: var(--vp-c-brand-1);
-  border-color: var(--vp-c-brand-1);
-}
-
-.dt-pipeline-code {
-  margin: 0;
-  padding: 0.85rem 0.9rem;
-  font-size: 0.82rem;
-  line-height: 1.45;
-  background: var(--vp-c-bg);
-  overflow-x: auto;
-}
-
-/* Workbench & Tabs */
-.dt-workbench {
-  border: 1px solid var(--vp-c-divider);
-  border-radius: 14px;
-  background: var(--vp-c-bg-soft);
-  overflow: hidden;
-  margin-top: 1.25rem;
-}
-
 .dt-tabs {
   display: flex;
   gap: 0.25rem;
-  padding: 0.5rem 0.6rem 0;
+  padding: 0.4rem 0.6rem 0;
   background: var(--vp-c-bg-elv);
   border-bottom: 1px solid var(--vp-c-divider);
   overflow-x: auto;
@@ -650,8 +657,8 @@ function copyText(text: string, targetKey: string) {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.55rem 0.9rem;
-  font-size: 0.85rem;
+  padding: 0.5rem 0.85rem;
+  font-size: 0.82rem;
   font-weight: 600;
   color: var(--vp-c-text-2);
   background: transparent;
@@ -674,28 +681,28 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-tab-count {
-  font-size: 0.75rem;
+  font-size: 0.72rem;
   opacity: 0.75;
 }
 
 .dt-tab-panel {
-  padding: 1rem;
+  padding: 0.85rem;
 }
 
 /* Terminal Window */
 .dt-terminal {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: 8px;
   background: #18181b;
   color: #f4f4f5;
   overflow: hidden;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
 }
 
 .dt-terminal-header {
   display: flex;
   align-items: center;
-  padding: 0.5rem 0.8rem;
+  padding: 0.45rem 0.75rem;
   background: #27272a;
   border-bottom: 1px solid #3f3f46;
 }
@@ -706,8 +713,8 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-dot {
-  width: 10px;
-  height: 10px;
+  width: 9px;
+  height: 9px;
   border-radius: 50%;
 }
 
@@ -716,8 +723,8 @@ function copyText(text: string, targetKey: string) {
 .dt-dot.green { background: #22c55e; }
 
 .dt-terminal-title {
-  margin-left: 0.8rem;
-  font-size: 0.75rem;
+  margin-left: 0.75rem;
+  font-size: 0.72rem;
   color: #a1a1aa;
   font-family: var(--vp-font-family-mono);
 }
@@ -730,17 +737,23 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-time-badge {
-  font-size: 0.72rem;
+  font-size: 0.7rem;
   color: #e4e4e7;
   background: #3f3f46;
-  padding: 0.15rem 0.45rem;
+  padding: 0.1rem 0.4rem;
   border-radius: 4px;
 }
 
 .dt-terminal-copy-btn {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+  border: 1px solid #52525b;
   background: #3f3f46;
   color: #e4e4e7;
-  border-color: #52525b;
+  cursor: pointer;
+  transition: all 0.15s;
 }
 
 .dt-terminal-copy-btn:hover {
@@ -750,7 +763,7 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-terminal-content {
-  padding: 0.8rem;
+  padding: 0.75rem;
   max-height: 28rem;
   overflow: auto;
 }
@@ -758,7 +771,7 @@ function copyText(text: string, targetKey: string) {
 .dt-terminal-pre {
   margin: 0;
   padding: 0;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
   line-height: 1.5;
   font-family: var(--vp-font-family-mono);
   white-space: pre-wrap;
@@ -770,38 +783,38 @@ function copyText(text: string, targetKey: string) {
 .dt-inventory-box {
   display: flex;
   flex-direction: column;
-  gap: 0.8rem;
+  gap: 0.75rem;
 }
 
 .dt-inventory-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.65rem;
   flex-wrap: wrap;
 }
 
 .dt-search-box {
   position: relative;
   flex: 1;
-  min-width: 240px;
+  min-width: 220px;
 }
 
 .dt-search-icon {
   position: absolute;
-  left: 0.65rem;
+  left: 0.6rem;
   top: 50%;
   transform: translateY(-50%);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   pointer-events: none;
 }
 
 .dt-search-input {
   width: 100%;
-  padding: 0.45rem 1.8rem 0.45rem 2rem;
-  font-size: 0.85rem;
+  padding: 0.35rem 1.6rem 0.35rem 1.8rem;
+  font-size: 0.8rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-1);
   outline: none;
@@ -814,26 +827,26 @@ function copyText(text: string, targetKey: string) {
 
 .dt-clear-search {
   position: absolute;
-  right: 0.5rem;
+  right: 0.4rem;
   top: 50%;
   transform: translateY(-50%);
   border: none;
   background: transparent;
   color: var(--vp-c-text-2);
   cursor: pointer;
-  padding: 0.2rem;
+  padding: 0.15rem;
 }
 
 .dt-view-toggle {
   display: flex;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   overflow: hidden;
 }
 
 .dt-toggle-btn {
-  padding: 0.35rem 0.75rem;
-  font-size: 0.78rem;
+  padding: 0.28rem 0.65rem;
+  font-size: 0.75rem;
   font-weight: 600;
   background: var(--vp-c-bg);
   color: var(--vp-c-text-2);
@@ -849,12 +862,12 @@ function copyText(text: string, targetKey: string) {
 .dt-env-meta-bar {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.6rem;
-  padding: 0.6rem 0.8rem;
+  gap: 0.5rem 0.8rem;
+  padding: 0.5rem 0.75rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg);
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   color: var(--vp-c-text-1);
 }
 
@@ -870,24 +883,24 @@ function copyText(text: string, targetKey: string) {
 .dt-tools-cloud {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.35rem;
   max-height: 24rem;
   overflow-y: auto;
   padding: 0.5rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 8px;
+  border-radius: 6px;
   background: var(--vp-c-bg);
 }
 
 .dt-tool-chip {
   display: inline-flex;
   align-items: center;
-  gap: 0.25rem;
-  padding: 0.2rem 0.5rem;
-  font-size: 0.75rem;
+  gap: 0.2rem;
+  padding: 0.15rem 0.45rem;
+  font-size: 0.72rem;
   font-family: var(--vp-font-family-mono);
   border: 1px solid var(--vp-c-divider);
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-1);
   transition: all 0.15s;
@@ -907,40 +920,40 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-key-badge {
-  font-size: 0.65rem;
-  padding: 0.05rem 0.3rem;
-  border-radius: 3px;
+  font-size: 0.6rem;
+  padding: 0.02rem 0.25rem;
+  border-radius: 2px;
   background: var(--vp-c-brand-1);
   color: white;
 }
 
 .dt-empty-tools {
-  padding: 2rem;
+  padding: 1.5rem;
   text-align: center;
   color: var(--vp-c-text-2);
-  font-size: 0.85rem;
+  font-size: 0.82rem;
 }
 
 /* Assert Styles */
 .dt-assert-cards {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
-  margin-bottom: 1rem;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
 }
 
 .dt-audit-card {
   display: flex;
   align-items: center;
-  gap: 0.9rem;
-  padding: 0.85rem 1rem;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
   border: 1px solid var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--vp-c-bg);
 }
 
 .dt-audit-icon {
-  font-size: 1.3rem;
+  font-size: 1.15rem;
 }
 
 .dt-audit-main {
@@ -949,22 +962,22 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-audit-title {
-  font-size: 0.88rem;
+  font-size: 0.82rem;
   font-weight: 700;
   color: var(--vp-c-text-1);
 }
 
 .dt-audit-desc {
-  font-size: 0.78rem;
+  font-size: 0.74rem;
   color: var(--vp-c-text-2);
-  margin-top: 0.15rem;
+  margin-top: 0.1rem;
 }
 
 .dt-audit-badge {
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   font-weight: 700;
-  padding: 0.2rem 0.55rem;
-  border-radius: 6px;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
   background: var(--vp-c-bg-soft);
   color: var(--vp-c-text-2);
   white-space: nowrap;
@@ -977,7 +990,7 @@ function copyText(text: string, targetKey: string) {
 
 .dt-assert-raw-box {
   border: 1px solid var(--vp-c-divider);
-  border-radius: 10px;
+  border-radius: 8px;
   background: var(--vp-c-bg);
   overflow: hidden;
 }
@@ -986,19 +999,34 @@ function copyText(text: string, targetKey: string) {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.5rem 0.8rem;
+  padding: 0.45rem 0.75rem;
   border-bottom: 1px solid var(--vp-c-divider);
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-weight: 700;
   color: var(--vp-c-text-1);
 }
 
-@media (max-width: 768px) {
-  .dt-metrics-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-  .dt-pipelines {
-    grid-template-columns: 1fr;
-  }
+.dt-copy-btn {
+  font-size: 0.68rem;
+  font-weight: 600;
+  padding: 0.12rem 0.4rem;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-2);
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.dt-copy-btn:hover {
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-brand-1);
+}
+
+.dt-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 </style>
