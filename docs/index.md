@@ -1,45 +1,78 @@
 ---
 layout: home
+
 hero:
-  name: hello-mq
-  text: 消息队列、事件流与可靠消息模式
-  tagline: 用统一实验场景解释消息系统核心语义，用可运行的容器化 Demo 验证关键结论，用横向矩阵说明能力边界与选型依据
+  name: "💬 Hello MQ"
+  text: "消息队列与事件流知识百科"
+  tagline: "8 个主流 MQ · 统一实验验证 · 三层语义说明 · 横向选型矩阵"
+  image: /logo.svg
+  alt: Hello MQ - 消息系统学习平台
   actions:
     - theme: brand
-      text: 基础原理
+      text: 理解核心原理
       link: /concepts/
     - theme: alt
-      text: 横向矩阵与选型
-      link: /matrix/
-    - theme: alt
-      text: 进入实验室
+      text: 🧪 可复现实验
       link: /matrix/experiment/
+    - theme: alt
+      text: ⚖️ 能力对比矩阵
+      link: /matrix/
 
 features:
-  - icon: 🧭
+  - icon: 🏗️
     title: 统一知识骨架
-    details: 所有产品按相同的十二个公共维度讲解：定位、核心实体、路由、存储、生产/消费可靠性、投递语义、顺序、失败处理、高可用、安全与可观测、限制与反模式。
+    details: 所有产品按相同的十二个公共维度讲解：定位、核心实体、路由分发、存储策略、生产确认、消费投递、顺序保证、失败处理、高可用架构、安全权限、性能瓶颈。
   - icon: 🧪
-    title: 可运行实验与验证快照
-    details: 消费者崩溃重投、毒消息与 DLQ、幂等拦截、事务与回放等行为由 Docker Compose + Java 21 Demo 复现，实验输出经归一化后作为快照提交，可一键复现。
-  - icon: ⚖️
-    title: 三层语义说明法
-    details: 每项“保证”都拆成 Broker 层、Client 层与 Business 层，区分规范保证、配置条件、客户端行为与业务端补偿，不写无条件的 exactly-once。
+    title: 真实环境验证
+    details: Docker Compose 编排 + Java 21 Demo，复现消费者崩溃重试、毒消息 DLQ、事务回查、幂等拦截等行为；输出经归一化后作为快照提交。
+  - icon: 🌐
+    title: 三层语义模型
+    details: Broker 层（服务端保证）+ Client 层（SDK 行为）+ Business 层（业务补偿），拒绝「无条件的 exactly-once」等模糊断言。
+  - icon: 📊
+    title: 场景化选型指南
+    details: 7 大能力矩阵 × 30+ 技术特性对照表，帮你根据吞吐量需求、一致性要求、运维成本筛选最佳方案。
 ---
 
-## 产品覆盖
+## 🎯 典型消息系统快速入口
 
-| 产品 | 状态 | 代表性 | 分卷 | 实验 |
-| :--- | :--- | :--- | :--- | :--- |
-| <ProductLogo product="rabbitmq" /> RabbitMQ | ✅ 已落地 | 传统消息队列与灵活路由 | [8 页](/products/rabbitmq/) | 5 个（basic / routing / consumer-crash / retry-dlq / backlog-recovery） |
-| <ProductLogo product="kafka" /> Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/products/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
-| <ProductLogo product="rocketmq" /> Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/products/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
-| <ProductLogo product="pulsar" /> Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/products/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
-| <ProductLogo product="redis" /> Redis Streams | ✅ 已落地 | Redis 内的追加日志与消费组 | [8 页](/products/redis-streams/) | 2 个（basic / consumer-crash） |
-| <ProductLogo product="nats" /> NATS + JetStream | ✅ 已落地 | 低延迟 Core NATS 与持久化 JetStream | [8 页](/products/nats/) | 2 个（core-pubsub / jetstream-replay） |
-| ActiveMQ Artemis | ✅ 分卷落地（快照未采集） | 多协议 JMS Broker：anycast/multicast、服务端重试与死信、XA 事务 | [8 页](/products/artemis/) | 2 个编排就绪（basic / retry-dlq） |
+前 5 个为高频使用场景的代表性产品，其余 3 个可在导航栏「更多」下拉中查看。
 
-## 从同步调用到事件驱动
+| 产品 | 类型 | 核心价值 | 分卷文档 |
+| :--- | :--- | :--- | --- |
+| [RabbitMQ](/products/rabbitmq/) 🐰 | Queue | 灵活路由、可靠投递、延迟/优先级队列 | [8 页详解](/products/rabbitmq/) → |
+| [Apache Kafka](/products/kafka/) 🦓 | Log | 分区持久日志、高吞吐事件流、实时数据处理 | [8 页详解](/products/kafka/) → |
+| [RocketMQ](/products/rocketmq/) 🚀 | Queue-Log | 事务消息、定时/延迟消息、金融级可靠性 | [8 页详解](/products/rocketmq/) → |
+| [Apache Pulsar](/products/pulsar/) 🦋 | Log-Cloud | 存算分离、多租户、云原生原生设计 | [8 页详解](/products/pulsar/) → |
+| [Redis Streams](/products/redis-streams/) 💾 | Stream | 内存高性能、简单 API、嵌入式事件总线 | [8 页详解](/products/redis-streams/) → |
+
+<div class="grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 24px;">
+
+<a href="/products/" style="text-decoration: none;">
+  <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">📚 查看所有 8 个产品</h3>
+    <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">包括 NATS JetStream、ActiveMQ Artemis、ActiveMQ Classic</p>
+  </div>
+</a>
+
+<a href="/matrix/" style="text-decoration: none;">
+  <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">⚖️ 横向能力对比矩阵</h3>
+    <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">投递语义、顺序保证、重试与 DLQ、延迟消息、回放保留、扩展复制、安全模型七大维度深度对比</p>
+  </div>
+</a>
+
+<a href="/matrix/experiment/" style="text-decoration: none;">
+  <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">🔬 15+ 可复现实验手册</h3>
+    <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">基础收发、消费者崩溃重投、毒消息 DLQ、事务回查、顺序回放、积压追赶等完整故障演练脚本</p>
+  </div>
+</a>
+
+</div>
+
+---
+
+## 🔄 从同步调用到事件驱动
 
 切换下面的模式，观察调用关系如何从「点对点强耦合」演化为「经 Broker 解耦」；点「播放消息流」可高亮一条消息的流转路径。
 
@@ -113,36 +146,37 @@ features:
 
 模型细节与产品对照见[消息模型](/concepts/models)。
 
-## 验证快照示例：消费者崩溃与幂等拦截
+---
 
-下面是一次真实运行的 consumer-crash 实验快照：消费者在业务提交后、ACK 前崩溃（exit 137），重启后重投被幂等表拦截为 `duplicate_skipped`，业务表最终恰好 3 行。
+## 📊 关键能力横向对比
 
-<LabOutput product="rabbitmq" lab="consumer-crash" />
-
-完整解读见[消费者崩溃与重投](/matrix/experiment/consumer-crash)。
-
-## 横向矩阵速览
-
-七个产品在关键能力上的支持方式不同——「原生」不等于「免费」，「业务实现」也不等于「不可行」。完整矩阵与证据链接见 [横向矩阵](/matrix/)。
+七个产品在核心功能上的支持方式不同——「原生」不等于「免费」，「业务实现」也不等于「不可行」。
 
 | 能力 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS | Artemis |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 端到端 exactly-once | 业务实现 | 仅集群内 EOS | 业务实现 | 业务实现 | 业务实现 | 业务实现 | 业务实现 |
-| 顺序消息 | 单队列内 | 分区内 | MessageGroup 内 | 分区 + 订阅类型相关 | 单 Stream 内 | Subject/Stream 内 | 单队列内 + Message Group |
-| 内置重试与 DLQ | 组合配置（TTL+DLX） | 业务实现 | 原生（Broker 内置） | 组合配置（DeadLetterPolicy） | 业务实现（PEL+XCLAIM） | 组合配置（AckWait+MaxDeliver） | 原生（address-setting） |
-| 延迟消息 | 组合配置（TTL+DLX） | 业务实现 | 原生（定时投递） | 业务实现 | 不适用 | 原生（JetStream 延迟投递） | 原生（_AMQ_SCHED_DELAY） |
-| 消息回放 | 不适用（ACK 即删） | 原生（位点/时间戳） | 原生（位点重置） | 原生（reset-cursor） | 原生（XRANGE/XGROUP SETID） | Core 不适用；JetStream 原生 | 不适用（ack 即删） |
+| **端到端 exactly-once** | 业务实现 | 仅集群内 EOS | 业务实现 | 业务实现 | 业务实现 | 业务实现 | 业务实现 |
+| **顺序消息** | 单队列内 | 分区内 | MessageGroup 内 | 分区 + 订阅类型相关 | 单 Stream 内 | Subject/Stream 内 | 单队列内 + Message Group |
+| **内置重试与 DLQ** | 组合配置（TTL+DLX） | 业务实现 | 原生（Broker 内置） | 组合配置（DeadLetterPolicy） | 业务实现（PEL+XCLAIM） | 组合配置（AckWait+MaxDeliver） | 原生（address-setting） |
+| **延迟消息** | 组合配置（TTL+DLX） | 业务实现 | 原生（定时投递） | 业务实现 | 不适用 | 原生（JetStream 延迟投递） | 原生（_AMQ_SCHED_DELAY） |
+| **消息回放** | 不适用（ACK 即删） | 原生（位点/时间戳） | 原生（位点重置） | 原生（reset-cursor） | 原生（XRANGE/XGROUP SETID） | Core 不适用；JetStream 原生 | 不适用（ack 即删） |
 
 选型没有万能冠军：按输入维度筛选候选，见 [选型指南](/matrix/selection-guide)。
 
-## 本地实验 Quick Start
+---
+
+## 🚀 本地实验 Quick Start
 
 ```bash
-git clone <repo-url> && cd hello-mq
+git clone https://github.com/xy2401/hello-mq.git && cd hello-mq
 npm install
 
+# 运行单个实验
 bash demos/rabbitmq/basic/run.sh                 # 启动 RabbitMQ，发 3 条、收 3 条并校验
-for s in demos/*/*/run.sh; do bash "$s"; done    # 运行全部实验
+
+# 运行全部实验
+for s in demos/*/*/run.sh; do bash "$s"; done    # 15 个实验全跑一遍
 ```
 
-环境要求与完整说明见[快速开始](/guide/getting-started)。
+环境要求与完整说明见[实验约定](/guide/lab-conventions)。
+
+适合目标读者：**需要深入理解消息系统底层原理、构建高可靠分布式系统的后端工程师与 SRE**。
