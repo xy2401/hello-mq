@@ -5,7 +5,7 @@ hero:
   name: "💬 Hello MQ"
   text: "消息队列、事件流与选型"
   tagline: "8 个主流 MQ · 统一实验验证 · 三层语义说明 · 横向选型矩阵"
-  image: /logo.svg
+  image: /favicon.svg
   alt: Hello MQ - 消息系统学习平台
   actions:
     - theme: brand

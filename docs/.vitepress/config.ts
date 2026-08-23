@@ -12,7 +12,7 @@ const base = defineConfig({
   lastUpdated: true,
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
   themeConfig: {
-    logo: '/logo.svg',
+    logo: '/favicon.svg',
     nav,
     sidebar,
     outline: { level: [2, 3], label: '本页目录' },
