@@ -3,17 +3,23 @@ name: collect-docker-outputs
 on:
   workflow_dispatch:
 
+concurrency:
+  group: docker-evidence-main
+  cancel-in-progress: false
+
 jobs:
   collect-and-build:
     runs-on: ubuntu-latest
     timeout-minutes: 90
 
     permissions:
-      contents: read
+      contents: write
 
     steps:
       - name: 📥 检出项目代码
         uses: actions/checkout@v4
+        with:
+          ref: main
 
       - name: ☕ 配置 Java 环境
         uses: actions/setup-java@v4
@@ -37,7 +43,19 @@ jobs:
       - name: 🏗️ 验证 catalog 与 VitePress 构建
         run: npm run check
 
-      - name: 📦 上传待审查的镜像锁与证据快照
+      - name: 💾 提交采集证据到 main
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- .env.versions ':(glob)demos/**/docker/*.out.txt'
+          if git diff --cached --quiet; then
+            echo "Docker evidence is unchanged."
+            exit 0
+          fi
+          git commit -m "chore: update Docker evidence (run $GITHUB_RUN_ID)"
+          git push origin HEAD:main
+
+      - name: 📦 上传镜像锁与证据快照备份
         uses: actions/upload-artifact@v4
         with:
           name: hello-mq-docker-evidence-${{ github.run_id }}
