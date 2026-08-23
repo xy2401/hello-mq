@@ -1,6 +1,5 @@
 # Apache Kafka 总览
 
-<DockerTooling product="kafka" />
 
 <VersionBadge logo="kafka" product="Apache Kafka" broker="4.3.1" client="kafka-clients 4.3.1" image="tag+digest@.env.versions" />
 

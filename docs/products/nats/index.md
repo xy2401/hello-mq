@@ -1,6 +1,5 @@
 # NATS 与 JetStream 总览
 
-<DockerTooling product="nats" />
 
 <VersionBadge logo="nats" product="NATS" broker="2.11.5" client="jnats 2.21.1" image="tag+digest@.env.versions" />
 

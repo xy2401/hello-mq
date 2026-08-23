@@ -1,6 +1,5 @@
 # ActiveMQ Artemis 总览
 
-<DockerTooling product="artemis" />
 
 <VersionBadge product="ActiveMQ Artemis" broker="2.44.0" client="artemis-jakarta-client-all 2.44.0" image="tag+digest@.env.versions" />
 

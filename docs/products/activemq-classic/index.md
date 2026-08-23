@@ -1,6 +1,5 @@
 # ActiveMQ Classic 总览
 
-<DockerTooling product="activemq-classic" />
 
 <VersionBadge product="ActiveMQ Classic" broker="6.2.0" client="activemq-client 6.2.0" image="tag+digest@.env.versions" />
 

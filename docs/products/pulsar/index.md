@@ -1,6 +1,5 @@
 # Apache Pulsar 总览
 
-<DockerTooling product="pulsar" />
 
 <VersionBadge logo="pulsar" product="Apache Pulsar" broker="4.2.4" client="pulsar-client 4.2.2" image="tag+digest@.env.versions" />
 

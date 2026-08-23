@@ -1,6 +1,5 @@
 # Redis Streams 总览
 
-<DockerTooling product="redis-streams" />
 
 <VersionBadge logo="redis" product="Redis Streams" broker="8.2.1" client="jedis 6.0.0" image="tag+digest@.env.versions" />
 

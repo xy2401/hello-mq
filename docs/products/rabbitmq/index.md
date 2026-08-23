@@ -1,6 +1,5 @@
 # RabbitMQ 总览
 
-<DockerTooling product="rabbitmq" />
 
 <VersionBadge logo="rabbitmq" product="RabbitMQ" broker="4.1.4" client="amqp-client 5.34.0" image="tag+digest@.env.versions" />
 

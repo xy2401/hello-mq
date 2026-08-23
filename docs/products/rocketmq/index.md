@@ -1,6 +1,5 @@
 # Apache RocketMQ 总览
 
-<DockerTooling product="rocketmq" />
 
 <VersionBadge logo="rocketmq" product="Apache RocketMQ" broker="5.5.0" client="rocketmq-client-java 5.2.0" image="tag+digest@.env.versions" />
 

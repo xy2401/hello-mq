@@ -115,6 +115,7 @@ function productDetailSidebar(productName, base) {
         { text: '存储与高可用', link: `${base}/storage-ha` },
         { text: '运维与观测', link: `${base}/operations` },
         { text: '陷阱与检查表', link: `${base}/pitfalls` },
+        { text: 'Docker 工具', link: `${base}/DockerTooling` },
       ],
     },
   ]
