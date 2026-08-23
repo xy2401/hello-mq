@@ -2,16 +2,14 @@
 // 链接规则：'/x/y' → docs/x/y.md；'/x/' → docs/x/index.md。
 
 export const nav = [
-  { text: '首页', link: '/' },
+  { text: 'RabbitMQ', link: '/products/rabbitmq/' },
+  { text: 'Kafka', link: '/products/kafka/' },
+  { text: 'RocketMQ', link: '/products/rocketmq/' },
+  { text: 'Pulsar', link: '/products/pulsar/' },
+  { text: 'Redis Streams', link: '/products/redis-streams/' },
   {
-    text: '产品',
+    text: '更多',
     items: [
-      { text: '产品总览', link: '/products/' },
-      { text: 'RabbitMQ', link: '/products/rabbitmq/' },
-      { text: 'Kafka', link: '/products/kafka/' },
-      { text: 'RocketMQ', link: '/products/rocketmq/' },
-      { text: 'Pulsar', link: '/products/pulsar/' },
-      { text: 'Redis Streams', link: '/products/redis-streams/' },
       { text: 'NATS JetStream', link: '/products/nats/' },
       { text: 'ActiveMQ Artemis', link: '/products/artemis/' },
       { text: 'ActiveMQ Classic', link: '/products/activemq-classic/' },

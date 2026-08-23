@@ -13,6 +13,44 @@
   --vp-c-brand-3: #f0793f;
 }
 
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/"]::before,
+.VPSidebarItem.level-0:has(a[href*="/products/"]) > .item .text::before {
+  width: 1.1rem;
+  height: 1.1rem;
+  background-image: var(--mq-product-logo);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  content: '';
+  display: inline-block;
+  flex: 0 0 auto;
+  margin-right: 0.35rem;
+  vertical-align: -0.2rem;
+}
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/rabbitmq/"],
+.VPSidebarItem.level-0:has(a[href*="/products/rabbitmq/"]) { --mq-product-logo: url('./assets/rabbitmq.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/kafka/"],
+.VPSidebarItem.level-0:has(a[href*="/products/kafka/"]) { --mq-product-logo: url('./assets/kafka.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/rocketmq/"],
+.VPSidebarItem.level-0:has(a[href*="/products/rocketmq/"]) { --mq-product-logo: url('./assets/rocketmq.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/pulsar/"],
+.VPSidebarItem.level-0:has(a[href*="/products/pulsar/"]) { --mq-product-logo: url('./assets/pulsar.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/redis-streams/"],
+.VPSidebarItem.level-0:has(a[href*="/products/redis-streams/"]) { --mq-product-logo: url('./assets/redis.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/nats/"],
+.VPSidebarItem.level-0:has(a[href*="/products/nats/"]) { --mq-product-logo: url('./assets/nats.svg'); }
+
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/artemis/"],
+:where(.VPNavBarMenuLink, .VPNavScreenMenuLink, .VPMenu a)[href*="/products/activemq-classic/"],
+.VPSidebarItem.level-0:has(a[href*="/products/artemis/"]),
+.VPSidebarItem.level-0:has(a[href*="/products/activemq-classic/"]) { --mq-product-logo: url('./assets/activemq.svg'); }
+
 .lab-output pre {
   max-height: 420px;
   overflow: auto;

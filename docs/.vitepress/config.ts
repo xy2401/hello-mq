@@ -10,7 +10,7 @@ const base = defineConfig({
     '消息队列、事件流平台与可靠消息模式知识库：统一语义骨架、可运行实验与横向选型',
   cleanUrls: true,
   lastUpdated: true,
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/logo.svg' }]],
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
   themeConfig: {
     logo: '/logo.svg',
     nav,
