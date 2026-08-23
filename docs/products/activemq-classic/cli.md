@@ -1,6 +1,6 @@
 # ActiveMQ Classic CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/activemq-classic/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/activemq-classic/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -152,7 +152,7 @@ Browsing 'queue:orders.cli':
 
 ---
 
-**参考证据**：`demos/activemq-classic/cli-tools/` 中的 `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`, `produce.out.txt`。
+**参考证据**：`demos/activemq-classic/docker/` 中的 `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`, `produce.out.txt`。
 
 **闭环等级**：**完整闭环**（原生 CLI 支持完整的收发和运维操作）。
 

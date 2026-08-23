@@ -21,7 +21,7 @@ bash demos/redis-streams/basic/run.sh
 cd demos/redis-streams/basic
 
 # 1. 启动完整流程：redis → setup → producer → consumer → inspect-db
-docker compose --env-file ../../.env.versions up -d
+docker compose --env-file ../../../.env.versions up -d
 docker compose wait inspect-db
 
 # 2. 观察关键语义：消费完成后条目仍在 Stream，PEL 已清零
@@ -33,7 +33,7 @@ docker compose logs producer consumer
 docker compose ps --all
 
 # 4. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 ## 预期输出

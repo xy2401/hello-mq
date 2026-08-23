@@ -1,5 +1,7 @@
 # ActiveMQ Artemis 总览
 
+<DockerTooling product="artemis" />
+
 <VersionBadge product="ActiveMQ Artemis" broker="2.44.0" client="artemis-jakarta-client-all 2.44.0" image="tag+digest@.env.versions" />
 
 > 本页结论：ActiveMQ Artemis 是「传统 Broker + 队列」模型的多协议实现（JMS/Jakarta JMS、AMQP 1.0、OpenWire、STOMP、MQTT、CORE）：消息写入 Address，按 anycast（竞争消费）或 multicast（发布订阅）路由到 Queue，确认即删除。它像 RabbitMQ 一样面向任务分发，而不是 Kafka 式的保留日志。
@@ -70,7 +72,7 @@ flowchart LR
 ```bash
 bash demos/artemis/basic/run.sh
 bash demos/artemis/retry-dlq/run.sh
-bash demos/artemis/cli-tools/run.sh
+bash demos/artemis/docker/run.sh
 ```
 
 ## 版本基线

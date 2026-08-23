@@ -65,4 +65,4 @@ bin/artemis check node --url http://127.0.0.1:8161 --user <u> --password <p>
 
 bin 目录仅统一入口 `artemis`（另有 artemis.cmd/lib），producer/consumer/browser 子命令即可完成收发闭环：`check node` 探活 → `queue create --silent` 建 durable anycast 队列 → `producer` 循环 3 次各发 1 条（`--message` 只能固定内容）→ `consumer --message-count 3` 收满自动退出。`queue stat` 复查 MESSAGE COUNT=0、MESSAGES ACKED=3，browser 浏览余量为 0；镜像 security-enabled=true，每条命令都需带 `--user/--password/--url`。
 
-<LabOutput product="artemis" lab="cli-tools" />
+<LabOutput product="artemis" lab="docker" />

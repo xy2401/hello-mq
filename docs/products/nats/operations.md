@@ -73,4 +73,4 @@ nats sub 'orders.>'                     # 手工订阅（Core 层）
 
 nats:2.11.5 官方镜像是 distroless：文件系统仅含 `/nats-server` 单一二进制，无 shell、无自带收发 CLI（nats CLI 由 nats-io/natscli 独立发行）。因此本实验只做二进制盘点（`--version/--help`）与宿主机 8222 监控端点体检（`/healthz`、`/varz`、`/connz`、`/subsz`）；CLI 缺口如实记录在 gap.out.txt（容器内 `exec nats` 实测 executable file not found）。收发需外部客户端，Java 版见 core-pubsub 实验。
 
-<LabOutput product="nats" lab="cli-tools" />
+<LabOutput product="nats" lab="docker" />

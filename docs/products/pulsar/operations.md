@@ -78,7 +78,7 @@ docker compose -p hello-mq-pulsar-basic exec pulsar \
 
 standalone 镜像 bin 目录共 19 项，`pulsar-admin` 与 `pulsar-client` 即可完成收发闭环：`brokers healthcheck` 体检 → `topics create` 建 non-partitioned Topic → `pulsar-client produce -m` 以逗号分隔一次拆成 3 条消息 → `consume -n 3 --subscription-position Earliest` 收满自动退出。最后 `topics stats` 复查 msgInCounter=3、msgBacklog=0，全程不引入任何客户端 SDK。
 
-<LabOutput product="pulsar" lab="cli-tools" />
+<LabOutput product="pulsar" lab="docker" />
 
 ## 官方资料
 

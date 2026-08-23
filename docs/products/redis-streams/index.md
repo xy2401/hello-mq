@@ -1,5 +1,7 @@
 # Redis Streams 总览
 
+<DockerTooling product="redis-streams" />
+
 <VersionBadge logo="redis" product="Redis Streams" broker="8.2.1" client="jedis 6.0.0" image="tag+digest@.env.versions" />
 
 > 本页结论：Redis Streams 是 Redis 内的追加日志（append-only log）数据结构：条目写入后不随消费删除，Consumer Group 记录各自的消费位置，未确认条目通过 Pending Entries List 追踪重投。它是「轻量场景下的持久日志 + 竞争消费」，不是 Kafka 式多 Broker 分区日志。
@@ -71,7 +73,7 @@ flowchart LR
 ```bash
 bash demos/redis-streams/basic/run.sh
 bash demos/redis-streams/consumer-crash/run.sh
-bash demos/redis-streams/cli-tools/run.sh
+bash demos/redis-streams/docker/run.sh
 ```
 
 ## 版本基线

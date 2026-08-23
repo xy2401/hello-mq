@@ -1,5 +1,7 @@
 # ActiveMQ Classic 总览
 
+<DockerTooling product="activemq-classic" />
+
 <VersionBadge product="ActiveMQ Classic" broker="6.2.0" client="activemq-client 6.2.0" image="tag+digest@.env.versions" />
 
 > 本页结论：ActiveMQ Classic 是 JMS 原生的传统 Broker：消息进入 Queue/Topic 目的地，持久消息默认写 KahaDB，消费确认后删除；重投策略由客户端 redeliveryPolicy 声明、Broker 端强制执行，毒消息耗尽后自动进默认共享死信 ActiveMQ.DLQ。它面向 Java 生态的任务分发与 JMS 兼容，而不是 Kafka 式的保留日志。
@@ -68,11 +70,11 @@ flowchart LR
 ```bash
 bash demos/activemq-classic/basic/run.sh
 bash demos/activemq-classic/retry-dlq/run.sh
-bash demos/activemq-classic/cli-tools/run.sh
+bash demos/activemq-classic/docker/run.sh
 ```
 
 ## 版本基线
 
-- Broker：ActiveMQ Classic 6.2.0（镜像 tag+digest 双锁定，见 `demos/.env.versions`），ACTIVEMQ_HOME=`/opt/apache-activemq`。
+- Broker：ActiveMQ Classic 6.2.0（镜像 tag+digest 双锁定，见 `.env.versions`），ACTIVEMQ_HOME=`/opt/apache-activemq`。
 - Java 客户端：`org.apache.activemq:activemq-client:6.2.0`（OpenWire）。
 - 官方文档：<https://activemq.apache.org/components/classic/documentation/>（checkedAt: 2026-08-20）。

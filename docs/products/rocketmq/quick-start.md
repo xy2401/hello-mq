@@ -23,7 +23,7 @@ bash demos/rocketmq/basic/run.sh
 cd demos/rocketmq/basic
 
 # 1. 只启动 broker 侧（namesrv → broker → proxy；--wait 等 healthcheck 就绪）
-docker compose --env-file ../../.env.versions up -d --wait namesrv broker proxy
+docker compose --env-file ../../../.env.versions up -d --wait namesrv broker proxy
 
 # 2. 建 Topic 与消费组（broker 容器内 mqadmin；Topic 需声明 message.type）
 docker compose exec broker sh mqadmin -n namesrv:9876 updateTopic -c DefaultCluster \
@@ -43,7 +43,7 @@ java -jar ../target/hello-mq-rocketmq.jar consume --lab=basic \
 docker compose exec broker sh mqadmin -n namesrv:9876 consumerProgress -g orders-basic-group
 
 # 5. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 ## 预期输出

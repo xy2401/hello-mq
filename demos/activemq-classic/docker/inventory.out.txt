@@ -1,0 +1,56 @@
+---
+status: verified
+capturedAt: "2026-08-20T00:00:00.000Z"
+dockerImage: "apache/activemq-classic:6.2.0@sha256:992bc29a8459f6772ff14d168a8b011c9cde7a769ec01d72788c9cc4e9229564"
+exitCode: 0
+---
+[cli-tools] $ sh -c ls /opt/apache-activemq/bin && /opt/apache-activemq/bin/activemq version
+activemq
+activemq-diag
+activemq.jar
+linux-x86-64
+macosx
+setenv
+wrapper.jar
+INFO: Loading '/opt/apache-activemq/bin/setenv'
+INFO: Using java '/opt/java/openjdk/bin/java'
+Java Runtime: Eclipse Adoptium 17.0.17 /opt/java/openjdk
+  Heap sizes: current=67584k  free=65684k  max=1048576k
+    JVM args: -Xms64M -Xmx1G -Djava.util.logging.config.file=logging.properties -Djava.security.auth.login.config=/opt/apache-activemq/conf/login.config -Djetty.host=0.0.0.0 --add-reads=java.xml=java.logging --add-opens=java.base/java.security=ALL-UNNAMED --add-opens=java.base/java.net=ALL-UNNAMED --add-opens=java.base/java.lang=ALL-UNNAMED --add-opens=java.base/java.util=ALL-UNNAMED --add-opens=java.naming/javax.naming.spi=ALL-UNNAMED --add-opens=java.rmi/sun.rmi.transport.tcp=ALL-UNNAMED --add-opens=java.base/java.util.concurrent=ALL-UNNAMED --add-opens=java.base/java.util.concurrent.atomic=ALL-UNNAMED --add-opens=java.base/sun.nio.ch=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.http=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.https=ALL-UNNAMED --add-exports=java.base/sun.net.www.protocol.jar=ALL-UNNAMED --add-exports=jdk.xml.dom/org.w3c.dom.html=ALL-UNNAMED --add-exports=jdk.naming.rmi/com.sun.jndi.url.rmi=ALL-UNNAMED -Dactivemq.classpath=/opt/apache-activemq/conf: -Dactivemq.home=/opt/apache-activemq -Dactivemq.base=/opt/apache-activemq -Dactivemq.conf=/opt/apache-activemq/conf -Dactivemq.data=/opt/apache-activemq/data -Djolokia.conf=file:/opt/apache-activemq/conf/jolokia-access.xml
+Extensions classpath:
+  [/opt/apache-activemq/lib,/opt/apache-activemq/lib/camel,/opt/apache-activemq/lib/optional,/opt/apache-activemq/lib/web,/opt/apache-activemq/lib/extra]
+ACTIVEMQ_HOME: /opt/apache-activemq
+ACTIVEMQ_BASE: /opt/apache-activemq
+ACTIVEMQ_CONF: /opt/apache-activemq/conf
+ACTIVEMQ_DATA: /opt/apache-activemq/data
+Usage: Main [--extdir <dir>] [task] [task-options] [task data]
+
+Tasks:
+    backup                   - Backup a message (or range) from a queue to an archive file
+    browse                   - Display selected messages in a specified destination.
+    bstat                    - Performs a predefined query that displays useful statistics regarding the specified broker
+    consumer                 - Receives messages from the broker
+    create                   - Creates a runnable broker instance in the specified path.
+    decrypt                  - Decrypts given text
+    dstat                    - Performs a predefined query that displays useful tabular statistics regarding the specified destination type
+    encrypt                  - Encrypts given text
+    export                   - Exports a stopped brokers data files to an archive file
+    list                     - Lists all available brokers in the specified JMX context
+    producer                 - Sends messages to the broker
+    purge                    - Delete selected destination's messages that matches the message selector
+    query                    - Display selected broker component's attributes and statistics.
+    start                    - Creates and starts a broker using a configuration file, or a broker URI.
+    stop                     - Stops a running broker specified by the broker name.
+
+Task Options (Options specific to each task):
+    --extdir <dir>  - Add the jar files in the directory to the classpath.
+    --version       - Display the version information.
+    -h,-?,--help    - Display this help information. To display task specific help, use Main [task] -h,-?,--help
+
+Task Data:
+    - Information needed by each specific task.
+
+JMX system property options:
+    -Dactivemq.jmx.url=<jmx service uri> (default is: 'service:jmx:rmi:///jndi/rmi://localhost:1099/jmxrmi')
+    -Dactivemq.jmx.user=<user name>
+    -Dactivemq.jmx.password=<password>

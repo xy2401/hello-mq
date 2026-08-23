@@ -94,7 +94,7 @@ function checkNavLinks() {
 }
 
 function checkEnvVersions() {
-  const file = path.join(ROOT, 'demos', '.env.versions')
+  const file = path.join(ROOT, '.env.versions')
   const text = fs.readFileSync(file, 'utf8')
   for (const line of text.split('\n')) {
     const trimmed = line.trim()

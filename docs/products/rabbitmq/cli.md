@@ -1,6 +1,6 @@
 # RabbitMQ CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/rabbitmq/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/rabbitmq/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 重要说明
 
@@ -151,6 +151,6 @@ amq.topic
 
 ---
 
-**参考证据**：`demos/rabbitmq/cli-tools/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
+**参考证据**：`demos/rabbitmq/docker/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
 
 **限制说明**：RabbitMQ 的收发能力弱于其他产品，推荐在生产中使用 Java/.NET 等 SDK，而非依赖 CLI 手工操作。

@@ -1,5 +1,7 @@
 # Apache Pulsar 总览
 
+<DockerTooling product="pulsar" />
+
 <VersionBadge logo="pulsar" product="Apache Pulsar" broker="4.2.4" client="pulsar-client 4.2.2" image="tag+digest@.env.versions" />
 
 > 本页结论：Pulsar 是计算存储分离的云原生消息系统——无状态 Broker 负责接入与订阅分发，消息日志以 ledger 形式持久化在 BookKeeper，元数据由独立元数据服务（本仓库实验为内嵌 ZooKeeper）管理；一个 Topic 可挂多个 Subscription，四种订阅类型分别覆盖独占、竞争消费、主备与同键有序。

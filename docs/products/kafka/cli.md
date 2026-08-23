@@ -1,6 +1,6 @@
 # Kafka CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/kafka/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/kafka/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -204,4 +204,4 @@ $ /opt/kafka/bin/kafka-consumer-groups.sh \
 
 ---
 
-**参考证据**：`demos/kafka/cli-tools/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
+**参考证据**：`demos/kafka/docker/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。

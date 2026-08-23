@@ -1,6 +1,6 @@
 # Pulsar CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/pulsar/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/pulsar/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -150,6 +150,6 @@ Consumed a total of 3 messages
 
 ---
 
-**参考证据**：`demos/pulsar/cli-tools/` 中的 `status.out.txt`, `produce.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
+**参考证据**：`demos/pulsar/docker/` 中的 `status.out.txt`, `produce.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
 
 **闭环等级**：**完整闭环**（原生 CLI 支持完整的收发流程）。

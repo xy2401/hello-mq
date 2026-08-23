@@ -23,7 +23,7 @@ cd demos/activemq-classic/basic
 
 # 1. 启动完整流程：activemq → producer → consumer → inspect-db → stats
 #    （Classic 无显式建队命令：队列首次收发时自动创建；顺序与健康等待由 depends_on 条件保证）
-docker compose --env-file ../../.env.versions up -d
+docker compose --env-file ../../../.env.versions up -d
 docker compose wait stats
 
 # 2. 观察关键语义：确认后队列深度归零（stats 服务的日志即 QueueBrowser 深度）
@@ -34,7 +34,7 @@ docker compose logs producer consumer
 docker compose ps --all
 
 # 4. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 ## 预期输出

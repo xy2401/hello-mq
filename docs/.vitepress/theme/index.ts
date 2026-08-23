@@ -6,6 +6,7 @@ import MessageTrace from './components/MessageTrace.vue'
 import ProductLogo from './components/ProductLogo.vue'
 import TopologyDiagram from './components/TopologyDiagram.vue'
 import VersionBadge from './components/VersionBadge.vue'
+import DockerTooling from './components/DockerTooling.vue'
 import './custom.css'
 
 export default {
@@ -18,5 +19,6 @@ export default {
     app.component('ProductLogo', ProductLogo)
     app.component('TopologyDiagram', TopologyDiagram)
     app.component('VersionBadge', VersionBadge)
+    app.component('DockerTooling', DockerTooling)
   },
 }

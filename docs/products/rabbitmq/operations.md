@@ -56,7 +56,7 @@ docker compose -p <project> exec rabbitmq \
 
 sbin 共 10 项；4.x 已移除 `rabbitmqctl add_queue`（实测 Command not found），队列声明改用 management 镜像自带的 `rabbitmqadmin declare queue`。镜像内没有 curl/python3，收发由宿主机 curl 调 management HTTP API（15672）完成：publish ×3 全部 `"routed":true`，get 以 `ack_requeue_false` 消费即删除 3 条。最后 `rabbitmqctl list_queues` 复查队列深度归零。
 
-<LabOutput product="rabbitmq" lab="cli-tools" />
+<LabOutput product="rabbitmq" lab="docker" />
 
 ## 官方资料
 

@@ -60,7 +60,7 @@ docker compose -p <project> exec kafka \
 
 镜像 `/opt/kafka/bin` 自带全部 43 个 `.sh` 工具，纯靠它们即可完成收发闭环：`kafka-cluster.sh` 查集群状态 → `kafka-topics.sh` 建 `orders.cli` → `kafka-console-producer.sh` 管道灌入 3 条 → `kafka-console-consumer.sh` 以 `--from-beginning --max-messages 3` 收满退出。最后 `kafka-consumer-groups.sh` 复查 endOffset=3、lag=0，全程不引入任何客户端 SDK。
 
-<LabOutput product="kafka" lab="cli-tools" />
+<LabOutput product="kafka" lab="docker" />
 
 ## 官方资料
 

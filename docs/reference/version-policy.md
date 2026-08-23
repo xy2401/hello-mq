@@ -11,7 +11,7 @@
 RABBITMQ_IMAGE=rabbitmq:4.1.4-management@sha256:<digest>
 ```
 
-- Compose 文件只写 `image: ${RABBITMQ_IMAGE}`，由各实验的 `docker compose --env-file ../.env.versions` 注入。
+- Compose 文件只写 `image: ${RABBITMQ_IMAGE}`，由各实验的 `docker compose --env-file ../../../.env.versions` 注入。
 - Digest 必须用 `docker buildx imagetools inspect <image>:<tag>` 实测获取并记录，禁止凭记忆抄写。
 - Java 客户端版本锁在 `demos/pom.xml` 的 `dependencyManagement` 中。
 

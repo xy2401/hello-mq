@@ -9,7 +9,7 @@ jobs:
     timeout-minutes: 90
 
     permissions:
-      contents: write
+      contents: read
 
     steps:
       - name: 📥 检出项目代码
@@ -22,14 +22,27 @@ jobs:
           java-version: '21'
           cache: maven
 
-      - name: 🐳 逐实验运行 demos/*/*/run.sh 收集输出日志
-        run: |
-          for script in demos/*/*/run.sh; do
-            bash "$script"
-          done
-
-      - name: 🚀 自动提交更新后的 *.out.txt 实验日志到 GitHub
-        uses: stefanzweifel/git-auto-commit-action@v5
+      - name: 🟢 配置 Node.js 环境
+        uses: actions/setup-node@v4
         with:
-          commit_message: "chore(auto): update Docker lab output logs [skip ci]"
-          file_pattern: "demos/**/*.out.txt"
+          node-version: '22'
+          cache: npm
+
+      - name: 📦 安装文档依赖
+        run: npm ci
+
+      - name: 🐳 运行统一 Docker/CLI 证据采集
+        run: npm run collect:docker
+
+      - name: 🏗️ 验证 catalog 与 VitePress 构建
+        run: npm run check
+
+      - name: 📦 上传待审查的镜像锁与证据快照
+        uses: actions/upload-artifact@v4
+        with:
+          name: hello-mq-docker-evidence-${{ github.run_id }}
+          path: |
+            .env.versions
+            demos/**/docker/*.out.txt
+          include-hidden-files: true
+          if-no-files-found: error

@@ -1,0 +1,56 @@
+---
+status: verified
+capturedAt: "2026-08-20T00:00:00.000Z"
+dockerImage: "apache/rocketmq:5.5.0@sha256:7e8f6c9dbd9df742ed26ba69c00d4ad69e2f86a56f3ca7782ff8144dd0798132"
+exitCode: 0
+---
+## status
+[cli-tools] $ mqadmin clusterList -n namesrv:9876
+#Cluster Name           #Broker Name            #BID  #Addr                  #Version              #InTPS(LOAD)                   #OutTPS(LOAD)  #Timer(Progress)        #PCWait(ms)  #Hour         #SPACE    #ACTIVATED
+DefaultCluster          hello-mq-broker         0     172.18.0.3:10911       V5_5_0                 0.00(0,0ms)               0.00(0,0ms|0,0ms)  1-0(0.0w, 0.0, 0.0)               0  496456.36     0.5400          true
+
+## create
+[cli-tools] $ mqadmin updateTopic -n namesrv:9876 -c DefaultCluster -t ordersCli
+create topic to 172.18.0.3:10911 success.
+TopicConfig [topicName=ordersCli, readQueueNums=8, writeQueueNums=8, perm=RW-, topicFilterType=SINGLE_TAG, topicSysFlag=0, order=false, attributes={}]
+
+## produce
+[cli-tools] $ mqadmin sendMessage -n namesrv:9876 -t ordersCli -p order-cli-1 -c TagCli
+#Broker Name                      #QID  #Send Result            #MsgId
+hello-mq-broker                   7     SEND_OK                 AC12000301F32FF4ACD0655B785E0000
+[cli-tools] $ mqadmin sendMessage -n namesrv:9876 -t ordersCli -p order-cli-2 -c TagCli
+#Broker Name                      #QID  #Send Result            #MsgId
+hello-mq-broker                   0     SEND_OK                 AC12000302312FF4ACD0655B89F30000
+[cli-tools] $ mqadmin sendMessage -n namesrv:9876 -t ordersCli -p order-cli-3 -c TagCli
+#Broker Name                      #QID  #Send Result            #MsgId
+hello-mq-broker                   0     SEND_OK                 AC120003026E2FF4ACD0655B9BBA0000
+
+## consume
+[cli-tools] $ mqadmin consumeMessage -n namesrv:9876 -t ordersCli
+Consume ok
+MSGID: AC12000301F32FF4ACD0655B785E0000 MessageExt [brokerName=hello-mq-broker, queueId=7, storeSize=237, queueOffset=0, sysFlag=0, bornTimestamp=1787242893407, bornHost=/172.18.0.3:51468, storeTimestamp=1787242893463, storeHost=/172.18.0.3:10911, msgId=AC12000300002A9F0000000000000000, commitLogOffset=0, bodyCRC=449233014, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='ordersCli', flag=0, properties={MSG_REGION=DefaultRegion, UNIQ_KEY=AC12000301F32FF4ACD0655B785E0000, CLUSTER=DefaultCluster, MIN_OFFSET=0, TAGS=TagCli, WAIT=true, TRACE_ON=true, MAX_OFFSET=1}, body=[111, 114, 100, 101, 114, 45, 99, 108, 105, 45, 49], transactionId='null'}] BODY: order-cli-1
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=7] print msg finished. status=NO_NEW_MSG, offset=1
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=6] print msg finished. status=NO_NEW_MSG, offset=0
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=3] print msg finished. status=NO_NEW_MSG, offset=0
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=2] print msg finished. status=NO_NEW_MSG, offset=0
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=5] print msg finished. status=NO_NEW_MSG, offset=0
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=4] print msg finished. status=NO_NEW_MSG, offset=0
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=1] print msg finished. status=NO_NEW_MSG, offset=0
+Consume ok
+MSGID: AC12000302312FF4ACD0655B89F30000 MessageExt [brokerName=hello-mq-broker, queueId=0, storeSize=237, queueOffset=0, sysFlag=0, bornTimestamp=1787242897912, bornHost=/172.18.0.3:39286, storeTimestamp=1787242897940, storeHost=/172.18.0.3:10911, msgId=AC12000300002A9F00000000000000ED, commitLogOffset=237, bodyCRC=63934924, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='ordersCli', flag=0, properties={MSG_REGION=DefaultRegion, UNIQ_KEY=AC12000302312FF4ACD0655B89F30000, CLUSTER=DefaultCluster, MIN_OFFSET=0, TAGS=TagCli, WAIT=true, TRACE_ON=true, MAX_OFFSET=2}, body=[111, 114, 100, 101, 114, 45, 99, 108, 105, 45, 50], transactionId='null'}] BODY: order-cli-2
+MSGID: AC120003026E2FF4ACD0655B9BBA0000 MessageExt [brokerName=hello-mq-broker, queueId=0, storeSize=237, queueOffset=1, sysFlag=0, bornTimestamp=1787242902459, bornHost=/172.18.0.3:39294, storeTimestamp=1787242902481, storeHost=/172.18.0.3:10911, msgId=AC12000300002A9F00000000000001DA, commitLogOffset=474, bodyCRC=1959305562, reconsumeTimes=0, preparedTransactionOffset=0, toString()=Message{topic='ordersCli', flag=0, properties={MSG_REGION=DefaultRegion, UNIQ_KEY=AC120003026E2FF4ACD0655B9BBA0000, CLUSTER=DefaultCluster, MIN_OFFSET=0, TAGS=TagCli, WAIT=true, TRACE_ON=true, MAX_OFFSET=2}, body=[111, 114, 100, 101, 114, 45, 99, 108, 105, 45, 51], transactionId='null'}] BODY: order-cli-3
+MessageQueue [topic=ordersCli, brokerName=hello-mq-broker, queueId=0] print msg finished. status=NO_NEW_MSG, offset=2
+
+## verify
+[cli-tools] $ mqadmin topicStatus -n namesrv:9876 -t ordersCli
+#Broker Name                      #QID  #Min Offset           #Max Offset             #Last Updated
+hello-mq-broker                   0     0                     2                       2026-08-20 16:21:42,481
+hello-mq-broker                   1     0                     0                       
+hello-mq-broker                   2     0                     0                       
+hello-mq-broker                   3     0                     0                       
+hello-mq-broker                   4     0                     0                       
+hello-mq-broker                   5     0                     0                       
+hello-mq-broker                   6     0                     0                       
+hello-mq-broker                   7     0                     1                       2026-08-20 16:21:33,463
+
+Topic Put TPS: 0.0

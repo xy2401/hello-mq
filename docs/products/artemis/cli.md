@@ -1,6 +1,6 @@
 # ActiveMQ Artemis CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/artemis/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/artemis/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -141,6 +141,6 @@ $ bin/artemis connection list
 
 ---
 
-**参考证据**：`demos/artemis/cli-tools/` 中的 `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`。
+**参考证据**：`demos/artemis/docker/` 中的 `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`。
 
 **闭环等级**：**完整闭环**（统一入口支持全部运维和收发操作）。

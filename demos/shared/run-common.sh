@@ -8,7 +8,7 @@ set -euo pipefail
 PRODUCT="$(basename "$(dirname "$LAB_DIR")")"
 LAB="$(basename "$LAB_DIR")"
 PROJECT="hello-mq-${PRODUCT}-${LAB}"
-ENV_FILE="$LAB_DIR/../../.env.versions"
+ENV_FILE="$LAB_DIR/../../../.env.versions"
 ASSERT_FILE="$LAB_DIR/assert.out.txt"
 FAILURES=0
 : > "$ASSERT_FILE"

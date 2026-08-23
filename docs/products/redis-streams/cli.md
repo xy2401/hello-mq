@@ -1,6 +1,6 @@
 # Redis Streams CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/redis-streams/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/redis-streams/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -184,4 +184,4 @@ $ docker exec hello-mq-redis-1 redis-cli XAUTOCLAIM orders:cli orders-cli-group 
 
 ---
 
-**参考证据**：`demos/redis-streams/cli-tools/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。
+**参考证据**：`demos/redis-streams/docker/` 中的 `bin-list.out.txt`, `status.out.txt`, `consume.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`。

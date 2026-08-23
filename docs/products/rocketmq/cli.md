@@ -1,6 +1,6 @@
 # RocketMQ CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/rocketmq/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/rocketmq/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 命令清单
 
@@ -112,7 +112,7 @@ $ mqadmin getSubOffset -n "namesrv:9876" \
 
 ---
 
-**参考证据**：`demos/rocketmq/cli-tools/` 中的 `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`。
+**参考证据**：`demos/rocketmq/docker/` 中的 `status.out.txt`, `consume.out.txt`, `produce.out.txt`, `create.out.txt`, `verify.out.txt`, `assert.out.txt`, `bin-list.out.txt`。
 
 **闭环等级**：**完整闭环**（mqadmin 支持完整的运维和收发流程）。
 

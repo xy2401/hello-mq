@@ -1,5 +1,7 @@
 # Apache Kafka 总览
 
+<DockerTooling product="kafka" />
+
 <VersionBadge logo="kafka" product="Apache Kafka" broker="4.3.1" client="kafka-clients 4.3.1" image="tag+digest@.env.versions" />
 
 > 本页结论：Kafka 首先是一个分布式提交日志（commit log）：消息追加写入 Topic 的 Partition 并按 offset 编号，消费不删除日志，回放与多消费组是日志语义的自然结果。

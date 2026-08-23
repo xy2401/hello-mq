@@ -1,5 +1,7 @@
 # RabbitMQ 总览
 
+<DockerTooling product="rabbitmq" />
+
 <VersionBadge logo="rabbitmq" product="RabbitMQ" broker="4.1.4" client="amqp-client 5.34.0" image="tag+digest@.env.versions" />
 
 > 本页结论：RabbitMQ 首先是一个支持灵活路由与传统消息队列语义的 Broker；它用 Exchange/Binding 做路由、用 Queue 存消息、用两段独立确认（Publisher Confirms 与 Consumer ACK）构建可靠链路。

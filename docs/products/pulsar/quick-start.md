@@ -27,7 +27,7 @@ mvn -B -q -f ../../pom.xml -pl pulsar -am package -DskipTests
 
 # 2. 启动完整流程：pulsar → consumer → producer → inspect-db
 #    （Exclusive 订阅默认从 Latest 开始，故 consumer 先于 producer 启动；顺序由 depends_on 条件保证）
-docker compose --env-file ../../.env.versions up -d
+docker compose --env-file ../../../.env.versions up -d
 docker compose wait inspect-db
 
 # 3. 观察订阅游标与积压（msgBacklog 应为 0）
@@ -39,7 +39,7 @@ docker compose logs producer
 docker compose ps --all
 
 # 5. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 Topic 短名 `orders-basic` 的全限定名是 `persistent://public/default/orders-basic`（standalone 默认 tenant=`public`、namespace=`default`，多租户见 [存储与高可用](/products/pulsar/storage-ha)）。

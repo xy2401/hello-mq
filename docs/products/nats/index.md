@@ -1,5 +1,7 @@
 # NATS 与 JetStream 总览
 
+<DockerTooling product="nats" />
+
 <VersionBadge logo="nats" product="NATS" broker="2.11.5" client="jnats 2.21.1" image="tag+digest@.env.versions" />
 
 > 本页结论：NATS 是分层设计的消息系统——Core NATS 提供极低延迟的易失发布订阅（发了就忘），JetStream 在其上叠加持久化日志与消费语义（Stream + Consumer + ACK）。两者的发送 API 与可靠性目标完全不同，任何结论都必须先说明说的是哪一层。
@@ -64,7 +66,7 @@ flowchart LR
 ```bash
 bash demos/nats/core-pubsub/run.sh
 bash demos/nats/jetstream-replay/run.sh
-bash demos/nats/cli-tools/run.sh
+bash demos/nats/docker/run.sh
 ```
 
 ## 版本基线

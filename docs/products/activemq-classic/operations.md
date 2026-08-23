@@ -58,4 +58,4 @@ bin/activemq consumer --destination queue://orders-cli --messageCount 1
 
 6.2.0 镜像的 bin 目录仅 7 项（`activemq` 统一入口、`activemq-diag`、`activemq.jar`、`setenv`、`wrapper.jar`、`linux-x86-64`、`macosx`），统一入口为 task 制：producer/consumer 子命令即可完成收发闭环，`status` 查运行状态（实测输出 `ActiveMQ is running (pid '1')`）。Classic 没有显式建队命令：向全新队列 `orders-cli` 首次生产即自动创建。OpenWire 默认匿名，命令无需 user/password 参数（区别于 Artemis 镜像的 security-enabled=true）；`--message` 只能固定内容，run.sh 循环 3 次各发 1 条。自带 consumer **没有 receive-timeout 参数**，空队列时 `consumer --messageCount 1` 无限阻塞，实验用 `timeout 15` 包裹并断言 exit=124 证明队列已排空。
 
-<LabOutput product="activemq-classic" lab="cli-tools" />
+<LabOutput product="activemq-classic" lab="docker" />

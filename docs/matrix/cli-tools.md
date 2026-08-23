@@ -1,8 +1,8 @@
 # 自带 CLI 对照矩阵
 
-> 本页结论：七个产品的镜像都自带管理入口，但「纯自带命令能否走完收发闭环」差异很大——Kafka、Pulsar、Redis Streams、RocketMQ、Artemis 五个产品只用镜像自带命令即可完成 bin 列表 → 状态 → 建队列 → 生产 → 消费 → 复查的完整闭环；RabbitMQ 的队列与状态操作自带，收发却没有自带命令，只能借道 management HTTP API（4.x 已移除 rabbitmqctl add_queue）；NATS 官方镜像是 distroless，只有一个 /nats-server 二进制，连收发 CLI 都不存在，状态只能走 8222 监控端点。本页所有命令与输出摘自 demos/<产品>/cli-tools/ 实验的真实快照，未做改写。
+> 本页结论：八个产品全部有 Docker/CLI 证据。Kafka、Pulsar、Redis Streams、RocketMQ、Artemis、ActiveMQ Classic 六个产品可用镜像自带入口完成状态、创建、生产、消费和复查；RabbitMQ 的队列与状态操作自带，收发需借道 management HTTP API；NATS 官方镜像是 distroless，只有 `/nats-server`，状态走 8222 监控端点。本页命令与输出摘自 `demos/<产品>/docker/` 真实快照。
 
-版本基线见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。七组快照采集于 2026-08-20，每组实验的断言全部通过（各 `assert.out.txt` 末行均为 `RESULT: all assertions passed`）。本页只比较「镜像自带命令」这一层，管理插件、Web UI 与指标体系见[运维与观测](/matrix/operations)。
+版本基线见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。八组快照采集于 2026-08-20，每组实验的断言全部通过（各 `assert.out.txt` 结果均为 `RESULT: all assertions passed`）。本页只比较「镜像自带命令」这一层，管理插件、Web UI 与指标体系见[运维与观测](/matrix/operations)。
 
 ## 核心对照表
 
@@ -15,19 +15,20 @@
 | Redis Streams | 6 个二进制（redis-cli 等） | `INFO server` | `XGROUP CREATE ... MKSTREAM` | `XADD` | `XREADGROUP`/`XACK`（首读 `>` 重放 `0`） | 完整闭环 |
 | RocketMQ | bin 36 项 | `mqadmin clusterList` | `mqadmin updateTopic` | `mqadmin sendMessage -p body -c tag` | `mqadmin consumeMessage`（默认排空，`-c` 条数上限不可靠） | 完整闭环 |
 | Artemis | bin 仅统一入口 `artemis`（+lib） | `artemis check node` | `artemis queue create` | `artemis producer` | `artemis consumer`/`browser` | 完整闭环 |
+| ActiveMQ Classic | `/opt/apache-activemq/bin` 入口脚本 | `activemq status` | producer 首次发送自动建立队列 | `activemq producer` | `activemq consumer` | 完整闭环 |
 | RabbitMQ | sbin 10 项 | `rabbitmqctl status` | `rabbitmqadmin declare queue`（management 自带；4.x 移除 `rabbitmqctl add_queue`） | 无自带命令，走 management HTTP API | 无自带命令，宿主机 curl publish/get | 管理 API 辅助 |
 | NATS | distroless 单一 `/nats-server` | 8222 监控 `/healthz` `/varz` `/connz` `/subsz` | ➖ 无自带 CLI（缺口） | ➖ 无收发 CLI（缺口） | ➖ 无收发 CLI（缺口） | 仅状态 |
 
 两点横向评注：
 
-- bin 规模与闭环能力不成正比：Kafka 43 个脚本与 Artemis 单一入口都能完整闭环；NATS 最精简却连收发都做不到（官方 CLI 由 nats-io/natscli 独立发行，不在镜像内）。
+- bin 规模与闭环能力不成正比：Kafka 43 个脚本、Artemis 单一入口和 ActiveMQ Classic 的统一启动脚本都能完成闭环；NATS 最精简却连收发都做不到（官方 CLI 由 nats-io/natscli 独立发行，不在镜像内）。
 - 同一动词含义不同：`consume` 在 Kafka/Pulsar/Artemis 是独立命令，在 Redis Streams 是 `XREADGROUP` + `XACK` 两步，在 RocketMQ 是排空式查看（不推进任何消费组位点），在 RabbitMQ 是 management API 的 `get`（取走即确认）。
 
 ## 快照证据摘录
 
 以下输出逐字摘自各实验目录的 `*.out.txt`，路径即证据。
 
-### Kafka（demos/kafka/cli-tools/）
+### Kafka（demos/kafka/docker/）
 
 ```text
 # status.out.txt
@@ -45,7 +46,7 @@ orders-cli-group orders.cli      0          3               3               0
 
 `assert.out.txt`：`PASS binCount: 43`、`PASS consumerGroupLag: 0`。
 
-### Pulsar（demos/pulsar/cli-tools/）
+### Pulsar（demos/pulsar/docker/）
 
 ```text
 # status.out.txt
@@ -62,7 +63,7 @@ publishTime:[1787242491101], eventTime:[0], key:[null], properties:[], content:o
 
 `verify.out.txt`：`topics stats` 显示 `msgInCounter: 3`，订阅 `msgBacklog: 0`；`assert.out.txt`：`PASS producedMsgCount: 3`、`PASS consumedMsgCount: 3`。
 
-### Redis Streams（demos/redis-streams/cli-tools/）
+### Redis Streams（demos/redis-streams/docker/）
 
 ```text
 # bin-list.out.txt
@@ -80,7 +81,7 @@ PENDING=0
 
 `consume.out.txt`：`XREADGROUP ... '>'` 首读 3 条，`XACK` 返回 `3`，再以 `0` 重放为空——「首读 `>`、重放 `0`」是 Redis Streams 消费的两段式语义。
 
-### RocketMQ（demos/rocketmq/cli-tools/）
+### RocketMQ（demos/rocketmq/docker/）
 
 ```text
 # status.out.txt
@@ -95,7 +96,7 @@ MSGID: AC12000301F32FF4ACD0655B785E0000 MessageExt [... TAGS=TagCli ...] BODY: o
 
 `assert.out.txt`：`PASS binCount: 36`、`PASS consumedUnique: 3`、`PASS maxOffsetSum: 3`。`-c <N>` 不是可靠条数上限：run.sh 注释记录实测——源码对每个访问过的队列都扣减 countLeft，8 队列下 `-c 3` 可能只消费到 1 条，故本实验用默认值排空。
 
-### Artemis（demos/artemis/cli-tools/）
+### Artemis（demos/artemis/docker/）
 
 ```text
 # status.out.txt
@@ -110,7 +111,7 @@ Queue [name=orders-cli, address=orders-cli, routingType=ANYCAST, durable=true, .
 
 bin 目录只有 `artemis`、`artemis.cmd` 与 `lib/`（`bin-list.out.txt`）：所有子命令（check、queue、producer、consumer、browser）走同一入口。`browser.out.txt` 显示消费后浏览结果为 `browsed: 0 messages`，与 `queue stat` 的 MESSAGE COUNT 0 互证。
 
-### RabbitMQ（demos/rabbitmq/cli-tools/）
+### RabbitMQ（demos/rabbitmq/docker/）
 
 ```text
 # create.out.txt（rabbitmqadmin 为 management 插件自带）
@@ -127,7 +128,7 @@ orders-cli	0
 
 `run.sh` 记录了两点实测结论：4.x 的 rabbitmqctl 已无 `add_queue`（报 `Command 'add_queue' not found`），队列声明改用 rabbitmqadmin；镜像内没有 curl 也没有收发命令，publish/get 只能从宿主机打 15672 的 management HTTP API（`consume.out.txt` 的 get 响应含 3 条 payload，`assert.out.txt`：`PASS binCount: 10`、`PASS queueDepth: 0`）。
 
-### NATS（demos/nats/cli-tools/）
+### NATS（demos/nats/docker/）
 
 ```text
 # bin-list.out.txt（distroless：无 bin 目录，只有单一二进制）
@@ -163,16 +164,17 @@ CLI 的长项是**快、零依赖、贴近排障现场**：容器起来就能用
 每个实验独立运行，只起停自己的 Compose Project；运行会重新生成本页引用的全部快照：
 
 ```bash
-bash demos/kafka/cli-tools/run.sh
-bash demos/pulsar/cli-tools/run.sh
-bash demos/redis-streams/cli-tools/run.sh
-bash demos/rocketmq/cli-tools/run.sh
-bash demos/artemis/cli-tools/run.sh
-bash demos/rabbitmq/cli-tools/run.sh
-bash demos/nats/cli-tools/run.sh
+bash demos/kafka/docker/run.sh
+bash demos/pulsar/docker/run.sh
+bash demos/redis-streams/docker/run.sh
+bash demos/rocketmq/docker/run.sh
+bash demos/artemis/docker/run.sh
+bash demos/rabbitmq/docker/run.sh
+bash demos/nats/docker/run.sh
+bash demos/activemq-classic/docker/run.sh
 ```
 
-前置条件：本机 Docker（含 Compose 插件）。RabbitMQ 与 NATS 实验的收发/状态探测从宿主机发起（curl 打 127.0.0.1 映射端口），其余五个产品的命令全部在容器内执行。
+前置条件：本机 Docker（含 Compose 插件）。RabbitMQ 与 NATS 实验的收发/状态探测从宿主机发起（curl 打 127.0.0.1 映射端口），其余六个产品的命令全部在容器内执行。
 
 ## 相关页面
 

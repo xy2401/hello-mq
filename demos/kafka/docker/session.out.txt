@@ -1,0 +1,33 @@
+---
+status: verified
+capturedAt: "2026-08-20T00:00:00.000Z"
+dockerImage: "apache/kafka:4.3.1@sha256:77e3df9054047a88b520d0cc46e16696d3b22022e1d580aeccd2632df6532837"
+exitCode: 0
+---
+## status
+[cli-tools] $ /opt/kafka/bin/kafka-cluster.sh cluster-id --bootstrap-server localhost:9092
+Cluster ID: MkU3OEVBNTcwNTJENDM2Qk
+
+## create
+[cli-tools] $ /opt/kafka/bin/kafka-topics.sh --create --topic orders.cli --partitions 1 --replication-factor 1 --bootstrap-server localhost:9092
+WARNING: Due to limitations in metric names, topics with a period ('.') or underscore ('_') could collide. To avoid issues it is best to use either, but not both.
+Created topic orders.cli.
+
+## produce
+[cli-tools] $ sh -c printf 'order-cli-1\norder-cli-2\norder-cli-3\n' | /opt/kafka/bin/kafka-console-producer.sh --bootstrap-server localhost:9092 --topic orders.cli
+
+## consume
+[cli-tools] $ /opt/kafka/bin/kafka-console-consumer.sh --bootstrap-server localhost:9092 --topic orders.cli --group orders-cli-group --from-beginning --max-messages 3 --timeout-ms 30000
+The consumer rebalance protocol (KIP-848) is production-ready! Set group.protocol=consumer to try it out. See https://kafka.apache.org/documentation/#consumer_rebalance_protocol
+order-cli-1
+order-cli-2
+order-cli-3
+Processed a total of 3 messages
+
+## verify
+[cli-tools] $ /opt/kafka/bin/kafka-consumer-groups.sh --bootstrap-server localhost:9092 --describe --group orders-cli-group
+
+Consumer group 'orders-cli-group' has no active members.
+
+GROUP            TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+orders-cli-group orders.cli      0          3               3               0               -               -               -

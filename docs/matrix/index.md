@@ -25,7 +25,7 @@
 | ActiveMQ Artemis | 2.44.0 | [/products/artemis/](/products/artemis/) |
 | ActiveMQ Classic | 6.2.0 | [/products/activemq-classic/](/products/activemq-classic/) |
 
-镜像均以 tag+digest 双锁定，见 `demos/.env.versions` 与[版本政策](/reference/version-policy)。
+镜像均以 tag+digest 双锁定，见 `.env.versions` 与[版本政策](/reference/version-policy)。
 
 ## 五级标记图例
 

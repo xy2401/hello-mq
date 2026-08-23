@@ -69,7 +69,7 @@ RocketMQ Dashboard（原 rocketmq-console）提供 Web 界面：Topic/消费组�
 
 bin 目录共 36 项，`mqadmin` 即可完成收发闭环：`clusterList` 查状态 → `updateTopic` 建 `ordersCli` → `sendMessage` 连发 3 条全部 SEND_OK → `consumeMessage` 一次排空收齐 3 条 → `topicStatus` 复查 maxOffset 合计=3，全程不引入任何客户端 SDK。两处实测坑：Broker 约 30s 心跳注册路由，建 Topic 后需等路由可见再收发；`consumeMessage -c` 并非可靠条数上限，用默认 messageCount=128 即可。
 
-<LabOutput product="rocketmq" lab="cli-tools" />
+<LabOutput product="rocketmq" lab="docker" />
 
 ## 官方资料
 

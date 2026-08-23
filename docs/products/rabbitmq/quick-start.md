@@ -25,14 +25,14 @@ mvn -B -q -f ../../pom.xml -pl rabbitmq -am package -DskipTests
 
 # 2. 启动完整流程：rabbitmq → setup → producer → consumer → inspect-db
 #    （镜像 digest 经 env file 注入；顺序与健康等待由 depends_on 条件保证）
-docker compose --env-file ../../.env.versions up
+docker compose --env-file ../../../.env.versions up
 
 # 3. 观察各角色日志与退出码
 docker compose logs producer
 docker compose ps --all
 
 # 4. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 ## 预期输出

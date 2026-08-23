@@ -28,7 +28,7 @@ cd demos/nats/jetstream-replay
 
 # 1. 启动完整流程：nats → setup → producer → consumer-first → consumer-replay → inspect-db → stats
 #    （新 durable 从头回放 ⇒ 回放轮全部 duplicate_skipped；顺序由 depends_on 条件保证）
-docker compose --env-file ../../.env.versions up -d
+docker compose --env-file ../../../.env.versions up -d
 docker compose wait stats
 
 # 2. 观察关键语义：ACK 不删除 Stream 消息
@@ -38,7 +38,7 @@ docker compose exec nats nats stream info ORDERS    # Messages => 3
 docker compose logs producer consumer-first consumer-replay
 
 # 4. 清理（仅删除本实验的 Compose Project）
-docker compose --env-file ../../.env.versions down --volumes
+docker compose --env-file ../../../.env.versions down --volumes
 ```
 
 ## 预期输出

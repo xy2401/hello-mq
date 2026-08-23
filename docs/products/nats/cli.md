@@ -1,6 +1,6 @@
 # NATS CLI 工具
 
-> **本页面说明**：所有命令与输出来自 `demos/nats/cli-tools/*.out.txt` 的真实采集，未做任何改写。
+> **本页面说明**：所有命令与输出来自 `demos/nats/docker/*.out.txt` 的真实采集，未做任何改写。
 
 ## 重要说明
 
@@ -129,7 +129,7 @@ $ curl -fsS http://127.0.0.1:8222/jetstream_overview
 
 ---
 
-**参考证据**：`demos/nats/cli-tools/` 中的 `status.out.txt`, `varz.out.txt`, `connz.out.txt`, `gap.out.txt`。
+**参考证据**：`demos/nats/docker/` 中的 `status.out.txt`, `varz.out.txt`, `connz.out.txt`, `gap.out.txt`。
 
 **特殊说明**：
 1. **收发能力为零** - 必须依赖外部客户端
