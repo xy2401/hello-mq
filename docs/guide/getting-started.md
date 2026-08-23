@@ -48,6 +48,6 @@ npm run check           # check-project + docs:build
 
 ## 下一步
 
-- 理解概念：[基础原理](/fundamentals/)
-- 动手实验：[实验室总览](/labs/)
-- 产品学习：[RabbitMQ 分卷](/brokers/rabbitmq/)
+- 理解概念：[基础原理](/concepts/)
+- 动手实验：[实验室总览](/matrix/experiment/)
+- 产品学习：[RabbitMQ 分卷](/products/rabbitmq/)

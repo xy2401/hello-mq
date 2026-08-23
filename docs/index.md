@@ -7,13 +7,13 @@ hero:
   actions:
     - theme: brand
       text: 基础原理
-      link: /fundamentals/
+      link: /concepts/
     - theme: alt
       text: 横向矩阵与选型
       link: /matrix/
     - theme: alt
       text: 进入实验室
-      link: /labs/
+      link: /matrix/experiment/
 
 features:
   - icon: 🧭
@@ -31,13 +31,13 @@ features:
 
 | 产品 | 状态 | 代表性 | 分卷 | 实验 |
 | :--- | :--- | :--- | :--- | :--- |
-| <ProductLogo product="rabbitmq" /> RabbitMQ | ✅ 已落地 | 传统消息队列与灵活路由 | [8 页](/brokers/rabbitmq/) | 5 个（basic / routing / consumer-crash / retry-dlq / backlog-recovery） |
-| <ProductLogo product="kafka" /> Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/brokers/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
-| <ProductLogo product="rocketmq" /> Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/brokers/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
-| <ProductLogo product="pulsar" /> Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/brokers/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
-| <ProductLogo product="redis" /> Redis Streams | ✅ 已落地 | Redis 内的追加日志与消费组 | [8 页](/brokers/redis-streams/) | 2 个（basic / consumer-crash） |
-| <ProductLogo product="nats" /> NATS + JetStream | ✅ 已落地 | 低延迟 Core NATS 与持久化 JetStream | [8 页](/brokers/nats/) | 2 个（core-pubsub / jetstream-replay） |
-| ActiveMQ Artemis | ✅ 分卷落地（快照未采集） | 多协议 JMS Broker：anycast/multicast、服务端重试与死信、XA 事务 | [8 页](/brokers/artemis/) | 2 个编排就绪（basic / retry-dlq） |
+| <ProductLogo product="rabbitmq" /> RabbitMQ | ✅ 已落地 | 传统消息队列与灵活路由 | [8 页](/products/rabbitmq/) | 5 个（basic / routing / consumer-crash / retry-dlq / backlog-recovery） |
+| <ProductLogo product="kafka" /> Apache Kafka | ✅ 已落地 | 分区式持久日志与事件流 | [8 页](/products/kafka/) | 4 个（basic / consumer-group / ordering-replay / idempotence-transaction） |
+| <ProductLogo product="rocketmq" /> Apache RocketMQ | ✅ 已落地 | 面向业务消息的分布式中间件 | [8 页](/products/rocketmq/) | 4 个（basic / fifo-delay / transaction / retry-dlq） |
+| <ProductLogo product="pulsar" /> Apache Pulsar | ✅ 已落地 | 存储计算分离、云原生多租户 | [8 页](/products/pulsar/) | 3 个（basic / subscriptions / redelivery-replay） |
+| <ProductLogo product="redis" /> Redis Streams | ✅ 已落地 | Redis 内的追加日志与消费组 | [8 页](/products/redis-streams/) | 2 个（basic / consumer-crash） |
+| <ProductLogo product="nats" /> NATS + JetStream | ✅ 已落地 | 低延迟 Core NATS 与持久化 JetStream | [8 页](/products/nats/) | 2 个（core-pubsub / jetstream-replay） |
+| ActiveMQ Artemis | ✅ 分卷落地（快照未采集） | 多协议 JMS Broker：anycast/multicast、服务端重试与死信、XA 事务 | [8 页](/products/artemis/) | 2 个编排就绪（basic / retry-dlq） |
 
 ## 从同步调用到事件驱动
 
@@ -111,7 +111,7 @@ features:
   ]"
 />
 
-模型细节与产品对照见[消息模型](/fundamentals/models)。
+模型细节与产品对照见[消息模型](/concepts/models)。
 
 ## 验证快照示例：消费者崩溃与幂等拦截
 
@@ -119,7 +119,7 @@ features:
 
 <LabOutput product="rabbitmq" lab="consumer-crash" />
 
-完整解读见[消费者崩溃与重投](/labs/consumer-crash)。
+完整解读见[消费者崩溃与重投](/matrix/experiment/consumer-crash)。
 
 ## 横向矩阵速览
 

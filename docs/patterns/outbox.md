@@ -45,7 +45,7 @@ Relay「发布成功但标记失败」会重发同一条消息，所以整条链
 
 ## 与其他机制的关系
 
-- **Kafka 事务不是替代**：Kafka EOS 覆盖的是 topic→topic 的原子性，外部数据库写入不在其内（见 [Kafka 可靠性](/brokers/kafka/reliability)的「事务的边界」）。业务库 + Kafka 的组合仍需 Outbox 或 CDC。
+- **Kafka 事务不是替代**：Kafka EOS 覆盖的是 topic→topic 的原子性，外部数据库写入不在其内（见 [Kafka 可靠性](/products/kafka/reliability)的「事务的边界」）。业务库 + Kafka 的组合仍需 Outbox 或 CDC。
 - **RocketMQ 事务消息是另一条路**：Broker 提供「半消息 + 本地事务回查」，由 Broker 驱动确认；与 Outbox 目标相同（业务成功必发出），机制不同（回查 vs 转发器），选型时比较运维成本与产品绑定。
 - **CDC 变体**：用变更日志代替轮询，避免扫表与发送延迟，但引入 CDC 管道这一新组件，失败模式也随之转移。
 

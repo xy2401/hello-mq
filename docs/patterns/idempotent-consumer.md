@@ -4,7 +4,7 @@
 
 ## 为什么重复不可避免
 
-四个产品的确认机制不同（RabbitMQ ACK、Kafka offset 提交、RocketMQ 消费位点、Pulsar ack），但失败窗口的位置相同：**业务副作用已生效，向 Broker 的确认还没发出**。此时 Broker 认为消息未确认，必然重投。反过来若先确认再写业务，窗口就变成丢消息。顺序只能二选一，本仓库的选择是：**业务事务提交 → 确认**，重复交给幂等表处理（完整推导见[投递语义](/fundamentals/delivery-semantics)）。
+四个产品的确认机制不同（RabbitMQ ACK、Kafka offset 提交、RocketMQ 消费位点、Pulsar ack），但失败窗口的位置相同：**业务副作用已生效，向 Broker 的确认还没发出**。此时 Broker 认为消息未确认，必然重投。反过来若先确认再写业务，窗口就变成丢消息。顺序只能二选一，本仓库的选择是：**业务事务提交 → 确认**，重复交给幂等表处理（完整推导见[投递语义](/concepts/delivery-semantics)）。
 
 ## §5.4 基准实现（所有产品通用）
 
@@ -27,7 +27,7 @@
 
 <LabOutput product="rabbitmq" lab="consumer-crash" />
 
-完整实验步骤与断言解读见[消费者崩溃与重投](/labs/consumer-crash)。Kafka 分卷从 offset 语义给出同样的结论（见 [Kafka 可靠性](/brokers/kafka/reliability)「崩溃窗口与幂等消费」）：**「提交 offset 等于业务已成功」是禁止表述**——那是两个系统上的两个独立动作。
+完整实验步骤与断言解读见[消费者崩溃与重投](/matrix/experiment/consumer-crash)。Kafka 分卷从 offset 语义给出同样的结论（见 [Kafka 可靠性](/products/kafka/reliability)「崩溃窗口与幂等消费」）：**「提交 offset 等于业务已成功」是禁止表述**——那是两个系统上的两个独立动作。
 
 ## 去重键怎么选
 
@@ -41,7 +41,7 @@
 
 - 幂等记录要有**保留策略**（按业务窗口保留，如 7～30 天后归档），否则表无限增长；归档窗口外的极老重投按新消息处理，业务键约束兜底。
 - 用 Redis `SETNX` 做去重时，注意它与业务写入**不在同一事务**：标记成功、业务失败后 Redis 键还在，重投会被错误跳过。分布式锁/缓存只适合做前置快筛，最终裁决要落在与业务同库的唯一键上。
-- 不要根据 `redelivered=true` 直接跳过：重投的消息可能第一次就没处理完，必须走完整幂等流程（见[消费者崩溃与重投](/labs/consumer-crash)常见误区）。
+- 不要根据 `redelivered=true` 直接跳过：重投的消息可能第一次就没处理完，必须走完整幂等流程（见[消费者崩溃与重投](/matrix/experiment/consumer-crash)常见误区）。
 
 ## 与重试的关系
 
@@ -58,7 +58,7 @@
 - 「重复是小概率，可以不管」——at-least-once 的含义是业务**必须预期重复**，不是「偶尔可能重复」。
 - 「先 ACK 再写库更安全」——方向反了，那会把重复窗口换成丢失窗口。
 - 「幂等表只是性能优化」——它是崩溃窗口下的正确性组件，不可省略。
-- 「Kafka 开了事务/EOS 就不用幂等了」——EOS 只覆盖 Kafka 内部 topic→topic，外部数据库副作用仍需幂等（见 [Kafka 可靠性](/brokers/kafka/reliability)）。
+- 「Kafka 开了事务/EOS 就不用幂等了」——EOS 只覆盖 Kafka 内部 topic→topic，外部数据库副作用仍需幂等（见 [Kafka 可靠性](/products/kafka/reliability)）。
 
 ## 官方资料
 

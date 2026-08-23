@@ -52,11 +52,11 @@ sequenceDiagram
 | 阶段 | 内容 |
 | :--- | :--- |
 | 现象 | 集群网络分区：部分节点互相不可达；可能出现两个「多数派」或某分区只剩少数节点；客户端看到连接漂移、写入被拒或数据不一致风险 |
-| 第一动作 | 优先保护数据：让少数派停止服务而不是继续接受写入。RabbitMQ 使用 pause_minority 分区策略；Kafka 依赖 min.insync.replicas 让 ISR 不足的分区拒绝写入（宁可不可用，不假确认，见 [Kafka 可靠性](/brokers/kafka/reliability)）；Pulsar 依赖 broker 故障转移与元数据服务仲裁 |
+| 第一动作 | 优先保护数据：让少数派停止服务而不是继续接受写入。RabbitMQ 使用 pause_minority 分区策略；Kafka 依赖 min.insync.replicas 让 ISR 不足的分区拒绝写入（宁可不可用，不假确认，见 [Kafka 可靠性](/products/kafka/reliability)）；Pulsar 依赖 broker 故障转移与元数据服务仲裁 |
 | 确认项 | ① 分区双方各有哪些节点、哪边是多数派 ② quorum/ISR/元数据仲裁状态 ③ 客户端实际连在哪一侧 ④ 网络故障是链路、交换机还是节点宕机 |
 | 恢复动作 | 修复网络后让少数派重新加入并同步；核对副本/成员恢复完整（RabbitMQ quorum 成员、Kafka ISR 回到目标副本数、Pulsar bundle 重新分配）；检查分区期间是否有写入被拒并补偿；复盘：副本数、min.insync.replicas/quorum 写入条件、分区策略是否符合业务对「可用 vs 正确」的取舍 |
 
-说明：本仓库单节点实验无法复现脑裂（[存储与高可用](/brokers/rabbitmq/storage-ha)等页面给出的是各产品的机制说明），该剧本依据官方文档的推荐配置整理，属于 E1 级内容；在生产采用前必须在预发环境做分区演练。
+说明：本仓库单节点实验无法复现脑裂（[存储与高可用](/products/rabbitmq/storage-ha)等页面给出的是各产品的机制说明），该剧本依据官方文档的推荐配置整理，属于 E1 级内容；在生产采用前必须在预发环境做分区演练。
 
 ## 所有剧本的共同纪律
 

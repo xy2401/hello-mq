@@ -88,7 +88,7 @@
 | :--- | :--- | :--- |
 | RabbitMQ | 低：单节点/3 节点 Quorum | 队列级复制，资源按队列规模增长 |
 | Kafka | 中：Broker + KRaft 控制器 | 分区副本 + 磁盘容量规划 |
-| RocketMQ | 中：namesrv + broker（+ proxy） | 5.x 架构组件较多，见[概念映射](/brokers/rocketmq/concepts) |
+| RocketMQ | 中：namesrv + broker（+ proxy） | 5.x 架构组件较多，见[概念映射](/products/rocketmq/concepts) |
 | Pulsar | 高：Broker + BookKeeper + 元数据服务 | 存算分离换来弹性，代价是组件与调优面更大 |
 | Redis Streams | 极低～中：单实例/主从 + Sentinel（或 Cluster） | 零新增组件（若已有 Redis）；但 Stream 是单 key，容量受实例内存约束 |
 | NATS | 极低～低：单二进制，JetStream 开箱即用；集群为对等 gossip 路由 | 部署最简；Stream 无分区，吞吐与保留容量按单 Stream 规划 |
@@ -101,7 +101,7 @@ P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」�
 1. **先确认规模与可靠性等级**：需要分区级并行、多年保留回放、Broker 内置重试/DLQ、事务消息中的任何一项，直接回到 P0 候选；以下只在中小规模、常规 at-least-once 需求下成立。
 2. **Redis Streams 适用**：团队已有 Redis 运维能力；消息量与保留期在实例内存预算内；需要消费组、PEL 可查的失败追踪与有限回放；可接受主从异步复制的故障窗口。典型：缓存侧异步任务、轻量事件通知、会话内审计流水。
 3. **NATS 适用**：需要低延迟 pub/sub 或原生 Request-Reply；部署预算极小（单二进制、无外部元数据依赖）；Core 的 at-most-once 可接受，或叠加 JetStream 获得保留与回放。典型：服务间轻量事件分发、边缘/IoT 汇聚、内部命令通道。
-4. **共同的禁止表述**：不要把 Redis Streams 当作 Kafka 的轻量替代（无分区、无强持久化保证），也不要把 Core NATS 当作可靠队列（无订阅者即丢）——见各自[陷阱与检查表](/brokers/redis-streams/pitfalls)。
+4. **共同的禁止表述**：不要把 Redis Streams 当作 Kafka 的轻量替代（无分区、无强持久化保证），也不要把 Core NATS 当作可靠队列（无订阅者即丢）——见各自[陷阱与检查表](/products/redis-streams/pitfalls)。
 
 ## 第三步：输出格式（每个选型结论必须包含）
 
@@ -140,12 +140,12 @@ P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」�
 
 ## 通用风险验证清单（任何候选都要过）
 
-1. 重复：at-least-once 下幂等消费是否拦截全部重复（[实验](/labs/consumer-crash)）。
-2. 顺序：失败重试后业务完成顺序是否符合预期（[实验](/labs/ordering)）。
-3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[实验](/labs/poison-message)）。
-4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[实验](/labs/backlog-recovery)）。
+1. 重复：at-least-once 下幂等消费是否拦截全部重复（[实验](/matrix/experiment/consumer-crash)）。
+2. 顺序：失败重试后业务完成顺序是否符合预期（[实验](/matrix/experiment/ordering)）。
+3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[实验](/matrix/experiment/poison-message)）。
+4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[实验](/matrix/experiment/backlog-recovery)）。
 5. 副本：少数派节点故障时的可用性与数据完整性（各产品 storage-ha 页）。
-6. 默认值陷阱：对照各产品[陷阱与检查表](/brokers/rabbitmq/pitfalls)。
+6. 默认值陷阱：对照各产品[陷阱与检查表](/products/rabbitmq/pitfalls)。
 
 ## 相关页面
 

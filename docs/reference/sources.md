@@ -8,12 +8,12 @@
 | :--- | :--- | :--- |
 | RabbitMQ | <https://www.rabbitmq.com/docs> | 2026-08-19 |
 | RabbitMQ Release Information | <https://www.rabbitmq.com/release-information> | 2026-08-19 |
-| Apache Kafka | <https://kafka.apache.org/documentation/> | 2026-08-19（内容已落地：[Kafka 分卷](/brokers/kafka/)） |
-| Apache RocketMQ | <https://rocketmq.apache.org/docs/> | 2026-08-19（内容已落地：[RocketMQ 分卷](/brokers/rocketmq/)） |
-| Apache Pulsar | <https://pulsar.apache.org/docs/> | 2026-08-19（内容已落地：[Pulsar 分卷](/brokers/pulsar/)） |
-| Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（内容已落地：[Redis Streams 分卷](/brokers/redis-streams/)） |
-| NATS | <https://docs.nats.io/> | 2026-08-19（内容已落地：[NATS 分卷](/brokers/nats/)） |
-| ActiveMQ Artemis | <https://activemq.apache.org/components/artemis/documentation/> | 2026-08-19（内容已落地：[Artemis 分卷](/brokers/artemis/)） |
+| Apache Kafka | <https://kafka.apache.org/documentation/> | 2026-08-19（内容已落地：[Kafka 分卷](/products/kafka/)） |
+| Apache RocketMQ | <https://rocketmq.apache.org/docs/> | 2026-08-19（内容已落地：[RocketMQ 分卷](/products/rocketmq/)） |
+| Apache Pulsar | <https://pulsar.apache.org/docs/> | 2026-08-19（内容已落地：[Pulsar 分卷](/products/pulsar/)） |
+| Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（内容已落地：[Redis Streams 分卷](/products/redis-streams/)） |
+| NATS | <https://docs.nats.io/> | 2026-08-19（内容已落地：[NATS 分卷](/products/nats/)） |
+| ActiveMQ Artemis | <https://activemq.apache.org/components/artemis/documentation/> | 2026-08-19（内容已落地：[Artemis 分卷](/products/artemis/)） |
 
 ## 使用约定
 

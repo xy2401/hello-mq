@@ -24,7 +24,7 @@ flowchart LR
 - **订阅独立**：订阅 1 积压或离线，不影响订阅 2 的消费进度（存储侧的影响见下文「不保证什么」）。
 - **订阅内部仍是工作队列**：同一订阅的多个消费者竞争消费（见[工作队列](/patterns/work-queue)）。
 
-本仓库 routing 实验演示了 Topic Exchange 的绑定分发，断言「同一条消息被复制到多个队列」：见[毒消息、重试与 DLQ](/labs/poison-message)的 routing 部分。
+本仓库 routing 实验演示了 Topic Exchange 的绑定分发，断言「同一条消息被复制到多个队列」：见[毒消息、重试与 DLQ](/matrix/experiment/poison-message)的 routing 部分。
 
 ## 四产品实现对照
 
@@ -35,7 +35,7 @@ flowchart LR
 | RocketMQ | Topic + consumer group | 每个订阅者一个独立 consumer group（集群模式） | 组间消费位点独立 |
 | Pulsar | Topic + subscription | 每个订阅一个具名 subscription | 订阅有独立游标；积压可能影响 TTL 下的数据保留 |
 
-关键差异在「订阅」的实现位置：RabbitMQ 的扇出发生在 Exchange 绑定层（消息物理复制到各队列）；Kafka 只存一份日志，靠各 group 的 offset 实现「各自从头读」——所以 Kafka 新增订阅可以回放历史（在保留期内），RabbitMQ 新绑定的队列只能收到绑定之后的消息（见[存储与回放](/fundamentals/storage-and-replay)）。
+关键差异在「订阅」的实现位置：RabbitMQ 的扇出发生在 Exchange 绑定层（消息物理复制到各队列）；Kafka 只存一份日志，靠各 group 的 offset 实现「各自从头读」——所以 Kafka 新增订阅可以回放历史（在保留期内），RabbitMQ 新绑定的队列只能收到绑定之后的消息（见[存储与回放](/concepts/storage-and-replay)）。
 
 ## 事件语义：eventType 而不是队列名
 
@@ -44,7 +44,7 @@ flowchart LR
 ## 保证成立的条件 / 不保证什么
 
 - 条件：每个订阅按 at-least-once 配置确认机制；每个订阅各自实现幂等与重试。
-- 不保证：各订阅「同时」收到事件——每个订阅有自己的消费速率与积压；不保证跨订阅的全局顺序；Kafka/RocketMQ/Pulsar 中慢订阅积压超过保留期时，落后部分可能永久读不到（存储型系统的保留期边界，见[存储与回放](/fundamentals/storage-and-replay)）。
+- 不保证：各订阅「同时」收到事件——每个订阅有自己的消费速率与积压；不保证跨订阅的全局顺序；Kafka/RocketMQ/Pulsar 中慢订阅积压超过保留期时，落后部分可能永久读不到（存储型系统的保留期边界，见[存储与回放](/concepts/storage-and-replay)）。
 
 ## 常见误区
 

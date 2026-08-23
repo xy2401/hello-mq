@@ -156,7 +156,7 @@ CLI 的长项是**快、零依赖、贴近排障现场**：容器起来就能用
 | 类型化载荷与 Schema 演进 | 只有字符串/字节 | 客户端序列化：见 [Schema 演进](/patterns/schema-evolution) |
 | 批量、连接复用、背压、监听器 | 无 | SDK 运行时能力 |
 
-分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/brokers/rabbitmq/quick-start)与[实验总览](/labs/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
+分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/products/rabbitmq/quick-start)与[实验总览](/matrix/experiment/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
 
 ## 怎么复现
 

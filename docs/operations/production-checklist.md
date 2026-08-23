@@ -22,9 +22,9 @@
 
 - [ ] 消费者按 [§5.4 基准实现](/patterns/idempotent-consumer)：幂等键与业务写入同事务，确认动作在事务提交之后。
 - [ ] 手动确认（ACK / 手动提交 offset），确认时机有明确代码位置与注释。
-- [ ] 重试有上限与延迟策略；毒消息路径验证过（参考实验[毒消息、重试与 DLQ](/labs/poison-message)）。
+- [ ] 重试有上限与延迟策略；毒消息路径验证过（参考实验[毒消息、重试与 DLQ](/matrix/experiment/poison-message)）。
 - [ ] DLQ 已建立且有告警：深度、新增速率、最老消息年龄；回放流程演练过一次。
-- [ ] 崩溃重投已演练（参考实验[消费者崩溃与重投](/labs/consumer-crash)）：确认重复只产生 duplicate_skipped，不产生重复业务写入。
+- [ ] 崩溃重投已演练（参考实验[消费者崩溃与重投](/matrix/experiment/consumer-crash)）：确认重复只产生 duplicate_skipped，不产生重复业务写入。
 
 ## 4. 观测与告警
 
@@ -61,10 +61,10 @@
 
 | 产品 | 检查表 |
 | :--- | :--- |
-| RabbitMQ | [陷阱与检查表](/brokers/rabbitmq/pitfalls) |
-| Kafka | [陷阱与检查表](/brokers/kafka/pitfalls) |
-| RocketMQ | [陷阱与检查表](/brokers/rocketmq/pitfalls) |
-| Pulsar | [陷阱与检查表](/brokers/pulsar/pitfalls) |
+| RabbitMQ | [陷阱与检查表](/products/rabbitmq/pitfalls) |
+| Kafka | [陷阱与检查表](/products/kafka/pitfalls) |
+| RocketMQ | [陷阱与检查表](/products/rocketmq/pitfalls) |
+| Pulsar | [陷阱与检查表](/products/pulsar/pitfalls) |
 
 ## 常见误区
 

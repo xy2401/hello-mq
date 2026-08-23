@@ -8,11 +8,11 @@
 
 | 能力 | RabbitMQ | Kafka | RocketMQ | Pulsar | Redis Streams | NATS | Artemis |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| 延迟消息机制 | 🔧 队列级/消息级 TTL + DLX 组合：消息过期后死信转发到目标队列（[routing](/brokers/rabbitmq/routing)）；另有社区 delayed-message-exchange 插件（🧩，非核心发行版） | 🛠 无内置：常见做法是 delay topic + 定时扫描，或业务侧时间轮/调度器到点重新发送（[pitfalls](/brokers/kafka/pitfalls)） | ✅ 原生 Delay 消息类型：发送时指定投递时间戳（delivery timestamp），Broker 定时调度投递（[concepts](/brokers/rocketmq/concepts)） | 🛠 无内置延迟消息：需外部调度器/定时任务到点发送，或独立延迟 Topic 轮询（[pitfalls](/brokers/pulsar/pitfalls)） | 🛠 无内置：常用 ZSET（score=到期时间）做到期表，轮询 ZRANGEBYSCORE 后 XADD 到目标 Stream（[pitfalls](/brokers/redis-streams/pitfalls)） | 🛠 无内置：需外部调度器到点向 Subject 发布；JetStream 不支持延迟投递配置（[pitfalls](/brokers/nats/pitfalls)） | ✅ 原生：发送时设置 `_AMQ_SCHED_DELAY` 属性（延迟毫秒数），Broker 到期后才投递到目标队列（[concepts](/brokers/artemis/concepts)） |
-| 精度与粒度 | 🔧 per-message TTL 只在消息到达队头时才检查过期：队头未过期会阻塞后面已到期的消息，大量不同 TTL 混用时精度差（[pitfalls](/brokers/rabbitmq/pitfalls)） | 🛠 取决于自建扫描频率与时间轮实现，Broker 不参与 | ✅ 秒级精度的定时投递；注意经典版本只支持固定延迟档位（1s/5s/…/2h），5.x 支持任意时间戳（[concepts](/brokers/rocketmq/concepts)） | 🛠 取决于自建调度器实现，Broker 不参与 | 🛠 取决于 ZSET 轮询频率，Broker 不参与调度 | 🛠 取决于自建调度器实现，Broker 不参与 | ✅ 毫秒级延迟属性；延迟消息在 journal 中单独调度，不阻塞队列内其他消息（[concepts](/brokers/artemis/concepts)） |
+| 延迟消息机制 | 🔧 队列级/消息级 TTL + DLX 组合：消息过期后死信转发到目标队列（[routing](/products/rabbitmq/routing)）；另有社区 delayed-message-exchange 插件（🧩，非核心发行版） | 🛠 无内置：常见做法是 delay topic + 定时扫描，或业务侧时间轮/调度器到点重新发送（[pitfalls](/products/kafka/pitfalls)） | ✅ 原生 Delay 消息类型：发送时指定投递时间戳（delivery timestamp），Broker 定时调度投递（[concepts](/products/rocketmq/concepts)） | 🛠 无内置延迟消息：需外部调度器/定时任务到点发送，或独立延迟 Topic 轮询（[pitfalls](/products/pulsar/pitfalls)） | 🛠 无内置：常用 ZSET（score=到期时间）做到期表，轮询 ZRANGEBYSCORE 后 XADD 到目标 Stream（[pitfalls](/products/redis-streams/pitfalls)） | 🛠 无内置：需外部调度器到点向 Subject 发布；JetStream 不支持延迟投递配置（[pitfalls](/products/nats/pitfalls)） | ✅ 原生：发送时设置 `_AMQ_SCHED_DELAY` 属性（延迟毫秒数），Broker 到期后才投递到目标队列（[concepts](/products/artemis/concepts)） |
+| 精度与粒度 | 🔧 per-message TTL 只在消息到达队头时才检查过期：队头未过期会阻塞后面已到期的消息，大量不同 TTL 混用时精度差（[pitfalls](/products/rabbitmq/pitfalls)） | 🛠 取决于自建扫描频率与时间轮实现，Broker 不参与 | ✅ 秒级精度的定时投递；注意经典版本只支持固定延迟档位（1s/5s/…/2h），5.x 支持任意时间戳（[concepts](/products/rocketmq/concepts)） | 🛠 取决于自建调度器实现，Broker 不参与 | 🛠 取决于 ZSET 轮询频率，Broker 不参与调度 | 🛠 取决于自建调度器实现，Broker 不参与 | ✅ 毫秒级延迟属性；延迟消息在 journal 中单独调度，不阻塞队列内其他消息（[concepts](/products/artemis/concepts)） |
 | 取消/修改已定时消息 | ➖ 无原生取消手段（TTL 消息只能等过期或清空队列） | 🛠 自建方案自定（如标记删除） | 🔧 受实现限制，通常不支持发送后修改投递时间；以官方文档为准 | 🛠 自建方案自定 | 🔧 ZSET 方案天然支持：ZREM 取消、ZADD 改期，是相对优势 | 🛠 自建方案自定 | ➖ 无原生取消手段：消息已写入 journal，只能等到期投递 |
 | 与顺序的关系 | 🔧 延迟消息经 DLX 重新入队，不与原队列保持顺序 | 🛠 重新发送后按新写入位置排序 | 🔧 Delay 消息与 FIFO 是不同消息类型，Topic 类型约束不同，混用前需确认 | 🛠 到点重发后按新写入位置排序 | 🛠 到点 XADD 后按新 Entry ID 排序 | 🛠 到点发布后按新 sequence 排序 | 🔧 到期后进入目标队列参与排序，不与先到的非延迟消息保持原顺序 |
-| 大量延迟任务的适用性 | 🔧 适合中小规模、档位少的场景；海量不同到期时间会放大队头阻塞问题 | 🛠 海量定时可自建基于日志扫描的方案，但复杂度在业务侧 | ✅ 面向业务定时场景设计（如订单超时关闭、定时提醒）（[concepts](/brokers/rocketmq/concepts)） | 🛠 依赖外部调度系统的容量与可靠性 | 🔧 ZSET 到期表是 Redis 常见做法，适合中小规模；注意内存容量 | 🛠 依赖外部调度系统的容量与可靠性 | ✅ 内置调度适合订单超时关闭等场景；海量延迟消息会占用 journal/内存，需评估容量（[storage-ha](/brokers/artemis/storage-ha)） |
+| 大量延迟任务的适用性 | 🔧 适合中小规模、档位少的场景；海量不同到期时间会放大队头阻塞问题 | 🛠 海量定时可自建基于日志扫描的方案，但复杂度在业务侧 | ✅ 面向业务定时场景设计（如订单超时关闭、定时提醒）（[concepts](/products/rocketmq/concepts)） | 🛠 依赖外部调度系统的容量与可靠性 | 🔧 ZSET 到期表是 Redis 常见做法，适合中小规模；注意内存容量 | 🛠 依赖外部调度系统的容量与可靠性 | ✅ 内置调度适合订单超时关闭等场景；海量延迟消息会占用 journal/内存，需评估容量（[storage-ha](/products/artemis/storage-ha)） |
 
 ## 各产品延迟链路（「30 分钟后关闭未支付订单」）
 
@@ -31,5 +31,5 @@
 ## 相关页面
 
 - 到期后失败怎么办：[重试与 DLQ](/matrix/retry-dlq)
-- RocketMQ 消息类型全貌：[RocketMQ 核心概念映射](/brokers/rocketmq/concepts)
-- RabbitMQ TTL/DLX 细节：[RabbitMQ 路由与分发](/brokers/rabbitmq/routing)
+- RocketMQ 消息类型全貌：[RocketMQ 核心概念映射](/products/rocketmq/concepts)
+- RabbitMQ TTL/DLX 细节：[RabbitMQ 路由与分发](/products/rabbitmq/routing)
