@@ -7,7 +7,7 @@ const base = defineConfig({
   lang: 'zh-CN',
   title: 'hello-mq',
   description:
-    '消息队列、事件流平台与可靠消息模式知识库：统一语义骨架、可运行实验与横向选型',
+    '消息队列、事件流平台与可靠消息模式：统一语义骨架、可运行实验与横向选型',
   cleanUrls: true,
   lastUpdated: true,
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
@@ -23,6 +23,7 @@ const base = defineConfig({
       message: '以统一实验验证消息系统语义边界',
       copyright: 'MIT License',
     },
+    search: { provider: 'local' },
   },
   mermaid: {
     theme: 'neutral',
