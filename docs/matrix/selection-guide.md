@@ -29,6 +29,7 @@
 | 事务需求 | 是否需要「本地事务 ⇔ 消息投递」原子，或集群内 EOS 管道？ | [投递语义](/matrix/delivery-semantics) |
 | 重试/DLQ 诉求 | 是否希望 Broker 内置重试与死信，而不是应用层自建？ | [重试与 DLQ](/matrix/retry-dlq) |
 | 路由需求 | 是否需要模式/内容路由（按事件类型分发到不同消费者）？ | [投递语义](/matrix/delivery-semantics) |
+| 协议与终端约束 | 是否面对弱网、低带宽、受限设备，需要 MQTT Topic、QoS、会话和遗嘱语义？ | [MQTT 协议](/reference/protocols/mqtt) |
 | 团队熟悉度 | 已有哪种运维能力：RabbitMQ/Kafka 团队、大数据平台团队、云原生团队？ | [团队熟悉度](#团队熟悉度) |
 | 资源与复杂度预算 | 能接受多少组件（元数据服务、存储集群、镜像仓库）与学习成本？ | [复杂度对比](#复杂度对比) |
 
@@ -44,6 +45,7 @@
 | 业务消息中台（顺序 + 延迟 + 事务 + 内置重试都要） | RocketMQ 首选：四类消息类型 + Broker 内置重试/DLQ；Kafka 需全部应用层自建 |
 | 轻量任务队列/缓存侧事件（团队已有 Redis、中小规模、容忍内存容量上限） | Redis Streams 首选：XADD/XREADGROUP 直接可用，零新增组件；需要分区扩展或强持久化时回到 RabbitMQ/Kafka（见[轻量场景](#轻量场景redis-streams-与-nats)） |
 | 低延迟事件分发/请求-响应/边缘与 IoT（轻量部署、亚毫秒延迟、允许无持久化层） | NATS Core 首选：原生 Request-Reply 与 Subject 路由；需要保留与回放时叠加 JetStream（见[轻量场景](#轻量场景redis-streams-与-nats)） |
+| 设备遥测/弱网连接（Topic 树、QoS、持久会话、Retained/Will） | 选择原生 MQTT Broker；Mosquitto 适合轻量部署，EMQX/HiveMQ 等面向集群与设备平台。已有 JMS/企业 Broker 时可评估 Artemis 的 MQTT 接入，但要验证 Topic、会话、ACL 与持久化映射 |
 | 已有 JMS 生态/多协议接入（JMS/AMQP/STOMP/MQTT 客户端共存，要服务端重试/DLQ + 延迟 + 事务） | Artemis 首选：单 Broker 覆盖内置重试、延迟、XA，且无需回放与分区扩展时；需要日志回放回到 Kafka/Pulsar |
 
 ### 顺序需求

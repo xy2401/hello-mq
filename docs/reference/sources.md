@@ -14,6 +14,13 @@
 | Redis Streams | <https://redis.io/docs/latest/develop/data-types/streams/> | 2026-08-19（内容已落地：[Redis Streams 分卷](/products/redis-streams/)） |
 | NATS | <https://docs.nats.io/> | 2026-08-19（内容已落地：[NATS 分卷](/products/nats/)） |
 | ActiveMQ Artemis | <https://activemq.apache.org/components/artemis/documentation/> | 2026-08-19（内容已落地：[Artemis 分卷](/products/artemis/)） |
+| MQTT 5.0（OASIS Standard） | <https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html> | 2026-08-23（内容已落地：[MQTT 协议介绍](/reference/protocols/mqtt)） |
+| MQTT 3.1.1（OASIS Standard） | <https://docs.oasis-open.org/mqtt/mqtt/v3.1.1/mqtt-v3.1.1.html> | 2026-08-23（内容已落地：[MQTT 协议介绍](/reference/protocols/mqtt)） |
+| AMQP 0-9-1 | <https://www.rabbitmq.com/amqp-0-9-1-protocol> | 2026-08-23（内容已落地：[AMQP 0-9-1](/reference/protocols/amqp-091)） |
+| AMQP 1.0（OASIS Standard） | <https://docs.oasis-open.org/amqp/core/v1.0/amqp-core-overview-v1.0.html> | 2026-08-23（内容已落地：[AMQP 1.0](/reference/protocols/amqp-10)） |
+| STOMP 1.2 | <https://stomp.github.io/stomp-specification-1.2.html> | 2026-08-23（内容已落地：[STOMP](/reference/protocols/stomp)） |
+| Jakarta Messaging 3.1 | <https://jakarta.ee/specifications/messaging/3.1/> | 2026-08-23（内容已落地：[JMS / Jakarta Messaging](/reference/protocols/jakarta-messaging)） |
+| ActiveMQ OpenWire | <https://activemq.apache.org/components/classic/documentation/openwire> | 2026-08-23（内容已落地：[OpenWire](/reference/protocols/openwire)） |
 
 ## 使用约定
 
