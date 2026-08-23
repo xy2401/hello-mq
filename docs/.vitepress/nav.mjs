@@ -95,35 +95,37 @@ const productsSidebar = [
   },
 ]
 
-const productDetailSidebar = [
-  {
-    text: '产品内容',
-    items: [
-      { text: '总览', link: '/' },
-      { text: 'CLI 工具', link: '/cli' },
-      { text: '快速开始', link: '/quick-start' },
-      { text: '核心概念映射', link: '/concepts' },
-      { text: '路由与分发', link: '/routing' },
-      { text: '可靠性', link: '/reliability' },
-      { text: '存储与高可用', link: '/storage-ha' },
-      { text: '运维与观测', link: '/operations' },
-      { text: '陷阱与检查表', link: '/pitfalls' },
-    ],
-  },
-]
+function productDetailSidebar(productName, base) {
+  return [
+    {
+      text: productName,
+      items: [
+        { text: '总览', link: `${base}/` },
+        { text: 'CLI 工具', link: `${base}/cli` },
+        { text: '快速开始', link: `${base}/quick-start` },
+        { text: '核心概念映射', link: `${base}/concepts` },
+        { text: '路由与分发', link: `${base}/routing` },
+        { text: '可靠性', link: `${base}/reliability` },
+        { text: '存储与高可用', link: `${base}/storage-ha` },
+        { text: '运维与观测', link: `${base}/operations` },
+        { text: '陷阱与检查表', link: `${base}/pitfalls` },
+      ],
+    },
+  ]
+}
 
 export const sidebar = {
   '/concepts/': conceptsSidebar,
   '/reference/': conceptsSidebar,
+  '/products/rabbitmq/': productDetailSidebar('RabbitMQ', '/products/rabbitmq'),
+  '/products/kafka/': productDetailSidebar('Kafka', '/products/kafka'),
+  '/products/rocketmq/': productDetailSidebar('RocketMQ', '/products/rocketmq'),
+  '/products/pulsar/': productDetailSidebar('Pulsar', '/products/pulsar'),
+  '/products/redis-streams/': productDetailSidebar('Redis Streams', '/products/redis-streams'),
+  '/products/nats/': productDetailSidebar('NATS JetStream', '/products/nats'),
+  '/products/artemis/': productDetailSidebar('ActiveMQ Artemis', '/products/artemis'),
+  '/products/activemq-classic/': productDetailSidebar('ActiveMQ Classic', '/products/activemq-classic'),
   '/products/': productsSidebar,
-  '/products/rabbitmq/': [...productDetailSidebar],
-  '/products/kafka/': [...productDetailSidebar],
-  '/products/rocketmq/': [...productDetailSidebar],
-  '/products/pulsar/': [...productDetailSidebar],
-  '/products/redis-streams/': [...productDetailSidebar],
-  '/products/nats/': [...productDetailSidebar],
-  '/products/artemis/': [...productDetailSidebar],
-  '/products/activemq-classic/': [...productDetailSidebar],
-  '/matrix/': matrixSidebar,
   '/matrix/experiment/': experimentSidebar,
+  '/matrix/': matrixSidebar,
 }
