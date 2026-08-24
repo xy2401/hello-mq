@@ -64,7 +64,7 @@ const matrixSidebar = [
       { text: '安全', link: '/matrix/security' },
       { text: '运维与观测', link: '/matrix/operations' },
       { text: '自带 CLI', link: '/matrix/cli-tools' },
-      { text: 'Docker 工具证据', link: '/matrix/docker-tools' },
+      { text: 'Docker 验证证据', link: '/matrix/docker-tools' },
       { text: '选型指南', link: '/matrix/selection-guide' },
     ],
   },
@@ -116,7 +116,7 @@ function productDetailSidebar(productName, base) {
         { text: '运维与观测', link: `${base}/operations` },
         { text: '陷阱与检查表', link: `${base}/pitfalls` },
         { text: '版本演进', link: `${base}/versions` },
-        { text: 'Docker 工具', link: `${base}/DockerTooling` },
+        { text: 'Docker 验证', link: `${base}/DockerTooling` },
       ],
     },
   ]
