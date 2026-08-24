@@ -3,14 +3,17 @@ import { withMermaid } from 'vitepress-plugin-mermaid'
 // @ts-ignore -- 纯 JS 模块，config 与 check-project 共享同一数据源
 import { nav, sidebar } from './nav.mjs'
 
-const base = defineConfig({
+const base = process.env.DOCS_BASE || '/'
+
+const config = defineConfig({
+  base,
   lang: 'zh-CN',
   title: 'hello-mq',
   description:
     '消息队列、事件流平台与可靠消息模式：统一语义骨架、可运行实验与横向选型',
   cleanUrls: true,
   lastUpdated: true,
-  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' }]],
+  head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
   themeConfig: {
     logo: '/favicon.svg',
     nav,
@@ -30,4 +33,4 @@ const base = defineConfig({
   },
 })
 
-export default withMermaid(base)
+export default withMermaid(config)
