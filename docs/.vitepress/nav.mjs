@@ -16,7 +16,7 @@ export const nav = [
     ],
   },
   { text: '对比矩阵', link: '/matrix/' },
-  { text: '试验场', link: '/playground/' },
+  { text: '实验台', link: '/playground/' },
   { text: '参考资料', link: '/reference/' },
 ]
 
@@ -72,9 +72,9 @@ const matrixSidebar = [
 
 const experimentSidebar = [
   {
-    text: '实验手册',
+    text: '可复现实验台',
     items: [
-      { text: '实验总览', link: '/playground/' },
+      { text: '实验台总览', link: '/playground/' },
       { text: '基础收发流程', link: '/playground/basic-flow' },
       { text: '消费者崩溃与重投', link: '/playground/consumer-crash' },
       { text: '毒消息、重试与 DLQ', link: '/playground/poison-message' },

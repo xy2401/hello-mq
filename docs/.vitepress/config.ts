@@ -8,7 +8,8 @@ const base = process.env.DOCS_BASE || '/'
 const config = defineConfig({
   base,
   lang: 'zh-CN',
-  title: 'hello-mq',
+  title: 'Hello MQ',
+  titleTemplate: ':title | 消息队列手册',
   description:
     '消息队列、事件流平台与可靠消息模式：统一语义骨架、可运行实验与横向选型',
   cleanUrls: true,

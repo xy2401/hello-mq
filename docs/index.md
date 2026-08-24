@@ -1,9 +1,10 @@
 ---
 layout: home
+title: "Hello MQ"
 
 hero:
   name: "💬 Hello MQ"
-  text: "消息队列、事件流与选型"
+  text: "学习消息队列的核心概念、常用产品与实践方法。"
   tagline: "8 个主流 MQ · 统一实验验证 · 三层语义说明 · 横向选型矩阵"
   image: /favicon.svg
   alt: Hello MQ - 消息系统学习平台
@@ -12,7 +13,7 @@ hero:
       text: 理解核心原理
       link: /#mq-fundamentals
     - theme: alt
-      text: 🧪 可复现实验
+      text: 🧪 可复现实验台
       link: /playground/
     - theme: alt
       text: ⚖️ 能力对比矩阵

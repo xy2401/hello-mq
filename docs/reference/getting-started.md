@@ -49,5 +49,5 @@ npm run check           # check-project + docs:build
 ## 下一步
 
 - 理解概念：[基础原理](/#mq-fundamentals)
-- 动手实验：[实验室总览](/playground/)
+- 动手实验：[实验台总览](/playground/)
 - 产品学习：[RabbitMQ 分卷](/products/rabbitmq/)

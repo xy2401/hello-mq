@@ -7,7 +7,7 @@
 - [快速开始](/reference/getting-started)
 - [学习路径](/reference/learning-path)
 - [实验约定](/reference/lab-conventions)
-- [可复现实验](/playground/)
+- [可复现实验台](/playground/)
 
 ## 协议资料
 
