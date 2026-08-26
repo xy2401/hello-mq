@@ -8,7 +8,7 @@ export const nav = [
   { text: 'Pulsar', link: '/products/pulsar/' },
   { text: 'Redis Streams', link: '/products/redis-streams/' },
   {
-    text: '更多',
+    text: '📦 更多',
     items: [
       { text: 'NATS JetStream', link: '/products/nats/' },
       { text: 'ActiveMQ Artemis', link: '/products/artemis/' },
