@@ -162,6 +162,7 @@ function productDetailSidebar(productName, base) {
       text: productName,
       items: [
         { text: '总览', link: `${base}/` },
+        { text: '安装与切换', link: `${base}/install` },
         { text: 'CLI 工具', link: `${base}/cli` },
         { text: '快速开始', link: `${base}/quick-start` },
         { text: '核心概念映射', link: `${base}/concepts` },

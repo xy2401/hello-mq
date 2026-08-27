@@ -14,10 +14,11 @@
     "docs:preview": "vitepress preview docs",
     "check:project": "node scripts/check-project.js",
     "check:versions": "node scripts/check-version-docs.js",
+    "check:installs": "node scripts/check-install-docs.js",
     "collect:docker": "for script in demos/*/docker/run.sh; do bash \"$script\"; done && node scripts/normalize-docker-evidence.js",
     "check:docker-catalog": "node scripts/check-docker-catalog.js",
     "check:compose": "for f in demos/*/*/docker-compose.yml; do docker compose -p probe -f $f --env-file .env.versions config --quiet || exit 1; done",
-    "check": "npm run check:versions && npm run check:project && npm run check:docker-catalog && npm run docs:build"
+    "check": "npm run check:versions && npm run check:installs && npm run check:project && npm run check:docker-catalog && npm run docs:build"
   },
   "devDependencies": {
     "ajv": "^8.17.1",
