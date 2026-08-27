@@ -50,7 +50,11 @@ function linkToFile(baseDir, link) {
     if (fs.existsSync(path.join(DOCS, clean, 'index.md'))) return path.join(DOCS, clean, 'index.md')
     return fs.existsSync(p) ? p : path.join(DOCS, `${clean}.md`)
   }
-  return path.resolve(baseDir, clean)
+  const relative = path.resolve(baseDir, clean)
+  if (fs.existsSync(relative)) return relative
+  if (fs.existsSync(`${relative}.md`)) return `${relative}.md`
+  if (fs.existsSync(path.join(relative, 'index.md'))) return path.join(relative, 'index.md')
+  return relative
 }
 
 function checkMarkdownLinks() {

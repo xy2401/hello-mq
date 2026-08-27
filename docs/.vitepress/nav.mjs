@@ -101,6 +101,61 @@ const productsSidebar = [
   },
 ]
 
+const productVersionItems = {
+  'activemq-classic': [
+    { text: "ActiveMQ Classic 6.3", link: '/products/activemq-classic/version/activemq-classic-6.3' },
+    { text: "ActiveMQ Classic 6.1", link: '/products/activemq-classic/version/activemq-classic-6.1' },
+    { text: "ActiveMQ Classic 5.18", link: '/products/activemq-classic/version/activemq-classic-5.18' },
+  ],
+  'artemis': [
+    { text: "Artemis 2.42", link: '/products/artemis/version/artemis-2.42' },
+    { text: "Artemis 2.36+", link: '/products/artemis/version/artemis-2.36' },
+    { text: "Artemis 2.0", link: '/products/artemis/version/artemis-2.0' },
+  ],
+  'kafka': [
+    { text: "Kafka 4.2", link: '/products/kafka/version/kafka-4.2' },
+    { text: "Kafka 4.0", link: '/products/kafka/version/kafka-4.0' },
+    { text: "Kafka 3.8", link: '/products/kafka/version/kafka-3.8' },
+    { text: "Kafka 3.5 / 3.6", link: '/products/kafka/version/kafka-3.5-3.6' },
+    { text: "Kafka 3.0", link: '/products/kafka/version/kafka-3.0' },
+    { text: "Kafka 2.8", link: '/products/kafka/version/kafka-2.8' },
+    { text: "Kafka 0.11", link: '/products/kafka/version/kafka-0.11' },
+  ],
+  'nats': [
+    { text: "NATS 2.14", link: '/products/nats/version/nats-2.14' },
+    { text: "NATS 2.12", link: '/products/nats/version/nats-2.12' },
+    { text: "NATS 2.10", link: '/products/nats/version/nats-2.10' },
+    { text: "NATS 2.2 (JetStream 正式发布)", link: '/products/nats/version/nats-2.2' },
+  ],
+  'pulsar': [
+    { text: "Pulsar 4.2", link: '/products/pulsar/version/pulsar-4.2' },
+    { text: "Pulsar 4.0 LTS", link: '/products/pulsar/version/pulsar-4.0' },
+    { text: "Pulsar 3.0 LTS", link: '/products/pulsar/version/pulsar-3.0' },
+    { text: "Pulsar 2.8", link: '/products/pulsar/version/pulsar-2.8' },
+  ],
+  'rabbitmq': [
+    { text: "RabbitMQ 4.3", link: '/products/rabbitmq/version/rabbitmq-4.3' },
+    { text: "RabbitMQ 4.2", link: '/products/rabbitmq/version/rabbitmq-4.2' },
+    { text: "RabbitMQ 4.0", link: '/products/rabbitmq/version/rabbitmq-4.0' },
+    { text: "RabbitMQ 3.13", link: '/products/rabbitmq/version/rabbitmq-3.13' },
+    { text: "RabbitMQ 3.12", link: '/products/rabbitmq/version/rabbitmq-3.12' },
+    { text: "RabbitMQ 3.8", link: '/products/rabbitmq/version/rabbitmq-3.8' },
+  ],
+  'redis-streams': [
+    { text: "Redis 8.x Streams", link: '/products/redis-streams/version/redis-8.x-streams' },
+    { text: "Redis 7.0 (Streams)", link: '/products/redis-streams/version/redis-7.0' },
+    { text: "Redis 6.2 (Streams)", link: '/products/redis-streams/version/redis-6.2' },
+    { text: "Redis 5.0 (Streams 诞生)", link: '/products/redis-streams/version/redis-5.0' },
+  ],
+  'rocketmq': [
+    { text: "RocketMQ 5.5", link: '/products/rocketmq/version/rocketmq-5.5' },
+    { text: "RocketMQ 5.4", link: '/products/rocketmq/version/rocketmq-5.4' },
+    { text: "RocketMQ 5.3", link: '/products/rocketmq/version/rocketmq-5.3' },
+    { text: "RocketMQ 5.0", link: '/products/rocketmq/version/rocketmq-5.0' },
+    { text: "RocketMQ 4.5", link: '/products/rocketmq/version/rocketmq-4.5' },
+  ],
+};
+
 function productDetailSidebar(productName, base) {
   return [
     {
@@ -115,7 +170,7 @@ function productDetailSidebar(productName, base) {
         { text: '存储与高可用', link: `${base}/storage-ha` },
         { text: '运维与观测', link: `${base}/operations` },
         { text: '陷阱与检查表', link: `${base}/pitfalls` },
-        { text: '版本演进', link: `${base}/versions` },
+        { text: '版本演进', link: `${base}/version/`, collapsed: false, items: productVersionItems[base.split('/').at(-1)] },
         { text: 'Docker 验证', link: `${base}/DockerTooling` },
       ],
     },
