@@ -213,6 +213,17 @@ function checkScriptSyntax() {
   ok(`script syntax OK (${scripts.length})`)
 }
 
+function checkDemoBuildEntry() {
+  const common = fs.readFileSync(path.join(ROOT, 'demos', 'shared', 'run-common.sh'), 'utf8')
+  if (!common.includes('mvn -B -f "$LAB_DIR/../../pom.xml"')) {
+    fail('ensure_jar must resolve demos/pom.xml from LAB_DIR instead of the caller working directory')
+  }
+  if (/cd\s+"\$LAB_DIR\/\.\.\/\.\."[^\n]*mvn[^\n]*-f\s+demos\/pom\.xml/.test(common)) {
+    fail('ensure_jar resolves demos/demos/pom.xml after entering demos/')
+  }
+  ok('demo Maven entry resolves from LAB_DIR')
+}
+
 checkMarkdownLinks()
 checkNavLinks()
 checkEnvVersions()
@@ -222,6 +233,7 @@ checkForbiddenFiles()
 checkBrokerTemplates()
 checkSourcesCheckedAt()
 checkScriptSyntax()
+checkDemoBuildEntry()
 
 if (failures.length > 0) {
   console.error(`\n[check] ${failures.length} problem(s) found`)

@@ -53,7 +53,7 @@ ensure_jar() {
   local product="$1"
   local jar="$LAB_DIR/../target/hello-mq-${product}.jar"
   if [ ! -f "$jar" ]; then
-    (cd "$LAB_DIR/../.." && mvn -B -f demos/pom.xml package -DskipTests -pl "$product" -am)
+    mvn -B -f "$LAB_DIR/../../pom.xml" package -DskipTests -pl "$product" -am
   fi
 }
 
