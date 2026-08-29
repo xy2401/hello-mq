@@ -191,17 +191,47 @@ const versions = {
   jq: tool('jq'),
 }
 const collectionStartedAt = new Date().toISOString()
-const results = []
+const productGroups = new Map()
 for (const entry of selected) {
-  try {
-    await collect(entry, versions)
-    results.push({ scenario: `${entry.product}/${entry.id}`, status: 'passed' })
-  } catch (error) {
-    const message = error instanceof Error ? error.message : String(error)
-    console.error(`FAILED ${entry.product}/${entry.id}: ${message}`)
-    results.push({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error: message })
-  }
+  if (!productGroups.has(entry.product)) productGroups.set(entry.product, [])
+  productGroups.get(entry.product).push(entry)
 }
+
+const preparedProducts = new Set()
+const preparationFailures = new Map()
+for (const product of productGroups.keys()) {
+  console.log(`\n=== build ${product} ===`)
+  const build = spawnSync('mvn', ['-B', '-f', path.join(ROOT, 'demos', 'pom.xml'), 'package', '-DskipTests', '-pl', product, '-am'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+    stdio: 'inherit',
+  })
+  if (!build.error && build.status === 0) preparedProducts.add(product)
+  else preparationFailures.set(product, build.error?.message ?? `Maven 退出码 ${build.status ?? 1}`)
+}
+
+async function collectProduct(entries) {
+  const productResults = []
+  for (const entry of entries) {
+    try {
+      await collect(entry, versions)
+      productResults.push({ scenario: `${entry.product}/${entry.id}`, status: 'passed' })
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error)
+      console.error(`FAILED ${entry.product}/${entry.id}: ${message}`)
+      productResults.push({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error: message })
+    }
+  }
+  return productResults
+}
+
+const groupedResults = await Promise.all([...productGroups.entries()].map(async ([product, entries]) => {
+  if (preparedProducts.has(product)) return collectProduct(entries)
+  const error = `构建 ${product} 采集程序失败：${preparationFailures.get(product)}`
+  console.error(`FAILED ${product}: ${error}`)
+  return entries.map((entry) => ({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error }))
+}))
+const results = groupedResults.flat()
 const summary = {
   schemaVersion: 1,
   startedAt: collectionStartedAt,

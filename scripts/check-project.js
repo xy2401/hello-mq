@@ -119,6 +119,8 @@ function checkEnvVersions() {
 
 function checkComposeFiles() {
   const files = walk(path.join(ROOT, 'demos'), (f) => f.endsWith('docker-compose.yml'))
+  const parallelProducts = new Set(['rabbitmq', 'kafka', 'redis-streams'])
+  const parallelPortOwners = new Map()
   if (files.length === 0) fail('no demos/*/*/docker-compose.yml found')
   for (const file of files) {
     let doc
@@ -128,6 +130,7 @@ function checkComposeFiles() {
       fail(`compose file not parseable: ${path.relative(ROOT, file)} (${err.message})`)
       continue
     }
+    const product = path.relative(path.join(ROOT, 'demos'), file).split(path.sep)[0]
     const services = Object.keys(doc.services ?? {})
     if (new Set(services).size !== services.length) fail(`duplicate service names in ${file}`)
     for (const [name, service] of Object.entries(doc.services ?? {})) {
@@ -136,13 +139,19 @@ function checkComposeFiles() {
         if (!p.startsWith('127.0.0.1')) {
           fail(`service ${name} in ${path.relative(ROOT, file)} exposes non-localhost port: ${p}`)
         }
+        const hostPort = p.match(/^127\.0\.0\.1:(\d+):/)?.[1]
+        if (parallelProducts.has(product) && hostPort) {
+          const owner = parallelPortOwners.get(hostPort)
+          if (owner && owner !== product) fail(`parallel playground products ${owner} and ${product} both bind host port ${hostPort}`)
+          parallelPortOwners.set(hostPort, product)
+        }
       }
       if (typeof service.image === 'string' && /(^|:)latest($|@)/.test(service.image)) {
         fail(`service ${name} uses latest image`)
       }
     }
   }
-  ok(`compose files parse, ports localhost-only (${files.length})`)
+  ok(`compose files parse, ports localhost-only and parallel products are disjoint (${files.length})`)
 }
 
 function checkContractsAndFixtures() {
