@@ -69,7 +69,7 @@ bash demos/kafka/ordering-replay/run.sh   # 任意产品同理
 for s in demos/*/*/run.sh; do bash "$s"; done   # 全量运行
 ```
 
-交互回放证据需要 Docker、Compose、Bash、Maven 与 jq。每个场景使用独立 Compose Project、网络和数据卷，采集器默认同时运行 3 个场景；同一场景的步骤仍保持顺序。可用 `HELLO_MQ_COLLECT_CONCURRENCY=1..8` 调整并发数。采集过程保存角色日志、Broker 检查点、采集元数据与规范化 `replay.json`；普通文档构建不会启动 Broker：
+交互回放证据需要 Docker、Compose、Bash、Maven 与 jq。每个场景使用独立 Compose Project、网络和数据卷，采集器默认同时运行 3 个场景；同一场景的步骤仍保持顺序。可用 `HELLO_MQ_COLLECT_CONCURRENCY=1..8` 调整并发数。单场景默认最多运行 600 秒，单条 Compose 命令最多运行 540 秒，可分别通过 `HELLO_MQ_SCENARIO_TIMEOUT_SECONDS` 和 `HELLO_MQ_COMPOSE_TIMEOUT_SECONDS` 调整。超时会保存当前容器状态与日志、强制终止 Compose Project，并继续汇总其他场景。普通文档构建不会启动 Broker：
 
 ```bash
 npm run collect:playground

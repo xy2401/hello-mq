@@ -244,6 +244,22 @@ function checkCrashRecoveryPhases() {
   ok('crash recovery phases do not restart the crashed consumer')
 }
 
+function checkLabTimeouts() {
+  const common = fs.readFileSync(path.join(ROOT, 'demos', 'shared', 'run-common.sh'), 'utf8')
+  const collector = fs.readFileSync(path.join(ROOT, 'scripts', 'collect-playground.js'), 'utf8')
+  const smoke = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'smoke-labs.yml'), 'utf8')
+  if (!common.includes('HELLO_MQ_COMPOSE_TIMEOUT_SECONDS') || !common.includes('timeout --signal=TERM --kill-after=30s')) {
+    fail('run-common.sh must bound every Docker Compose command')
+  }
+  if (!collector.includes('HELLO_MQ_SCENARIO_TIMEOUT_SECONDS') || !collector.includes('captureTimeoutDiagnostics')) {
+    fail('playground collector must enforce a scenario timeout and preserve diagnostics')
+  }
+  if (!smoke.includes('timeout --signal=TERM --kill-after=45s 660s bash')) {
+    fail('smoke workflow must bound each lab independently')
+  }
+  ok('lab, Compose and collector timeouts are enforced')
+}
+
 checkMarkdownLinks()
 checkNavLinks()
 checkEnvVersions()
@@ -255,6 +271,7 @@ checkSourcesCheckedAt()
 checkScriptSyntax()
 checkDemoBuildEntry()
 checkCrashRecoveryPhases()
+checkLabTimeouts()
 
 if (failures.length > 0) {
   console.error(`\n[check] ${failures.length} problem(s) found`)

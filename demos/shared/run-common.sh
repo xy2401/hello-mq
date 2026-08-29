@@ -12,6 +12,11 @@ ENV_FILE="$LAB_DIR/../../../.env.versions"
 ASSERT_FILE="$LAB_DIR/assert.out.txt"
 FAILURES=0
 REPLAY_GATE_SEQUENCE=0
+COMPOSE_TIMEOUT_SECONDS="${HELLO_MQ_COMPOSE_TIMEOUT_SECONDS:-540}"
+case "$COMPOSE_TIMEOUT_SECONDS" in
+  ''|*[!0-9]*) printf 'HELLO_MQ_COMPOSE_TIMEOUT_SECONDS must be a positive integer\n' >&2; exit 2 ;;
+  0) printf 'HELLO_MQ_COMPOSE_TIMEOUT_SECONDS must be greater than zero\n' >&2; exit 2 ;;
+esac
 : > "$ASSERT_FILE"
 
 # replay_checkpoint <名称>：仅在证据采集模式下暂停宿主编排脚本。
@@ -40,11 +45,24 @@ replay_checkpoint() {
 }
 
 compose() {
-  docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE" "$@"
+  if command -v timeout >/dev/null 2>&1; then
+    timeout --signal=TERM --kill-after=30s "${COMPOSE_TIMEOUT_SECONDS}s" \
+      docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE" "$@"
+  else
+    docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE" "$@"
+  fi
 }
 
 cleanup() {
-  compose down --volumes --remove-orphans >/dev/null 2>&1 || true
+  local -a base=(docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE")
+  if command -v timeout >/dev/null 2>&1; then
+    if ! timeout --signal=TERM --kill-after=5s 30s "${base[@]}" down --timeout 5 --volumes --remove-orphans >/dev/null 2>&1; then
+      timeout --signal=KILL 15s "${base[@]}" kill -s SIGKILL >/dev/null 2>&1 || true
+      timeout --signal=KILL 30s "${base[@]}" down --timeout 0 --volumes --remove-orphans >/dev/null 2>&1 || true
+    fi
+  else
+    "${base[@]}" down --timeout 5 --volumes --remove-orphans >/dev/null 2>&1 || true
+  fi
 }
 trap cleanup EXIT
 

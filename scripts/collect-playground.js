@@ -4,17 +4,57 @@ import path from 'node:path'
 import { loadManifest, normalizeEol, ROOT } from './playground-evidence-lib.js'
 import { normalizeSelected } from './normalize-playground-evidence.js'
 
+function positiveInteger(value, fallback, maximum = Number.MAX_SAFE_INTEGER) {
+  const parsed = Number.parseInt(value ?? '', 10)
+  return Number.isFinite(parsed) && parsed > 0 ? Math.min(parsed, maximum) : fallback
+}
+
+const scenarioTimeoutSeconds = positiveInteger(process.env.HELLO_MQ_SCENARIO_TIMEOUT_SECONDS, 600, 3600)
+
 function tool(name, args = ['--version']) {
-  const result = spawnSync(name, args, { encoding: 'utf8', shell: false })
+  const result = spawnSync(name, args, { encoding: 'utf8', shell: false, timeout: 30_000, killSignal: 'SIGKILL' })
   if (result.error || result.status !== 0) throw new Error(`缺少采集依赖：${name}`)
   return normalizeEol(`${result.stdout}${result.stderr}`).trim().split('\n')[0]
 }
 
-function dockerCompose(entry, args) {
+function dockerCompose(entry, args, timeoutMs = 30_000) {
   const directory = path.join(ROOT, 'demos', entry.product, entry.id)
   const base = ['compose', '-p', `hello-mq-${entry.product}-${entry.id}`, '-f', path.join(directory, 'docker-compose.yml'), '--env-file', path.join(ROOT, '.env.versions')]
-  const result = spawnSync('docker', [...base, ...args], { cwd: directory, encoding: 'utf8' })
-  return { status: result.status, stdout: normalizeEol(result.stdout ?? ''), stderr: normalizeEol(result.stderr ?? '') }
+  const result = spawnSync('docker', [...base, ...args], { cwd: directory, encoding: 'utf8', timeout: timeoutMs, killSignal: 'SIGKILL' })
+  return {
+    status: result.status,
+    stdout: normalizeEol(result.stdout ?? ''),
+    stderr: normalizeEol(`${result.stderr ?? ''}${result.error ? `\n${result.error.message}` : ''}`),
+  }
+}
+
+function terminateProcessTree(child, signal) {
+  if (!child.pid) return
+  try {
+    if (process.platform === 'win32') child.kill(signal)
+    else process.kill(-child.pid, signal)
+  } catch {}
+}
+
+function captureTimeoutDiagnostics(entry, timeoutSeconds) {
+  const directory = path.join(ROOT, 'demos', entry.product, entry.id)
+  const status = dockerCompose(entry, ['ps', '--all'], 10_000)
+  const logs = dockerCompose(entry, ['logs', '--no-color', '--no-log-prefix'], 10_000)
+  const content = [
+    `scenario=${entry.product}/${entry.id}`,
+    `timedOut=true`,
+    `timeoutSeconds=${timeoutSeconds}`,
+    `capturedAt=${new Date().toISOString()}`,
+    '',
+    '--- docker compose ps --all ---',
+    status.stdout || status.stderr,
+    '',
+    '--- docker compose logs ---',
+    logs.stdout || logs.stderr,
+  ].join('\n')
+  fs.writeFileSync(path.join(directory, 'timeout.out.txt'), `${content}\n`)
+  dockerCompose(entry, ['kill', '-s', 'SIGKILL'], 15_000)
+  dockerCompose(entry, ['down', '--timeout', '0', '--volumes', '--remove-orphans'], 15_000)
 }
 
 function readTargets(entry) {
@@ -116,15 +156,17 @@ async function collect(entry, versions) {
   const rawFile = path.join(directory, 'replay.raw.jsonl')
   const captureFile = path.join(directory, 'capture.json')
   const replayFile = path.join(directory, 'replay.json')
+  const timeoutFile = path.join(directory, 'timeout.out.txt')
   fs.rmSync(gate, { recursive: true, force: true })
   fs.mkdirSync(gate, { recursive: true })
-  for (const file of [rawFile, captureFile, replayFile]) fs.rmSync(file, { force: true })
+  for (const file of [rawFile, captureFile, replayFile, timeoutFile]) fs.rmSync(file, { force: true })
 
   console.log(`\n=== ${entry.product}/${entry.id} ===`)
   const child = spawn('bash', ['run.sh'], {
     cwd: directory,
     env: { ...process.env, HELLO_MQ_REPLAY_CAPTURE: '1' },
     stdio: ['ignore', 'inherit', 'inherit'],
+    detached: process.platform !== 'win32',
   })
   const handled = new Set()
   const watcher = setInterval(() => {
@@ -145,18 +187,36 @@ async function collect(entry, versions) {
     }
   }, 150)
 
-  const exitCode = await new Promise((resolve, reject) => {
-    child.once('error', reject)
-    child.once('exit', (code) => resolve(code ?? 1))
+  let timedOut = false
+  let forceKillTimer
+  const timeoutTimer = setTimeout(() => {
+    timedOut = true
+    console.error(`TIMEOUT ${entry.product}/${entry.id}: exceeded ${scenarioTimeoutSeconds}s`)
+    try {
+      captureTimeoutDiagnostics(entry, scenarioTimeoutSeconds)
+    } catch (error) {
+      console.error(`TIMEOUT diagnostics failed for ${entry.product}/${entry.id}: ${error instanceof Error ? error.message : String(error)}`)
+    } finally {
+      terminateProcessTree(child, 'SIGTERM')
+      forceKillTimer = setTimeout(() => terminateProcessTree(child, 'SIGKILL'), 10_000)
+    }
+  }, scenarioTimeoutSeconds * 1000)
+  const outcome = await new Promise((resolve) => {
+    child.once('error', (error) => resolve({ code: 1, signal: null, error }))
+    child.once('exit', (code, signal) => resolve({ code: code ?? 1, signal, error: null }))
   })
+  clearTimeout(timeoutTimer)
+  if (forceKillTimer) clearTimeout(forceKillTimer)
   clearInterval(watcher)
+  const exitCode = timedOut ? 124 : outcome.code
   const revision = spawnSync('git', ['rev-parse', 'HEAD'], { cwd: ROOT, encoding: 'utf8' }).stdout?.trim() ?? null
-  fs.writeFileSync(captureFile, `${JSON.stringify({ capturedAt: new Date().toISOString(), exitCode, tools: versions, sourceRevision: revision }, null, 2)}\n`)
+  fs.writeFileSync(captureFile, `${JSON.stringify({ capturedAt: new Date().toISOString(), exitCode, timedOut, timeoutSeconds: scenarioTimeoutSeconds, signal: outcome.signal, error: outcome.error?.message, tools: versions, sourceRevision: revision }, null, 2)}\n`)
   try {
     normalizeSelected({ scenario: `${entry.product}/${entry.id}` })
   } finally {
     fs.rmSync(gate, { recursive: true, force: true })
   }
+  if (timedOut) throw new Error(`${entry.product}/${entry.id} 超过 ${scenarioTimeoutSeconds} 秒，已强制终止`)
   if (exitCode !== 0) throw new Error(`${entry.product}/${entry.id} 采集失败，退出码 ${exitCode}`)
 }
 
@@ -205,6 +265,8 @@ for (const product of productGroups.keys()) {
     cwd: ROOT,
     encoding: 'utf8',
     stdio: 'inherit',
+    timeout: 600_000,
+    killSignal: 'SIGKILL',
   })
   if (!build.error && build.status === 0) preparedProducts.add(product)
   else preparationFailures.set(product, build.error?.message ?? `Maven 退出码 ${build.status ?? 1}`)
@@ -217,8 +279,7 @@ const runnable = selected.filter((entry) => {
   resultByScenario.set(`${entry.product}/${entry.id}`, { scenario: `${entry.product}/${entry.id}`, status: 'failed', error })
   return false
 })
-const configuredConcurrency = Number.parseInt(process.env.HELLO_MQ_COLLECT_CONCURRENCY ?? '3', 10)
-const concurrency = Number.isFinite(configuredConcurrency) ? Math.max(1, Math.min(8, configuredConcurrency)) : 3
+const concurrency = positiveInteger(process.env.HELLO_MQ_COLLECT_CONCURRENCY, 3, 8)
 
 async function collectQueue(entries, label) {
   let nextScenario = 0
@@ -251,6 +312,7 @@ const summary = {
   finishedAt: new Date().toISOString(),
   requested: filter,
   concurrency,
+  scenarioTimeoutSeconds,
   tools: versions,
   passed: results.filter((result) => result.status === 'passed').length,
   failed: results.filter((result) => result.status === 'failed').length,
