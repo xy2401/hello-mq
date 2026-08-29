@@ -119,8 +119,8 @@ function checkEnvVersions() {
 
 function checkComposeFiles() {
   const files = walk(path.join(ROOT, 'demos'), (f) => f.endsWith('docker-compose.yml'))
-  const parallelProducts = new Set(['rabbitmq', 'kafka', 'redis-streams'])
-  const parallelPortOwners = new Map()
+  const playgroundManifest = JSON.parse(fs.readFileSync(path.join(ROOT, 'demos', 'playground-scenarios.json'), 'utf8'))
+  const playgroundComposeFiles = new Set(playgroundManifest.map((entry) => path.join(ROOT, 'demos', entry.product, entry.id, 'docker-compose.yml')))
   if (files.length === 0) fail('no demos/*/*/docker-compose.yml found')
   for (const file of files) {
     let doc
@@ -130,7 +130,6 @@ function checkComposeFiles() {
       fail(`compose file not parseable: ${path.relative(ROOT, file)} (${err.message})`)
       continue
     }
-    const product = path.relative(path.join(ROOT, 'demos'), file).split(path.sep)[0]
     const services = Object.keys(doc.services ?? {})
     if (new Set(services).size !== services.length) fail(`duplicate service names in ${file}`)
     for (const [name, service] of Object.entries(doc.services ?? {})) {
@@ -139,19 +138,14 @@ function checkComposeFiles() {
         if (!p.startsWith('127.0.0.1')) {
           fail(`service ${name} in ${path.relative(ROOT, file)} exposes non-localhost port: ${p}`)
         }
-        const hostPort = p.match(/^127\.0\.0\.1:(\d+):/)?.[1]
-        if (parallelProducts.has(product) && hostPort) {
-          const owner = parallelPortOwners.get(hostPort)
-          if (owner && owner !== product) fail(`parallel playground products ${owner} and ${product} both bind host port ${hostPort}`)
-          parallelPortOwners.set(hostPort, product)
-        }
+        if (playgroundComposeFiles.has(file)) fail(`parallel playground scenario publishes unnecessary host port: ${path.relative(ROOT, file)} (${p})`)
       }
       if (typeof service.image === 'string' && /(^|:)latest($|@)/.test(service.image)) {
         fail(`service ${name} uses latest image`)
       }
     }
   }
-  ok(`compose files parse, ports localhost-only and parallel products are disjoint (${files.length})`)
+  ok(`compose files parse; playground scenarios publish no host ports (${files.length})`)
 }
 
 function checkContractsAndFixtures() {

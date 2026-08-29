@@ -35,8 +35,6 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
-    ports:
-      - "127.0.0.1:9092:9092"
     # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
     healthcheck:
       test: ["CMD", "/opt/kafka/bin/kafka-broker-api-versions.sh", "--bootstrap-server", "localhost:9092"]

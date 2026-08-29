@@ -210,33 +210,47 @@ for (const product of productGroups.keys()) {
   else preparationFailures.set(product, build.error?.message ?? `Maven 退出码 ${build.status ?? 1}`)
 }
 
-async function collectProduct(entries) {
-  const productResults = []
-  for (const entry of entries) {
-    try {
-      await collect(entry, versions)
-      productResults.push({ scenario: `${entry.product}/${entry.id}`, status: 'passed' })
-    } catch (error) {
-      const message = error instanceof Error ? error.message : String(error)
-      console.error(`FAILED ${entry.product}/${entry.id}: ${message}`)
-      productResults.push({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error: message })
+const resultByScenario = new Map()
+const runnable = selected.filter((entry) => {
+  if (preparedProducts.has(entry.product)) return true
+  const error = `构建 ${entry.product} 采集程序失败：${preparationFailures.get(entry.product)}`
+  resultByScenario.set(`${entry.product}/${entry.id}`, { scenario: `${entry.product}/${entry.id}`, status: 'failed', error })
+  return false
+})
+const configuredConcurrency = Number.parseInt(process.env.HELLO_MQ_COLLECT_CONCURRENCY ?? '3', 10)
+const concurrency = Number.isFinite(configuredConcurrency) ? Math.max(1, Math.min(8, configuredConcurrency)) : 3
+
+async function collectQueue(entries, label) {
+  let nextScenario = 0
+  async function worker() {
+    while (nextScenario < entries.length) {
+      const entry = entries[nextScenario]
+      nextScenario += 1
+      const scenario = `${entry.product}/${entry.id}`
+      try {
+        await collect(entry, versions)
+        resultByScenario.set(scenario, { scenario, status: 'passed' })
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error)
+        console.error(`FAILED ${scenario}: ${message}`)
+        resultByScenario.set(scenario, { scenario, status: 'failed', error: message })
+      }
     }
   }
-  return productResults
+  const workerCount = Math.min(concurrency, entries.length)
+  console.log(`\n=== ${label}: ${entries.length} scenario(s), concurrency=${workerCount} ===`)
+  await Promise.all(Array.from({ length: workerCount }, () => worker()))
 }
 
-const groupedResults = await Promise.all([...productGroups.entries()].map(async ([product, entries]) => {
-  if (preparedProducts.has(product)) return collectProduct(entries)
-  const error = `构建 ${product} 采集程序失败：${preparationFailures.get(product)}`
-  console.error(`FAILED ${product}: ${error}`)
-  return entries.map((entry) => ({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error }))
-}))
-const results = groupedResults.flat()
+await collectQueue(runnable.filter((entry) => entry.id !== 'consumer-crash'), 'independent scenarios')
+await collectQueue(runnable.filter((entry) => entry.id === 'consumer-crash'), 'crash scenarios after basic evidence')
+const results = selected.map((entry) => resultByScenario.get(`${entry.product}/${entry.id}`))
 const summary = {
   schemaVersion: 1,
   startedAt: collectionStartedAt,
   finishedAt: new Date().toISOString(),
   requested: filter,
+  concurrency,
   tools: versions,
   passed: results.filter((result) => result.status === 'passed').length,
   failed: results.filter((result) => result.status === 'failed').length,

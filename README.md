@@ -69,7 +69,7 @@ bash demos/kafka/ordering-replay/run.sh   # 任意产品同理
 for s in demos/*/*/run.sh; do bash "$s"; done   # 全量运行
 ```
 
-交互回放证据需要 Docker、Compose、Bash、Maven 与 jq。采集命令顺序运行实验，保存角色日志、Broker 检查点、采集元数据与规范化 `replay.json`；普通文档构建不会启动 Broker：
+交互回放证据需要 Docker、Compose、Bash、Maven 与 jq。每个场景使用独立 Compose Project、网络和数据卷，采集器默认同时运行 3 个场景；同一场景的步骤仍保持顺序。可用 `HELLO_MQ_COLLECT_CONCURRENCY=1..8` 调整并发数。采集过程保存角色日志、Broker 检查点、采集元数据与规范化 `replay.json`；普通文档构建不会启动 Broker：
 
 ```bash
 npm run collect:playground
@@ -81,7 +81,7 @@ npm run check:playground            # 要求 11 个场景全部已有已验证�
 
 ## 资源与安全提示
 
-- 所有 Broker 端口仅绑定 `127.0.0.1`，不暴露公网。
+- 交互回放场景不向宿主机发布 Broker 端口；需要宿主机 CLI 的独立 Docker 验证只绑定 `127.0.0.1`，不暴露公网。
 - `demos/.env.example` 中的演示账号与密码**仅限本地实验，禁止用于生产**。
 - run.sh 退出时自动 `docker compose down --volumes`，只作用于本实验的 `hello-mq-*` Compose Project，不使用全局 `docker prune`。
 - 镜像一律 tag + digest 双锁定，禁止 `latest`；见 [版本政策](docs/reference/version-policy.md)。
