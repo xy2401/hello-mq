@@ -48,7 +48,7 @@ create_group() { # <group> [updateSubGroup 额外参数...]
 
 ensure_jar rocketmq
 compose up -d proxy
-compose wait proxy || true
+wait_healthy proxy
 create_topic orders-retry NORMAL
 # 重试策略由消费组承载：最多重试 2 次、每次间隔 1s（CUSTOMIZED），耗尽后进 %DLQ%。
 retry_policy='{"type":"CUSTOMIZED","customizedRetryPolicy":{"next":[1000,1000]}}'

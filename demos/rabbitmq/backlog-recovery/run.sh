@@ -8,7 +8,7 @@ source "$LAB_DIR/../../shared/run-common.sh"
 
 ensure_jar rabbitmq
 compose up -d rabbitmq
-compose wait rabbitmq || true
+wait_healthy rabbitmq
 compose run --rm setup
 # 清掉历史残留，保证积压计数只反映本轮生产
 compose exec -T rabbitmq rabbitmqctl purge_queue orders.backlog

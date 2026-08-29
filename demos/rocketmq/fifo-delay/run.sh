@@ -48,7 +48,7 @@ create_group() { # <group> [updateSubGroup 额外参数...]
 
 ensure_jar rocketmq
 compose up -d proxy
-compose wait proxy || true
+wait_healthy proxy
 create_topic orders-fifo FIFO
 create_topic orders-delay DELAY
 create_group orders-fifo-group

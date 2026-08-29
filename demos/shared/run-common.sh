@@ -53,6 +53,55 @@ compose() {
   fi
 }
 
+# wait_healthy <服务> [秒数]：等待常驻服务的 Docker healthcheck，而不是等待容器退出。
+# 状态变化或每 15 秒输出一次进度；unhealthy、容器退出或超时都会打印诊断并失败。
+wait_healthy() {
+  local service="$1" limit="${2:-${HELLO_MQ_HEALTH_TIMEOUT_SECONDS:-240}}"
+  local started deadline now elapsed next_report=0 cid state last_state=""
+  case "$limit" in
+    ''|*[!0-9]*) printf 'health timeout for %s must be a positive integer\n' "$service" >&2; return 2 ;;
+    0) printf 'health timeout for %s must be greater than zero\n' "$service" >&2; return 2 ;;
+  esac
+  started="$(date +%s)"
+  deadline=$((started + limit))
+  while true; do
+    now="$(date +%s)"
+    elapsed=$((now - started))
+    cid="$(compose ps --all -q "$service" | tail -n 1)"
+    if [ -n "$cid" ]; then
+      if command -v timeout >/dev/null 2>&1; then
+        state="$(timeout --signal=KILL 10s docker inspect -f '{{if .State.Running}}{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}{{else}}exited{{end}}' "$cid" 2>/dev/null || printf inspect-failed)"
+      else
+        state="$(docker inspect -f '{{if .State.Running}}{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}{{else}}exited{{end}}' "$cid" 2>/dev/null || printf inspect-failed)"
+      fi
+    else
+      state="container-missing"
+    fi
+    if [ "$state" = "healthy" ]; then
+      printf 'Service %s is healthy after %ss\n' "$service" "$elapsed"
+      return 0
+    fi
+    if [ "$state" = "unhealthy" ] || [ "$state" = "no-healthcheck" ] || [ "$state" = "exited" ]; then
+      printf 'Service %s cannot become healthy: state=%s\n' "$service" "$state" >&2
+      compose ps --all "$service" >&2 || true
+      compose logs --tail 100 --no-color --no-log-prefix "$service" >&2 || true
+      return 1
+    fi
+    if [ "$now" -ge "$deadline" ]; then
+      printf 'Service %s health timeout after %ss: state=%s\n' "$service" "$limit" "$state" >&2
+      compose ps --all "$service" >&2 || true
+      compose logs --tail 100 --no-color --no-log-prefix "$service" >&2 || true
+      return 1
+    fi
+    if [ "$state" != "$last_state" ] || [ "$elapsed" -ge "$next_report" ]; then
+      printf 'Waiting for %s health: state=%s elapsed=%ss/%ss\n' "$service" "$state" "$elapsed" "$limit"
+      last_state="$state"
+      next_report=$((elapsed + 15))
+    fi
+    sleep 2
+  done
+}
+
 cleanup() {
   local -a base=(docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE")
   if command -v timeout >/dev/null 2>&1; then

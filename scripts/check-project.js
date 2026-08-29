@@ -257,6 +257,15 @@ function checkLabTimeouts() {
   if (!smoke.includes('timeout --signal=TERM --kill-after=45s 660s bash')) {
     fail('smoke workflow must bound each lab independently')
   }
+  if (!common.includes('wait_healthy()') || !common.includes('Waiting for %s health')) {
+    fail('run-common.sh must report bounded healthcheck progress for long-running services')
+  }
+  for (const script of walk(path.join(ROOT, 'demos'), (file) => file.endsWith('run.sh'))) {
+    const text = fs.readFileSync(script, 'utf8')
+    if (/^compose wait (rabbitmq|proxy)(?:\s|$)/m.test(text)) {
+      fail(`${path.relative(ROOT, script)} waits for a long-running service to exit; use wait_healthy`)
+    }
+  }
   ok('lab, Compose and collector timeouts are enforced')
 }
 

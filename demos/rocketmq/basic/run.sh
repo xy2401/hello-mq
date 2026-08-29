@@ -55,7 +55,7 @@ consume_diff() {
 
 ensure_jar rocketmq
 compose up -d proxy
-compose wait proxy || true
+wait_healthy proxy
 create_topic orders-basic NORMAL
 create_group orders-basic-group
 

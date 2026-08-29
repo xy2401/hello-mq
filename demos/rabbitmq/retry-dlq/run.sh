@@ -8,7 +8,7 @@ source "$LAB_DIR/../../shared/run-common.sh"
 
 ensure_jar rabbitmq
 compose up -d rabbitmq
-compose wait rabbitmq || true
+wait_healthy rabbitmq
 compose run --rm setup
 compose exec -T rabbitmq rabbitmqctl purge_queue orders.work
 compose exec -T rabbitmq rabbitmqctl purge_queue orders.retry || true
