@@ -1,0 +1,2472 @@
+{
+  "schemaVersion": 1,
+  "id": "basic",
+  "product": "kafka",
+  "title": "基础收发",
+  "model": "分区与手动提交 offset",
+  "description": "幂等生产、分区投递、业务提交与 offset 提交。",
+  "evidenceStatus": "verified",
+  "image": {
+    "reference": "apache/kafka:4.3.1",
+    "digest": "sha256:77e3df9054047a88b520d0cc46e16696d3b22022e1d580aeccd2632df6532837"
+  },
+  "capture": {
+    "capturedAt": "2026-08-29T22:29:46.461Z",
+    "exitCode": 0,
+    "timedOut": false,
+    "timeoutSeconds": 540,
+    "signal": null,
+    "tools": {
+      "docker": "Docker version 28.0.4, build b8034c0",
+      "compose": "Docker Compose version v2.38.2",
+      "bash": "GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)",
+      "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+      "jq": "jq-1.7"
+    },
+    "sourceRevision": "1520297004b487a432b06f37d1ce3db4d7efc74b"
+  },
+  "topology": [
+    {
+      "id": "producer",
+      "label": "Producer",
+      "kind": "producer",
+      "status": "idle"
+    },
+    {
+      "id": "broker",
+      "label": "Topic",
+      "kind": "broker",
+      "status": "idle"
+    },
+    {
+      "id": "queue",
+      "label": "Partition",
+      "kind": "queue",
+      "status": "idle"
+    },
+    {
+      "id": "consumer",
+      "label": "Consumer",
+      "kind": "consumer",
+      "status": "idle"
+    },
+    {
+      "id": "database",
+      "label": "业务数据库",
+      "kind": "database",
+      "status": "idle"
+    }
+  ],
+  "defaultTrack": "observed",
+  "tracks": [
+    {
+      "id": "observed",
+      "label": "实际收发",
+      "description": "Docker 采集轨道：实际收发",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "producer",
+          "type": "produced",
+          "title": "produced",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "status": "produced"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/producer.out.txt",
+              "line": 4,
+              "hash": "3d1902bf85c6213329c04b6ff47cd33af31d55336cd78bc50325df8eebc5a259",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:29:05.656382342Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 offset=0 seq=1 durationMs=259 status=produced"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 12,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "produced",
+          "title": "produced",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "status": "produced"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/producer.out.txt",
+              "line": 5,
+              "hash": "2bb31383a38da40ff48c41ddf3aaa0d42063ddb81b649fcef83e7c9d4b0a680f",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:29:05.668783030Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 offset=1 seq=2 durationMs=9 status=produced"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 20,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "produced",
+          "title": "produced",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "status": "produced"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/producer.out.txt",
+              "line": 6,
+              "hash": "dd84bafb8baabc1297693aa54f3515dc3d423430f0ffb379d70338689cb4d446",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:29:05.676834717Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 offset=0 seq=3 durationMs=7 status=produced"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 20,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "observed",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/producer.out.txt",
+              "line": 7,
+              "hash": "fda758dfb713a9e30c604232c7be7863762e57520585031cbb1d64d1affee6b2",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:29:05.676946317Z level=INFO service=order-service product=kafka lab=basic destination=orders.basic produced=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 1524,
+          "delayMs": 1504,
+          "actor": "consumer",
+          "type": "assigned",
+          "title": "消费组完成分区分配",
+          "track": "observed",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "assigned"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 4,
+              "hash": "a5eca87e82dcb548c22e3516dbac557c92958b0f67c885b63b00caee756e29d0",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:07.180047806Z level=INFO service=order-service product=kafka lab=basic destination=orders.basic consumerGroup=orders-basic-group consumer=consumer-1 partitions=0,1,2 status=assigned"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 1727,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 5,
+              "hash": "30178150ab9f13421ed447334ab5d764761d8f3ae467c8b3cc867731e4b3b92a",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:07.383225948Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 offset=0 seq=1 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 1735,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 6,
+              "hash": "1d6b913848232fd3381dee450cfa03ef4e8eb1194e6578976179207b55be3f48",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:07.391224917Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 6210,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 1,
+              "hash": "06567fb4fd0b9b8c4c34e88a8486309591b1665206edc5e3dfc9eede1ec204cc",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:11.866Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":0,\"endOffset\":3,\"lag\":0,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          -               2               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          -               1               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          -               0               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 6244,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 7,
+              "hash": "dddb377db62cbee254b64b6c7a324f61ec744f74cbba7cf87a8283a409a20b74",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:11.900122504Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 6254,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 8,
+              "hash": "4f39771cbcd5ed755c8c93e5896e64c53717915bdecd0506d20d68bba635655d",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:11.910785134Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic partitionOrQueue=0 seq=1 consumerGroup=orders-basic-group attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 6255,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 9,
+              "hash": "cf7d43a22e0226bae6fd76c3259cf8db554f21150bf9359a7239789361b1586b",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:11.911290146Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000001 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000001-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 10298,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "before-offset-commit",
+          "title": "Broker 状态：before-offset-commit",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 2,
+              "hash": "21e3c26e3e27a9622742d417de19f3e2f174de492369ddff3ca4bb7d44f9a1dc",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:15.954Z\",\"checkpoint\":\"before-offset-commit\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":0,\"endOffset\":3,\"lag\":0,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          -               2               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          -               1               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          -               0               -               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 10363,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 10,
+              "hash": "2c4c7aa9fd4e709eb04d71aa21fdb4bce0171014a74bbd38b54bf631e2383a36",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:16.019513415Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000001 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000001-2 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 10402,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 11,
+              "hash": "ff4de3a774469c9752cea8f343e1f12a21e9418a7d7d19536727113bc025022c",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:16.058030528Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 offset=1 seq=2 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 10402,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 0,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 12,
+              "hash": "f1f189b62342982c87d44eec8000af6f95835bc5270d13fd5f171ad7801f04b0",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:16.058652771Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 14662,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 3,
+              "hash": "44be5db598dc57018302e88ec7ae4905a217c762de05ec021053970edcda4719",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:20.318Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":1,\"endOffset\":3,\"lag\":2,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          1               2               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          0               1               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          0               0               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 14711,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 13,
+              "hash": "69292ed534e7e80f16e1eed0d8c79ea735c7dd0933a96f01231e2f571b3e5ae4",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:20.367533721Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000002-3 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 14713,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 14,
+              "hash": "451a188b79f7cf92c21dd62790a0180a3aefc71affc76d72310ba43c7fa587d5",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:20.369573348Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic partitionOrQueue=0 seq=2 consumerGroup=orders-basic-group attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 14713,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 15,
+              "hash": "5038c8939e579d4acba9a436ec69358d2a1f4123a894d3aca7ce2f52ce7e5391",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:20.369938065Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000002 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000002-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 19353,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "before-offset-commit",
+          "title": "Broker 状态：before-offset-commit",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 4,
+              "hash": "63f65cf215b1b67b03c547d9e9d216c0367e283645d15a83812c8e3d8bf35c4c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:25.009Z\",\"checkpoint\":\"before-offset-commit\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":1,\"endOffset\":3,\"lag\":2,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          1               2               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          0               1               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          0               0               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "relativeMs": 19424,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "0",
+              "offset": 1,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 16,
+              "hash": "a91d9f31c770b2a8bfb76eba26089f8013bac0b9db2a0cc181d03aa8c99eaea9",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:25.080134145Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000002 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000002-4 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "relativeMs": 19430,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 17,
+              "hash": "071d2b3c22dd172eceaa78292e8603730f0f1d6b1ee86de3e60e5d2a933b8f88",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:25.086554353Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 offset=0 seq=3 consumerGroup=orders-basic-group consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 22,
+          "relativeMs": 19430,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 1,
+              "endOffset": 3,
+              "lag": 2,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 18,
+              "hash": "830d05b5f313d97256d43cdd2ebab1ecf91982034fd8e4f6583afd351b60992f",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:25.086909121Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000003-5 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 23,
+          "relativeMs": 23389,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 5,
+              "hash": "ccc2cd642f7a611ca0d9da5ece3cf3f39e073ac64db6990d5f97fd69d7d8df18",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:29.045Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":2,\"endOffset\":3,\"lag\":1,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          2               2               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          0               1               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          0               0               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 24,
+          "relativeMs": 23437,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 19,
+              "hash": "bd32d199ac905718cc246c021d8d04e18c812c48acbc5560a92d9c7b590b3eb5",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:29.093608855Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=aca5887fa4a2-1-after-delivery-01JMQ000000000000000000003-5 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 25,
+          "relativeMs": 23439,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 20,
+              "hash": "9e2ded246ce2d0a29e36c288c5e5b9b38400b4febc67ba1a0a7ff282373cb747",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:29.095763646Z level=INFO service=order-service product=kafka lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic partitionOrQueue=1 seq=3 consumerGroup=orders-basic-group attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 26,
+          "relativeMs": 23440,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 21,
+              "hash": "b43002dc274e8aa81da3997b56b776613bbb76bff4ee47290f9d30e217ebee3b",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:29.096091855Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000003 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000003-6 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 27,
+          "relativeMs": 27777,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "before-offset-commit",
+          "title": "Broker 状态：before-offset-commit",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 6,
+              "hash": "1ff6bb992823720760d804cb9a691d910f275c5f8b65ae6de2d78788a68d7549",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:33.433Z\",\"checkpoint\":\"before-offset-commit\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":2,\"endOffset\":3,\"lag\":1,\"members\":1,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                        HOST            CLIENT-ID\\norders-basic-group orders.basic    0          2               2               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    1          0               1               1               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\norders-basic-group orders.basic    2          0               0               0               consumer-orders-basic-group-1-3b69ebd1-5122-4696-baae-d40d1ece29c3 /172.18.0.3     consumer-orders-basic-group-1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 28,
+          "relativeMs": 27850,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 22,
+              "hash": "c1d72abd8b601b0687038f52e06e08166b727ada4569da7ba3fe0df85782ebc9",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:29:33.506079110Z checkpoint=before-offset-commit messageId=01JMQ000000000000000000003 token=aca5887fa4a2-1-before-offset-commit-01JMQ000000000000000000003-6 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 29,
+          "relativeMs": 27852,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "observed",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/consumer.out.txt",
+              "line": 23,
+              "hash": "25f7702a4573c4c8fdb3fc4c5791e744304ebf7308e43c68e1027046de675b4b",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:29:33.508928551Z level=INFO service=order-service product=kafka lab=basic destination=orders.basic consumer=consumer-1 received=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 30,
+          "relativeMs": 28718,
+          "delayMs": 866,
+          "actor": "inspect-db",
+          "type": "snapshot",
+          "title": "snapshot",
+          "track": "observed",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "currentOffset": 2,
+              "endOffset": 3,
+              "lag": 1,
+              "members": 1,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/inspect-db.out.txt",
+              "line": 4,
+              "hash": "9af8c8d09255634d4e66407a5e777711fee0b4b4f04f732ab0b238d52f99b5b5",
+              "role": "inspect-db",
+              "content": "[inspect] timestamp=2026-08-29T22:29:34.374718370Z level=INFO service=order-service product=kafka lab=basic business_rows=3 processed_rows=3 status=snapshot"
+            }
+          ]
+        },
+        {
+          "sequence": 31,
+          "relativeMs": 32713,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "services-started",
+          "title": "Broker 状态：services-started",
+          "track": "observed",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "currentOffset": 3,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 0,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 7,
+              "hash": "1ad6c81502afe1f129fde8039bb8b1a2e06a11926e063c2b44625c2b91f5889e",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:38.369Z\",\"checkpoint\":\"services-started\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":3,\"endOffset\":3,\"lag\":0,\"members\":0,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID\\norders-basic-group orders.basic    0          2               2               0               -               -               -\\norders-basic-group orders.basic    1          1               1               0               -               -               -\\norders-basic-group orders.basic    2          0               0               0               -               -               -\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 32,
+          "relativeMs": 39571,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "final-state",
+          "title": "Broker 状态：final-state",
+          "track": "observed",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Topic",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Partition",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "partition": "1",
+              "offset": 0,
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "currentOffset": 3,
+              "endOffset": 3,
+              "lag": 0,
+              "members": 0,
+              "groups": 1,
+              "partitions": 3
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/kafka/basic/replay.raw.jsonl",
+              "line": 8,
+              "hash": "12b809ee043bd2fc31fd1e12cb3d7edd89163b3555a2fa1eea2e4d2acbe8f2c6",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:29:45.227Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"currentOffset\":3,\"endOffset\":3,\"lag\":0,\"members\":0,\"groups\":1,\"partitions\":3},\"commands\":{\"topic\":\"Topic: orders.basic\\tTopicId: WvSqsSuATc2WcdsW8E79ZA\\tPartitionCount: 3\\tReplicationFactor: 1\\tConfigs: min.insync.replicas=1\\n\\tTopic: orders.basic\\tPartition: 0\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 1\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\\tTopic: orders.basic\\tPartition: 2\\tLeader: 1\\tReplicas: 1\\tIsr: 1\\tElr: \\tLastKnownElr: \\n\",\"orders-basic-group\":\"\\nGROUP              TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID\\norders-basic-group orders.basic    0          2               2               0               -               -               -\\norders-basic-group orders.basic    1          1               1               0               -               -               -\\norders-basic-group orders.basic    2          0               0               0               -               -               -\\n\"}}"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "assertions": [
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 1,
+      "hash": "5e7c3c95a45c62303d69025efed2d293ffe38323833fc6ecf44f8485a73dbc43",
+      "role": "assert",
+      "content": "PASS produced: 3"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 2,
+      "hash": "8c5f123c31974ca9be94e1c22249fc3dd5d11acb865b83fac297de843885de9e",
+      "role": "assert",
+      "content": "PASS received: 3"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 3,
+      "hash": "da1bdcb561ec6f972364800edc29cf351b7edd9446cb437f554d98c34501810b",
+      "role": "assert",
+      "content": "PASS uniqueMessageIds: 3"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 4,
+      "hash": "d4476a70c637b309fd0f9c87effc9a21f04e794edbb117e7410018a4d2a6645c",
+      "role": "assert",
+      "content": "PASS businessCommitted: 3"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 5,
+      "hash": "de9bf54983b6e0ed977ce5efc27aaea62881231cff18b9f9688930aad6463c10",
+      "role": "assert",
+      "content": "PASS business_rows: 3"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 6,
+      "hash": "3b118304c8394031f55fa6d8cb53ef071ce717ea816fe97741b91a0ea0a83eb9",
+      "role": "assert",
+      "content": "PASS consumerGroupLag: 0"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 7,
+      "hash": "36e9961837cfd0ed36c70fb70a26adcd3dc7b6ccd2985765856a1157c75482c6",
+      "role": "assert",
+      "content": "PASS consumer.exitCode: 0"
+    },
+    {
+      "file": "demos/kafka/basic/assert.out.txt",
+      "line": 8,
+      "hash": "9ceca2d7c97276e5cc6ead25d74e96dac0d99ea445badd3ae22bb96cbe285a56",
+      "role": "assert",
+      "content": "RESULT: all assertions passed"
+    }
+  ],
+  "document": "/playground/basic-flow"
+}

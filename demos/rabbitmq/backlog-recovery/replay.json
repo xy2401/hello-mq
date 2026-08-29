@@ -1,0 +1,4017 @@
+{
+  "schemaVersion": 1,
+  "id": "backlog-recovery",
+  "product": "rabbitmq",
+  "title": "积压与追赶",
+  "model": "消费者离线与恢复",
+  "description": "消费者离线形成积压，恢复后追赶至队列清空。",
+  "evidenceStatus": "verified",
+  "image": {
+    "reference": "rabbitmq:4.1.4-management",
+    "digest": "sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
+  },
+  "capture": {
+    "capturedAt": "2026-08-29T22:28:39.347Z",
+    "exitCode": 0,
+    "timedOut": false,
+    "timeoutSeconds": 540,
+    "signal": null,
+    "tools": {
+      "docker": "Docker version 28.0.4, build b8034c0",
+      "compose": "Docker Compose version v2.38.2",
+      "bash": "GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)",
+      "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+      "jq": "jq-1.7"
+    },
+    "sourceRevision": "1520297004b487a432b06f37d1ce3db4d7efc74b"
+  },
+  "topology": [
+    {
+      "id": "producer",
+      "label": "Producer",
+      "kind": "producer",
+      "status": "idle"
+    },
+    {
+      "id": "broker",
+      "label": "Exchange",
+      "kind": "broker",
+      "status": "idle"
+    },
+    {
+      "id": "queue",
+      "label": "Queue",
+      "kind": "queue",
+      "status": "idle"
+    },
+    {
+      "id": "consumer",
+      "label": "Consumer",
+      "kind": "consumer",
+      "status": "idle"
+    },
+    {
+      "id": "database",
+      "label": "业务数据库",
+      "kind": "database",
+      "status": "idle"
+    }
+  ],
+  "defaultTrack": "offline",
+  "tracks": [
+    {
+      "id": "offline",
+      "label": "消费者离线",
+      "description": "Docker 采集轨道：消费者离线",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 4,
+              "hash": "0bb2dcda869b7015b788a7c7481f8751fe9050dd456491a29b9b9d322ff9e20b",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.093347533Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F4CCGD90J009J9YP3M7 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog routingKey=orders.backlog durationMs=3 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 2,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 5,
+              "hash": "3ea090c358503ba84988ec68fb83239509430547ba75776e7dcf144bfc52792c",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.095086971Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F55BBP76V00SYFS5ZT6 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog routingKey=orders.backlog durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 3,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 6,
+              "hash": "598c4051636b653d5c59c862bad3c9066df5f5ee9f97092eeed653c9982800d7",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.096535807Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F57AFR09N00S9R6WEYA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog routingKey=orders.backlog durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 5,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 7,
+              "hash": "00b985def45f9b02d4d1eb21204e284ef1cba4032e8c3d7ff38aef00115532c5",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.098071434Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F59QYZ8SF00FKK1MPGT eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog routingKey=orders.backlog durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 6,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 8,
+              "hash": "8949225be832240fb20faa4a36ded1c70f77da9c8c422e0f7dca654583ad8336",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.099699765Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5AD9XAQY0099BV0JF2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog routingKey=orders.backlog durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 8,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "offline",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 9,
+              "hash": "1eeb34a1138195ef8f0cdd29e0cde33863a6dba1679376d716823d0a16f9a953",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.101282233Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5CQ4F9V000DE7HNYJA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog routingKey=orders.backlog durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 8,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "offline",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/producer.out.txt",
+              "line": 10,
+              "hash": "09b0c9398a4fcec433e1eadbad5102709e324a81651763c4b3092902bc88435d",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:28:13.101418888Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery destination=orders.backlog confirmed=6 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 2204,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "backlog-without-consumer",
+          "title": "Broker 状态：backlog-without-consumer",
+          "track": "offline",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 6,
+              "messagesUnacknowledged": 0,
+              "consumers": 0,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 1,
+              "hash": "3b0e7ec8e503fded7a6175789414f54f01f633e208ca03106702c4ccb50b73e0",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:15.297Z\",\"checkpoint\":\"backlog-without-consumer\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":6,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":6,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 4339,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 5,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 2,
+              "hash": "5cd332bbb40cc453e3213b72a8baf1eef1d005acf46408ace63068871e89b7b7",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:17.432Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F4CCGD90J009J9YP3M7\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":5,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":5,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 5719,
+          "delayMs": 1380,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 5,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 3,
+              "hash": "80ba68855a7e1a7b1a120842daf6c4facb6de62d632f6c078d2cf52362dbe483",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:18.812Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F4CCGD90J009J9YP3M7\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":5,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":5,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 7160,
+          "delayMs": 1441,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 4,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 4,
+              "hash": "1726afb1a145a4fe375e81e03f08db3a810939b423777088aa9eefe8a716f504",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:20.253Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F55BBP76V00SYFS5ZT6\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":4,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":4,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 8652,
+          "delayMs": 1492,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 4,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 5,
+              "hash": "9abc13e53a14e62d92d1df112cb11b5b7815c3d5fdc1996a23caf9016aca0c87",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:21.745Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F55BBP76V00SYFS5ZT6\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":4,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":4,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 10035,
+          "delayMs": 1383,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 6,
+              "hash": "a925307abd15a43590c2aa7f4d76bb04485c6320b6604f4d9a93cde864e56c25",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:23.128Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F57AFR09N00S9R6WEYA\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":3,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 11433,
+          "delayMs": 1398,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 7,
+              "hash": "d88a33eb8c1da746a60f5fcaba063b8777ca919afbaea2da68e03007ff1c90fb",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:24.526Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F57AFR09N00S9R6WEYA\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":3,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 12945,
+          "delayMs": 1512,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 2,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 8,
+              "hash": "b08c4a1202b7e26aaf97b84f0281df61bfcebb1c9e5ae845903678c15ef546d1",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:26.038Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F59QYZ8SF00FKK1MPGT\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 14424,
+          "delayMs": 1479,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 2,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 9,
+              "hash": "d7384cd2d85383487bd40b960073fea3deef25be1fcaf5b66511a23fb0fb4401",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:27.517Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F59QYZ8SF00FKK1MPGT\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 15798,
+          "delayMs": 1374,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 10,
+              "hash": "7fa6977bd030a9d88df78e5aea83c99430e8186057ea237a0b80c4b5e2a33f7c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:28.891Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F5AD9XAQY0099BV0JF2\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 17178,
+          "delayMs": 1380,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 11,
+              "hash": "53f6c348837f56453186ce318f5225d337dfaeaa7c1b16e0169e4f2a5837bc72",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:30.271Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F5AD9XAQY0099BV0JF2\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 18640,
+          "delayMs": 1462,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "offline",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 12,
+              "hash": "e013654897ee82625a3106106b38a7cc3b1781b2eca2be07ebb2b2726ec66e35",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:31.733Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01M17T6F5CQ4F9V000DE7HNYJA\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 20088,
+          "delayMs": 1448,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "offline",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 13,
+              "hash": "f60a36ef58bd28a34fbb72ae128f236798035c756a70010c838391ceafaed9c3",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:33.181Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01M17T6F5CQ4F9V000DE7HNYJA\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "relativeMs": 20764,
+          "delayMs": 676,
+          "actor": "inspect-db",
+          "type": "snapshot",
+          "title": "snapshot",
+          "track": "offline",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/inspect-db.out.txt",
+              "line": 4,
+              "hash": "4134173d74deeb313a0cd3e6932528d15366abc67f213605b783f05c6010bea2",
+              "role": "inspect-db",
+              "content": "[inspect] timestamp=2026-08-29T22:28:33.857137025Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery business_rows=3 processed_rows=3 status=snapshot"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "relativeMs": 24828,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "final-state",
+          "title": "Broker 状态：final-state",
+          "track": "offline",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "broker",
+              "queue": "orders.backlog",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 0,
+              "consumers": 0,
+              "dlqDepth": 0
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 15,
+              "hash": "f07fb8c92c80ad38cf27f319c8a785214cf1b920fc396780e10b6c6e04e791f1",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:37.921Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ],
+          "actions": [
+            {
+              "id": "switch-recovery",
+              "label": "启动消费者追赶",
+              "targetTrack": "recovery",
+              "targetStep": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "recovery",
+      "label": "启动消费者追赶",
+      "description": "Docker 采集轨道：启动消费者追赶",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 4,
+              "hash": "ecee10369796dfd90ef87a6bc818930655048cdc4d6d7a62773159f4bba1273f",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:16.092036171Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F4CCGD90J009J9YP3M7 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 12,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 5,
+              "hash": "7a99873ef62d925cd0918a0483a900bc3ac49ae3fe3d7f7f643b0f60dc3e62da",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:16.104604656Z checkpoint=after-delivery messageId=01M17T6F4CCGD90J009J9YP3M7 token=37b42cc50d45-1-after-delivery-01M17T6F4CCGD90J009J9YP3M7-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 1420,
+          "delayMs": 1408,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 6,
+              "hash": "21b3b93d10f401a3489a7d0df1cb9dd2a1185cafd673f686c1519a4a1694e782",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:17.512222738Z checkpoint=after-delivery messageId=01M17T6F4CCGD90J009J9YP3M7 token=37b42cc50d45-1-after-delivery-01M17T6F4CCGD90J009J9YP3M7-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 1429,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 7,
+              "hash": "724a9ec26031a51446d6432050fd9c2416edfb440c5793288b1fc5f9e9b35bbd",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:17.521573041Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F4CCGD90J009J9YP3M7 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 1430,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 8,
+              "hash": "f80f927b858f471cd3f9f642eda091fcb04e0f3772460c25b75e1c28f22252bb",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:17.522088113Z checkpoint=before-ack messageId=01M17T6F4CCGD90J009J9YP3M7 token=37b42cc50d45-1-before-ack-01M17T6F4CCGD90J009J9YP3M7-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 2733,
+          "delayMs": 1303,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F4CCGD90J009J9YP3M7",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 9,
+              "hash": "e637f4f811b3b9f37232d7827a83a9d87e75402ed7a15d6925fb581964e39878",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:18.825073653Z checkpoint=before-ack messageId=01M17T6F4CCGD90J009J9YP3M7 token=37b42cc50d45-1-before-ack-01M17T6F4CCGD90J009J9YP3M7-2 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 2735,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 10,
+              "hash": "589c0d3733f0600383f45ce27b52c8c5f0d9480f47cc8f1467d12833eaaf3b1d",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:18.827182213Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F55BBP76V00SYFS5ZT6 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 2735,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 11,
+              "hash": "59f089511350808c3dc0ede3d9b933f355ba24600f4129bae46dfca46fc996db",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:18.827698989Z checkpoint=after-delivery messageId=01M17T6F55BBP76V00SYFS5ZT6 token=37b42cc50d45-1-after-delivery-01M17T6F55BBP76V00SYFS5ZT6-3 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 4238,
+          "delayMs": 1503,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 12,
+              "hash": "ac35f40cd6d3fea27630b1d8223f898051fc741957d22bd31417460070ca309d",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:20.330316176Z checkpoint=after-delivery messageId=01M17T6F55BBP76V00SYFS5ZT6 token=37b42cc50d45-1-after-delivery-01M17T6F55BBP76V00SYFS5ZT6-3 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 4240,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 13,
+              "hash": "7bd27eeea6b922f0b6e4dd64c679cd843696ba3304646a2b34064677287f91d8",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:20.332574716Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F55BBP76V00SYFS5ZT6 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 4241,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 14,
+              "hash": "967120ac3b6e8c0288c9c17d62284e75ca73dfda75c6801414b342e521a87655",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:20.333066045Z checkpoint=before-ack messageId=01M17T6F55BBP76V00SYFS5ZT6 token=37b42cc50d45-1-before-ack-01M17T6F55BBP76V00SYFS5ZT6-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 5744,
+          "delayMs": 1503,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F55BBP76V00SYFS5ZT6",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 15,
+              "hash": "04818676ac78a9bdaeb06494826f0be6c2a88417fdb7f91607cd63175a591457",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:21.836015399Z checkpoint=before-ack messageId=01M17T6F55BBP76V00SYFS5ZT6 token=37b42cc50d45-1-before-ack-01M17T6F55BBP76V00SYFS5ZT6-4 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 5745,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 16,
+              "hash": "2e2d7b6822c45d890962edee4abcb86a7a583fedab2fceff1829f8db627a26c4",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:21.837856520Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F57AFR09N00S9R6WEYA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 5746,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 17,
+              "hash": "54582191d68c81ea8c9ca822ee13378dca614d6331d83ef96d5e86d7c4d2502c",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:21.838317913Z checkpoint=after-delivery messageId=01M17T6F57AFR09N00S9R6WEYA token=37b42cc50d45-1-after-delivery-01M17T6F57AFR09N00S9R6WEYA-5 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 7049,
+          "delayMs": 1303,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 18,
+              "hash": "c1ebd43b8f6cced88f50854d7d5750d90be591f32766c6362479702981216655",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:23.141018676Z checkpoint=after-delivery messageId=01M17T6F57AFR09N00S9R6WEYA token=37b42cc50d45-1-after-delivery-01M17T6F57AFR09N00S9R6WEYA-5 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 7050,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 19,
+              "hash": "758b0dcd8cd4b8ae9ebe5b561fbd9a6a5605957551c1540ffd597d038677de96",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:23.142813251Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F57AFR09N00S9R6WEYA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 7051,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 20,
+              "hash": "b0ac585513bc705275cdc24b75f16e02e7b7bde0c9190e394ce335c380b02243",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:23.143214731Z checkpoint=before-ack messageId=01M17T6F57AFR09N00S9R6WEYA token=37b42cc50d45-1-before-ack-01M17T6F57AFR09N00S9R6WEYA-6 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 8453,
+          "delayMs": 1402,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F57AFR09N00S9R6WEYA",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 21,
+              "hash": "8e00979563ae1477282dae49f5340e17f8d9cf9e5ebb2fd7394a1572dd8290a2",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:24.545402503Z checkpoint=before-ack messageId=01M17T6F57AFR09N00S9R6WEYA token=37b42cc50d45-1-before-ack-01M17T6F57AFR09N00S9R6WEYA-6 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 8454,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 22,
+              "hash": "9b986857927119f2c84886c6faa54ae60784501da44faf28e24bd4db03c28f02",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:24.546919078Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F59QYZ8SF00FKK1MPGT eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 8455,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 23,
+              "hash": "5f0de8b21dddf198a31edc0d1c8d3cb8ade7fa54e2154410674748387bcb3522",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:24.547486599Z checkpoint=after-delivery messageId=01M17T6F59QYZ8SF00FKK1MPGT token=37b42cc50d45-1-after-delivery-01M17T6F59QYZ8SF00FKK1MPGT-7 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "relativeMs": 9958,
+          "delayMs": 1503,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 24,
+              "hash": "ba1a3a577fec09175b034bb085ac5d7a5e9b153accfce514b9f1e039ec7382ee",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:26.050678666Z checkpoint=after-delivery messageId=01M17T6F59QYZ8SF00FKK1MPGT token=37b42cc50d45-1-after-delivery-01M17T6F59QYZ8SF00FKK1MPGT-7 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "relativeMs": 9965,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "duplicate_skipped",
+          "title": "幂等表拦截重复消息",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "duplicate_skipped"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 25,
+              "hash": "b785b3e84e0d79c19061aab15662742a2aef5bc03d97c6b4ac1a38c8af4fdc84",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:26.057228065Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F59QYZ8SF00FKK1MPGT eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.backlog attempt=1 status=duplicate_skipped"
+            }
+          ]
+        },
+        {
+          "sequence": 22,
+          "relativeMs": 9965,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 26,
+              "hash": "3df75d436df9e4b63a45870c694ce641ef0af2868db8719c3c32d7a8a554f858",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:26.057668318Z checkpoint=before-ack messageId=01M17T6F59QYZ8SF00FKK1MPGT token=37b42cc50d45-1-before-ack-01M17T6F59QYZ8SF00FKK1MPGT-8 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 23,
+          "relativeMs": 11468,
+          "delayMs": 1503,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F59QYZ8SF00FKK1MPGT",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 27,
+              "hash": "be743466a7bb8f5e3e3a64d88aa8d02c4385bfa5d730d6489cab6f96a4762daf",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:27.560092787Z checkpoint=before-ack messageId=01M17T6F59QYZ8SF00FKK1MPGT token=37b42cc50d45-1-before-ack-01M17T6F59QYZ8SF00FKK1MPGT-8 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 24,
+          "relativeMs": 11469,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 28,
+              "hash": "d7307b3648b30594e0aa42ddcfae1379961d9ec68ee45403fb5175bf1c8cc9b5",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:27.561783786Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5AD9XAQY0099BV0JF2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 25,
+          "relativeMs": 11470,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 29,
+              "hash": "e7e19a543270fcf6eff86782df9605d479e4c190b4723e41be1d43e73ba40220",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:27.562265767Z checkpoint=after-delivery messageId=01M17T6F5AD9XAQY0099BV0JF2 token=37b42cc50d45-1-after-delivery-01M17T6F5AD9XAQY0099BV0JF2-9 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 26,
+          "relativeMs": 12873,
+          "delayMs": 1403,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 30,
+              "hash": "856e46b006f88bc1a66c631b482cfbc71bef7b90ed85804b9cc7c950c2835c80",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:28.965029557Z checkpoint=after-delivery messageId=01M17T6F5AD9XAQY0099BV0JF2 token=37b42cc50d45-1-after-delivery-01M17T6F5AD9XAQY0099BV0JF2-9 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 27,
+          "relativeMs": 12874,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "duplicate_skipped",
+          "title": "幂等表拦截重复消息",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "duplicate_skipped"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 31,
+              "hash": "8b731e65a6347e4cea4b055436fbf110d76ef690e6050342bb78d9d1b5bf3d9e",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:28.966164830Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5AD9XAQY0099BV0JF2 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.backlog attempt=1 status=duplicate_skipped"
+            }
+          ]
+        },
+        {
+          "sequence": 28,
+          "relativeMs": 12874,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 32,
+              "hash": "a16ae2a176a0cae26498bc6370afe13a9d7433f134a702c97162e8ca750a91a1",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:28.966561742Z checkpoint=before-ack messageId=01M17T6F5AD9XAQY0099BV0JF2 token=37b42cc50d45-1-before-ack-01M17T6F5AD9XAQY0099BV0JF2-10 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 29,
+          "relativeMs": 14277,
+          "delayMs": 1403,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5AD9XAQY0099BV0JF2",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 33,
+              "hash": "22458f5c0acab5e84eae3bbb9ac06f793b4ea49009fddea56387fbcd39c3997b",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:30.369156995Z checkpoint=before-ack messageId=01M17T6F5AD9XAQY0099BV0JF2 token=37b42cc50d45-1-before-ack-01M17T6F5AD9XAQY0099BV0JF2-10 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 30,
+          "relativeMs": 14278,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 34,
+              "hash": "fa1d7c01b5853d72423e36fe745fb11233524fd371188896ec9069bf5d1ba64b",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:30.370568966Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5CQ4F9V000DE7HNYJA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 31,
+          "relativeMs": 14278,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 35,
+              "hash": "219826b92baee78737ee26b47a162ed20821420967b348fb7ff2a7ae3f88eb82",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:30.370987047Z checkpoint=after-delivery messageId=01M17T6F5CQ4F9V000DE7HNYJA token=37b42cc50d45-1-after-delivery-01M17T6F5CQ4F9V000DE7HNYJA-11 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 32,
+          "relativeMs": 15683,
+          "delayMs": 1405,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 36,
+              "hash": "60be33b7a64d7fb53b60ed0cdd4355d86598f4404bfe9827396ca31d5644c577",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:31.775127912Z checkpoint=after-delivery messageId=01M17T6F5CQ4F9V000DE7HNYJA token=37b42cc50d45-1-after-delivery-01M17T6F5CQ4F9V000DE7HNYJA-11 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 33,
+          "relativeMs": 15684,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "duplicate_skipped",
+          "title": "幂等表拦截重复消息",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "duplicate_skipped"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 37,
+              "hash": "a328b99d8bee8570f2dfa3b6cae4b5e93ac7bb24c1a2b7839e3ff0065c21a896",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:31.776105460Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery messageId=01M17T6F5CQ4F9V000DE7HNYJA eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.backlog attempt=1 status=duplicate_skipped"
+            }
+          ]
+        },
+        {
+          "sequence": 34,
+          "relativeMs": 15684,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 38,
+              "hash": "42101369953e5efd19c7fa74fbc28c99c9ae352d3ea5822fadabefe2770e5155",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:31.776542848Z checkpoint=before-ack messageId=01M17T6F5CQ4F9V000DE7HNYJA token=37b42cc50d45-1-before-ack-01M17T6F5CQ4F9V000DE7HNYJA-12 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 35,
+          "relativeMs": 17187,
+          "delayMs": 1503,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "recovery",
+          "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 39,
+              "hash": "d1541c364e0a7267076d3c177871654aad190ce81fa891becad6ca14be11acfd",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:28:33.279335704Z checkpoint=before-ack messageId=01M17T6F5CQ4F9V000DE7HNYJA token=37b42cc50d45-1-before-ack-01M17T6F5CQ4F9V000DE7HNYJA-12 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 36,
+          "relativeMs": 17187,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "recovery",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/consumer.out.txt",
+              "line": 40,
+              "hash": "8efea8b679bd62c86d71776a35edc560770db56e711764470984e87f16dad06e",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:28:33.279836943Z level=INFO service=order-service product=rabbitmq lab=backlog-recovery queue=orders.backlog received=6 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 37,
+          "relativeMs": 20133,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "backlog-recovered",
+          "title": "Broker 状态：backlog-recovered",
+          "track": "recovery",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01M17T6F5CQ4F9V000DE7HNYJA",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.backlog",
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 0,
+              "consumers": 0,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/backlog-recovery/replay.raw.jsonl",
+              "line": 14,
+              "hash": "53f0e785ad66d75bb2cda3af27d75d2ba0940c78aabe88e7148496caa9b3ba80",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:28:36.225Z\",\"checkpoint\":\"backlog-recovered\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.backlog\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.backlog\\\",\\\"routing_key\\\":\\\"orders.backlog\\\"}\\n]\\n\"}}"
+            }
+          ]
+        }
+      ],
+      "branchFrom": {
+        "track": "offline",
+        "step": 21
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 1,
+      "hash": "a0cbcef3abcee2742cfba509cfcde2d03fef27ef6b68f4f8339f8bd044f11ce5",
+      "role": "assert",
+      "content": "PASS confirmed: 6"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 2,
+      "hash": "b22b985b91fc7c51ab80fad6f93727078c119cb7f5653af3867a4ed2740ba9e5",
+      "role": "assert",
+      "content": "PASS backlogDepth: 6"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 3,
+      "hash": "8884c047678d9041541c1926d83aa832a5c72c7bc0a2ebee178c15644d6f6350",
+      "role": "assert",
+      "content": "PASS received: 6"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 4,
+      "hash": "ca30fdb197919275bdeb68804d54c882f9ab01b0f4174e0603add55577409098",
+      "role": "assert",
+      "content": "PASS uniqueMessageIds: 6"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 5,
+      "hash": "d4476a70c637b309fd0f9c87effc9a21f04e794edbb117e7410018a4d2a6645c",
+      "role": "assert",
+      "content": "PASS businessCommitted: 3"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 6,
+      "hash": "7195b3b3ef22bf334b57bc9d7d14779d5af29b5a45c0f5a42b3d99f775247d09",
+      "role": "assert",
+      "content": "PASS businessDuplicatesSkipped: 3"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 7,
+      "hash": "de9bf54983b6e0ed977ce5efc27aaea62881231cff18b9f9688930aad6463c10",
+      "role": "assert",
+      "content": "PASS business_rows: 3"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 8,
+      "hash": "0144513370de65b51289dcd86e62fee8520d3fa98345a4f5b6866e1202ec27a3",
+      "role": "assert",
+      "content": "PASS queueDepthAfter: 0"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 9,
+      "hash": "36e9961837cfd0ed36c70fb70a26adcd3dc7b6ccd2985765856a1157c75482c6",
+      "role": "assert",
+      "content": "PASS consumer.exitCode: 0"
+    },
+    {
+      "file": "demos/rabbitmq/backlog-recovery/assert.out.txt",
+      "line": 10,
+      "hash": "9ceca2d7c97276e5cc6ead25d74e96dac0d99ea445badd3ae22bb96cbe285a56",
+      "role": "assert",
+      "content": "RESULT: all assertions passed"
+    }
+  ],
+  "document": "/playground/backlog-recovery"
+}

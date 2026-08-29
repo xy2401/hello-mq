@@ -1,0 +1,4846 @@
+{
+  "schemaVersion": 1,
+  "id": "consumer-crash",
+  "product": "redis-streams",
+  "title": "PEL 与接管",
+  "model": "ACK 前崩溃与 XCLAIM",
+  "description": "崩溃后条目留在 PEL，由另一消费者 XCLAIM 接管。",
+  "evidenceStatus": "verified",
+  "image": {
+    "reference": "redis:8.2.1",
+    "digest": "sha256:5fa2edb1e408fa8235e6db8fab01d1afaaae96c9403ba67b70feceb8661e8621"
+  },
+  "capture": {
+    "capturedAt": "2026-08-29T22:33:37.777Z",
+    "exitCode": 0,
+    "timedOut": false,
+    "timeoutSeconds": 540,
+    "signal": null,
+    "tools": {
+      "docker": "Docker version 28.0.4, build b8034c0",
+      "compose": "Docker Compose version v2.38.2",
+      "bash": "GNU bash, version 5.2.21(1)-release (x86_64-pc-linux-gnu)",
+      "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
+      "jq": "jq-1.7"
+    },
+    "sourceRevision": "1520297004b487a432b06f37d1ce3db4d7efc74b"
+  },
+  "topology": [
+    {
+      "id": "producer",
+      "label": "Producer",
+      "kind": "producer",
+      "status": "idle"
+    },
+    {
+      "id": "broker",
+      "label": "Stream",
+      "kind": "broker",
+      "status": "idle"
+    },
+    {
+      "id": "queue",
+      "label": "Consumer Group",
+      "kind": "queue",
+      "status": "idle"
+    },
+    {
+      "id": "consumer",
+      "label": "Consumer",
+      "kind": "consumer",
+      "status": "idle"
+    },
+    {
+      "id": "database",
+      "label": "业务数据库",
+      "kind": "database",
+      "status": "idle"
+    }
+  ],
+  "defaultTrack": "normal",
+  "tracks": [
+    {
+      "id": "normal",
+      "label": "正常 XACK",
+      "description": "Docker 采集轨道：正常 XACK",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "broker",
+              "queue": "orders.basic",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/producer.out.txt",
+              "line": 1,
+              "hash": "50f8c1968719d8efae33dd2b59dfba579f77b153e2a1387ba2d9017255487f5f",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:14.127477005Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic entryId=1788042794126-0 durationMs=16 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 3,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "broker",
+              "queue": "orders.basic",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/producer.out.txt",
+              "line": 2,
+              "hash": "9b9919f00c527df1a7de0d5de69a1a5fbf5dd346cad33d67d157c1bdf35e792e",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:14.130467096Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic entryId=1788042794130-0 durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 4,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "broker",
+              "queue": "orders.basic",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/producer.out.txt",
+              "line": 3,
+              "hash": "956962915e4f479679b7edc324b927a65eed8cb4085f96749075c84c75edcf6b",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:14.131159673Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic entryId=1788042794131-0 durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 4,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "normal",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "broker",
+              "queue": "orders.basic",
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/producer.out.txt",
+              "line": 4,
+              "hash": "2a1006124e636e44a41558d788bef84e999fbcbe2acb7bf2efec6b9681337ca5",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:14.131248359Z level=INFO service=order-service product=redis-streams lab=basic destination=orders.basic confirmed=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 731,
+          "delayMs": 727,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 4,
+              "hash": "2d136853f9497c7149f6c703da039ef55bf1c7104d413a04c4f59bc7b4bd2516",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:14.858696038Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic consumer=consumer-1 entryId=1788042794126-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 743,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 5,
+              "hash": "8abe86ec9bf74be2e70612ffa06578494ebdedebc5281a0d872e75ebf4d28dc5",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:14.870529045Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 1335,
+          "delayMs": 592,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 1,
+              "hash": "eaca97feaab4a161b81b98e248daeee07687d70c8191ac4f91d2939d763a6544",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:15.462Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794126-0\\n1788042794126-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794126-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n638\\ninactive\\n638\\n\",\"pel\":\"1788042794126-0\\nconsumer-1\\n743\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 1349,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 6,
+              "hash": "cea6c6500ee2040d480250493656e6e8b0fd6a288c15c00a597b5b3a2b3c4b83",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:15.476878630Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 1359,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 7,
+              "hash": "01ac948d2dc6aa48e0d088a398aba0a2e4d2c49666ecaf316cba335f295eff78",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:15.486161279Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.basic attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 1359,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 8,
+              "hash": "862a33245ef60896c01936b17bdfef0ebc5b0931a3ede764f895a455a492d57e",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:15.486619047Z checkpoint=before-xack messageId=01JMQ000000000000000000001 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000001-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 1986,
+          "delayMs": 627,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 2,
+              "hash": "e6301ae680693c3ac03b9bb1b22850303316466aa865f273c1864db7651213b5",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:16.113Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794126-0\\n1788042794126-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794126-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n1296\\ninactive\\n1296\\n\",\"pel\":\"1788042794126-0\\nconsumer-1\\n1395\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 2060,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 9,
+              "hash": "80d2956a8dc89b5cfc34207ac83fa0d5292c67bda90e812eadea0768f2e1d59e",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:16.187860746Z checkpoint=before-xack messageId=01JMQ000000000000000000001 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000001-2 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 2062,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 10,
+              "hash": "595e5a56efaf122c8588153bf48ad618f8ffa730134c2556cdf087166df0251d",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:16.189291256Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic consumer=consumer-1 entryId=1788042794130-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 2062,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 11,
+              "hash": "c35e06dbc187cfda0bb4eacb7cd0da2f6aaf28efd56c0ed74cb9846fe8bcb95e",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:16.189840635Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 2622,
+          "delayMs": 560,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 3,
+              "hash": "892f47a009945b0e29dff33914f5ee683662879f48f65251e1a3de953a88f6e7",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:16.749Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794130-0\\n1788042794130-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794130-0\\nentries-read\\n2\\nlag\\n1\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n459\\ninactive\\n459\\n\",\"pel\":\"1788042794130-0\\nconsumer-1\\n556\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 2663,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 12,
+              "hash": "943388fd18ec7c6f56a7bc28dd3d86fdfefa13ed1f2d8d1ab15a124051852f60",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:16.790995827Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000002-3 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 2666,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 13,
+              "hash": "86e09d80d01b8c6eda4d6216003c6de3a32b11b18b0354856065d47f4d1804d9",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:16.793203944Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.basic attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 2666,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 14,
+              "hash": "704722c04dffa00cf4e8a52ba8714dfe920ee57198aeac957b07ef674fbcd74c",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:16.793748093Z checkpoint=before-xack messageId=01JMQ000000000000000000002 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000002-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 3262,
+          "delayMs": 596,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 4,
+              "hash": "7f024f82f9b436fefd63a3b67d8671772c02f02ad7f7b90f9252ba14caf8bd0c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:17.389Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794130-0\\n1788042794130-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794130-0\\nentries-read\\n2\\nlag\\n1\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n1101\\ninactive\\n1101\\n\",\"pel\":\"1788042794130-0\\nconsumer-1\\n1196\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 3268,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 15,
+              "hash": "bad772f95d8af49e3931f8d6e520bce2d7da06aeb5a245227f8f009b5d07ede7",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:17.395132622Z checkpoint=before-xack messageId=01JMQ000000000000000000002 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000002-4 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "relativeMs": 3269,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 16,
+              "hash": "d97748ad11ebbd3d2065fde68dd569dd616d231b8e0a0be1c66689f0003dad59",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:17.396545094Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic consumer=consumer-1 entryId=1788042794131-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "relativeMs": 3270,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 17,
+              "hash": "a27150883fa9df88e681ec8ed54545e8a0711fe8920b50214da6ed006c778df6",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:17.397058505Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000003-5 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 22,
+          "relativeMs": 3910,
+          "delayMs": 640,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 5,
+              "hash": "6c1c84ae7c92d72018b63f1a194c2e2ab627381214af0d6f072078d880879765",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:18.037Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794131-0\\n1788042794131-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794131-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n540\\ninactive\\n540\\n\",\"pel\":\"1788042794131-0\\nconsumer-1\\n638\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 23,
+          "relativeMs": 3971,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 18,
+              "hash": "600d2b51a48531ee76a14ccf7e5ebf37cf568330f400a2be706b979dd22f6dd9",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:18.098721620Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=9b1fb94cd2f8-1-after-delivery-01JMQ000000000000000000003-5 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 24,
+          "relativeMs": 3973,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 19,
+              "hash": "46e19845eb5465955fd66c00395193509638b50f07aed015e1730d28609b48c6",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:18.100863563Z level=INFO service=order-service product=redis-streams lab=basic messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.basic attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 25,
+          "relativeMs": 3974,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 20,
+              "hash": "1c96bc81a8f24f1fa23f0212857f02d4c81b1abbd264e6611f188a4982ef3235",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:18.101337931Z checkpoint=before-xack messageId=01JMQ000000000000000000003 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000003-6 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 26,
+          "relativeMs": 4558,
+          "delayMs": 584,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 6,
+              "hash": "b11e9133ae0e1f4378cf312f0346cca41f02c86f15b57fc3e9058adb1c28b9b6",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:18.685Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042794131-0\\n1788042794131-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042794131-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n1192\\ninactive\\n1192\\n\",\"pel\":\"1788042794131-0\\nconsumer-1\\n1286\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 27,
+          "relativeMs": 4575,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "normal",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 21,
+              "hash": "a1568868ab09a96f8b4c8ad2b75044a20efb22b9e283752783057a389af3c921",
+              "role": "consumer",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:18.702490317Z checkpoint=before-xack messageId=01JMQ000000000000000000003 token=9b1fb94cd2f8-1-before-xack-01JMQ000000000000000000003-6 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 28,
+          "relativeMs": 4576,
+          "delayMs": 250,
+          "actor": "consumer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "normal",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/consumer.out.txt",
+              "line": 22,
+              "hash": "edd2ff8441169f69544f4a263de6d4881dbcfa2d1f3c63c8eaabaa6854abf6e5",
+              "role": "consumer",
+              "content": "[consumer] timestamp=2026-08-29T22:33:18.703158489Z level=INFO service=order-service product=redis-streams lab=basic stream=orders.basic consumer=consumer-1 acked=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 29,
+          "relativeMs": 5186,
+          "delayMs": 610,
+          "actor": "inspect-db",
+          "type": "snapshot",
+          "title": "snapshot",
+          "track": "normal",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/inspect-db.out.txt",
+              "line": 4,
+              "hash": "dc35458d3b4d1ffc8e230ef33713f5ce0a1b0bdf8e8e3c509f984cd466f30f08",
+              "role": "inspect-db",
+              "content": "[inspect] timestamp=2026-08-29T22:33:19.313748927Z level=INFO service=order-service product=redis-streams lab=basic business_rows=3 processed_rows=3 status=snapshot"
+            }
+          ]
+        },
+        {
+          "sequence": 30,
+          "relativeMs": 5586,
+          "delayMs": 400,
+          "actor": "broker",
+          "type": "services-started",
+          "title": "Broker 状态：services-started",
+          "track": "normal",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 0
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 7,
+              "hash": "71b373fbdd0aa299b3e8cc856f037185aa61481ef666d7ccdd4b60d954c57598",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:19.713Z\",\"checkpoint\":\"services-started\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":0},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"0\\n\\n\\n\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n0\\nlast-delivered-id\\n1788042794131-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n2210\\ninactive\\n2210\\n\",\"pel\":\"\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 31,
+          "relativeMs": 6844,
+          "delayMs": 1258,
+          "actor": "broker",
+          "type": "final-state",
+          "title": "Broker 状态：final-state",
+          "track": "normal",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.basic",
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 0
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/basic/replay.raw.jsonl",
+              "line": 8,
+              "hash": "a3fbbce6c88509a9a0cbbcd61b1cf3f1bd6e34f4972c36528c1745282569053c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:20.971Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":0},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"0\\n\\n\\n\\n\",\"groups\":\"name\\norders-basic-group\\nconsumers\\n1\\npending\\n0\\nlast-delivered-id\\n1788042794131-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n3469\\ninactive\\n3469\\n\",\"pel\":\"\\n\"}}"
+            }
+          ],
+          "actions": [
+            {
+              "id": "switch-crash",
+              "label": "崩溃进入 PEL",
+              "targetTrack": "crash",
+              "targetStep": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crash",
+      "label": "崩溃进入 PEL",
+      "description": "Docker 采集轨道：崩溃进入 PEL",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "broker",
+              "queue": "orders.crash",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/producer.out.txt",
+              "line": 1,
+              "hash": "ac26982320d01995ec72a6faf7894cf08e7303d088350d314652bb51711d06e9",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:28.157469465Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash entryId=1788042808156-0 durationMs=15 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 3,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "broker",
+              "queue": "orders.crash",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/producer.out.txt",
+              "line": 2,
+              "hash": "e619bebc5a0c70d5f305f109ccc819aedb8bf2b6a1988cf386d4153fbf6a2422",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:28.160508708Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.crash entryId=1788042808160-0 durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 4,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "confirmed",
+          "title": "Broker 已确认发布",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "idle"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "broker",
+              "queue": "orders.crash",
+              "status": "confirmed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/producer.out.txt",
+              "line": 3,
+              "hash": "64114156a292bb5d6b3e51ddd712ae2675c7ead185ace8d532de42154c09f27d",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:28.161290272Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.crash entryId=1788042808161-0 durationMs=0 status=confirmed"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 4,
+          "delayMs": 250,
+          "actor": "producer",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "crash",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "broker",
+              "queue": "orders.crash",
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/producer.out.txt",
+              "line": 4,
+              "hash": "a88a99b61650129be736ff4c2e7f2e8644a70554119d74df3cfe82c8a7f8e64d",
+              "role": "producer",
+              "content": "[producer] timestamp=2026-08-29T22:33:28.161381082Z level=INFO service=order-service product=redis-streams lab=consumer-crash destination=orders.crash confirmed=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 784,
+          "delayMs": 780,
+          "actor": "consumer-run1",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run1.out.txt",
+              "line": 4,
+              "hash": "b7f70d7a3752a7833437f3570be6dd35fc43b6585684d8d11d00538ebd614c4f",
+              "role": "consumer-run1",
+              "content": "[consumer] timestamp=2026-08-29T22:33:28.941301501Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash consumer=consumer-1 entryId=1788042808156-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 796,
+          "delayMs": 250,
+          "actor": "consumer-run1",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run1.out.txt",
+              "line": 5,
+              "hash": "9de82702eddbceef57f237b95284939db38de49334a39f14415260fa46d1318a",
+              "role": "consumer-run1",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:28.953141783Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=609c871d3fdf-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 1327,
+          "delayMs": 531,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 1,
+              "hash": "2d2151a12c406c76b517d1ea84cbd72d7dea2384f7d9758f9b3bcffab813a02c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:29.484Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808156-0\\n1788042808156-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042808156-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n592\\ninactive\\n592\\n\",\"pel\":\"1788042808156-0\\nconsumer-1\\n688\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 1402,
+          "delayMs": 250,
+          "actor": "consumer-run1",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run1.out.txt",
+              "line": 6,
+              "hash": "210aafb2fc82cb590907760197857a45112412e6b9f7da4a625572bc1e8482c4",
+              "role": "consumer-run1",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:29.559529169Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=609c871d3fdf-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 1411,
+          "delayMs": 250,
+          "actor": "consumer-run1",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run1.out.txt",
+              "line": 7,
+              "hash": "3f93085915cf0086f7fe9c966aefc1c2ff1c7312a8b751105ef3c236c489a4ee",
+              "role": "consumer-run1",
+              "content": "[consumer] timestamp=2026-08-29T22:33:29.568924922Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 1412,
+          "delayMs": 250,
+          "actor": "consumer-run1",
+          "type": "crash_injected",
+          "title": "Consumer 在确认前崩溃",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run1.out.txt",
+              "line": 8,
+              "hash": "3368b5dc1f839c184a4b2af95fb93fe729ef76cc23deea5361c07ad2c4ad64bd",
+              "role": "consumer-run1",
+              "content": "[consumer] timestamp=2026-08-29T22:33:29.569050056Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash status=crash_injected"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 2126,
+          "delayMs": 714,
+          "actor": "broker",
+          "type": "pending-after-crash",
+          "title": "Broker 状态：pending-after-crash",
+          "track": "crash",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 2,
+              "hash": "164a0e8a11f625b918b6e07347a3f577cea38d8e50daeb959a6636899c67aa55",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:30.283Z\",\"checkpoint\":\"pending-after-crash\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808156-0\\n1788042808156-0\\nconsumer-1\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n1\\npending\\n1\\nlast-delivered-id\\n1788042808156-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n1\\nidle\\n1385\\ninactive\\n1385\\n\",\"pel\":\"1788042808156-0\\nconsumer-1\\n1486\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 3521,
+          "delayMs": 1395,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 3,
+              "hash": "e3447c530889dd6b3bf371c7f7fe26bbe3137f907590dea8703e330f9084585a",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:31.678Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808156-0\\n1788042808156-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808156-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n2777\\ninactive\\n2777\\nname\\nconsumer-2\\npending\\n1\\nidle\\n661\\ninactive\\n661\\n\",\"pel\":\"1788042808156-0\\nconsumer-2\\n766\\n2\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 4165,
+          "delayMs": 644,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 4,
+              "hash": "d1dde5e212358b464bf441068d442795ee91077ff5143dd1c84f1b5116dbf5d7",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:32.322Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808156-0\\n1788042808156-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808156-0\\nentries-read\\n1\\nlag\\n2\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n3426\\ninactive\\n3426\\nname\\nconsumer-2\\npending\\n1\\nidle\\n1310\\ninactive\\n1310\\n\",\"pel\":\"1788042808156-0\\nconsumer-2\\n1410\\n2\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 4810,
+          "delayMs": 645,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 5,
+              "hash": "2805b8a87e65f48cdfa095b95548e77397b9b1dbfc96e30949b140ee4b48be4d",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:32.967Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808160-0\\n1788042808160-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808160-0\\nentries-read\\n2\\nlag\\n1\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n4074\\ninactive\\n4074\\nname\\nconsumer-2\\npending\\n1\\nidle\\n466\\ninactive\\n466\\n\",\"pel\":\"1788042808160-0\\nconsumer-2\\n563\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 5446,
+          "delayMs": 636,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 6,
+              "hash": "45030dc75fb4d7e1edb6f8716c7e3f363cbb42f056abff3f294bcf0b1894797c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:33.603Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808160-0\\n1788042808160-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808160-0\\nentries-read\\n2\\nlag\\n1\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n4707\\ninactive\\n4707\\nname\\nconsumer-2\\npending\\n1\\nidle\\n1099\\ninactive\\n1099\\n\",\"pel\":\"1788042808160-0\\nconsumer-2\\n1200\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 6083,
+          "delayMs": 637,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 7,
+              "hash": "3bb65e0d895d9620b8e5063f88d62c963950e71a07aa81defd4ffa19925ce49f",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:34.240Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808161-0\\n1788042808161-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808161-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n5343\\ninactive\\n5343\\nname\\nconsumer-2\\npending\\n1\\nidle\\n526\\ninactive\\n526\\n\",\"pel\":\"1788042808161-0\\nconsumer-2\\n628\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 6725,
+          "delayMs": 642,
+          "actor": "broker",
+          "type": "before-xack",
+          "title": "Broker 状态：before-xack",
+          "track": "crash",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "crash_injected"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 8,
+              "hash": "ede60ed98b21af902a712e0f1da34a730ae5474432f4aba1e5bd3c22c740eedf",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:34.882Z\",\"checkpoint\":\"before-xack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":1},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"1\\n1788042808161-0\\n1788042808161-0\\nconsumer-2\\n1\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n1\\nlast-delivered-id\\n1788042808161-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n5990\\ninactive\\n5990\\nname\\nconsumer-2\\npending\\n1\\nidle\\n1173\\ninactive\\n1173\\n\",\"pel\":\"1788042808161-0\\nconsumer-2\\n1269\\n1\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 7311,
+          "delayMs": 586,
+          "actor": "inspect-db",
+          "type": "snapshot",
+          "title": "snapshot",
+          "track": "crash",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 1
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/inspect-db.out.txt",
+              "line": 4,
+              "hash": "770988db0e43015b0a99594c677f42cd0464e3cc401d52e708c5a330b06c0c40",
+              "role": "inspect-db",
+              "content": "[inspect] timestamp=2026-08-29T22:33:35.468387327Z level=INFO service=order-service product=redis-streams lab=consumer-crash business_rows=3 processed_rows=3 status=snapshot"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 9233,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "final-state",
+          "title": "Broker 状态：final-state",
+          "track": "crash",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "failed"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-1",
+              "status": "snapshot"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 0
+            },
+            "business": {
+              "businessRows": 3
+            }
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 10,
+              "hash": "12052697d22e81136f1314021ce7d6962fad67183376de431138b4776d1b0125",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:37.390Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":0},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"0\\n\\n\\n\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n0\\nlast-delivered-id\\n1788042808161-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n8496\\ninactive\\n8496\\nname\\nconsumer-2\\npending\\n0\\nidle\\n3679\\ninactive\\n3679\\n\",\"pel\":\"\\n\"}}"
+            }
+          ],
+          "actions": [
+            {
+              "id": "switch-claim",
+              "label": "XCLAIM 接管",
+              "targetTrack": "claim",
+              "targetStep": 0
+            }
+          ]
+        }
+      ],
+      "branchFrom": {
+        "track": "normal",
+        "step": 31
+      }
+    },
+    {
+      "id": "claim",
+      "label": "XCLAIM 接管",
+      "description": "Docker 采集轨道：XCLAIM 接管",
+      "events": [
+        {
+          "sequence": 0,
+          "relativeMs": 0,
+          "delayMs": 0,
+          "actor": "consumer-run2",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 4,
+              "hash": "651697aad7930d07937d8d9b966eb23d7044c77c875898283ce408d616e68835",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:31.065333779Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash consumer=consumer-2 entryId=1788042808156-0 attempt=1 redelivered=true status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 1,
+          "relativeMs": 15,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 5,
+              "hash": "37d058091798946ff31e54521d72e58c642b3066b25afe0186218f15021f00af",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:31.080281203Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 2,
+          "relativeMs": 622,
+          "delayMs": 607,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 6,
+              "hash": "b1513f222de1d27e4c146b9e707e287d42894dbc5a0d29fe81f4a1806aae3ab6",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:31.687475064Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 3,
+          "relativeMs": 631,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "duplicate_skipped",
+          "title": "幂等表拦截重复消息",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "duplicate_skipped"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 7,
+              "hash": "338840ebbd7a1bd3b051e184b015db6242b04778d232ccdf5e3646c6de7a7aa7",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:31.696102778Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.crash attempt=1 status=duplicate_skipped"
+            }
+          ]
+        },
+        {
+          "sequence": 4,
+          "relativeMs": 631,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 8,
+              "hash": "03244a463604f343a11dbac041f4be73b15ecce53fbb6afd75a1ccab0e8bdefe",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:31.696563390Z checkpoint=before-xack messageId=01JMQ000000000000000000001 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000001-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 5,
+          "relativeMs": 1332,
+          "delayMs": 701,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": true,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 9,
+              "hash": "647c8a94a3f77d7f865bfe9771c7245e4af6177ea6be8e6fde20e2d7dd9b8eb1",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:32.397838144Z checkpoint=before-xack messageId=01JMQ000000000000000000001 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000001-2 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 1335,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 10,
+              "hash": "ed588a1fa7b39399f3d2212cda09ac580d0a1c7c4207af406685fc8824e848f1",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:32.400872798Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.crash consumer=consumer-2 entryId=1788042808160-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 1336,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 11,
+              "hash": "4ba6863c12e87fbc0d89ba7b714d3a987891e812b9f9ba492f0113d5d5abe02c",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:32.401346235Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 1937,
+          "delayMs": 601,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 12,
+              "hash": "0b535f2ec7b5a506c0cc722292a85e762f37d7b1f26affadb99d18eee7bfb2dd",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:33.002487734Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000002-3 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 9,
+          "relativeMs": 1940,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "business_committed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 13,
+              "hash": "8c00aadbc8b6c8013adfcd33e4df7e62d00a581be4172e7bdd30cd6b80334311",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:33.005808135Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.crash attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 10,
+          "relativeMs": 1941,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 14,
+              "hash": "766b7c91d5a3bbd28df38d4e7c52c0dfffb32e397169ee84cee0da78c0da26c7",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:33.006190501Z checkpoint=before-xack messageId=01JMQ000000000000000000002 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000002-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 11,
+          "relativeMs": 2542,
+          "delayMs": 601,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 15,
+              "hash": "0f5a621e82e780c2a31eb77744ada27c7d4a45c314f6b90c03aa1f7ef3438f76",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:33.607347373Z checkpoint=before-xack messageId=01JMQ000000000000000000002 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000002-4 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 12,
+          "relativeMs": 2543,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 16,
+              "hash": "484a2ca0b3c31b98736fc15807777b06538b20e73dfc750a8a18ebec88166dfe",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:33.608688005Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.crash consumer=consumer-2 entryId=1788042808161-0 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 13,
+          "relativeMs": 2544,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 17,
+              "hash": "6e795e1843491e6c3086bf4da8d5a6b088d4ff7ad8b77ee59326da0af55984a0",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:33.609111558Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000003-5 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 14,
+          "relativeMs": 3245,
+          "delayMs": 701,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 18,
+              "hash": "fd79e89733bc84161c9e0f3cc0c437bd6120c0a02ab8235b1e9123b993b3f79d",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:34.310319237Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=e5e59ce83daf-1-after-delivery-01JMQ000000000000000000003-5 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 15,
+          "relativeMs": 3247,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "business_committed"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 19,
+              "hash": "7b9dab6c28b72399cc11514ffe03af14756d4e4a0f7d24150d504b6e23d183cf",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:34.312563193Z level=INFO service=order-service product=redis-streams lab=consumer-crash messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.crash attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 16,
+          "relativeMs": 3248,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 20,
+              "hash": "c66e427130337be04b1c197111b1e3e69147e1deb1cb3979bd0f651bc6219ac3",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:34.313040437Z checkpoint=before-xack messageId=01JMQ000000000000000000003 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000003-6 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 3849,
+          "delayMs": 601,
+          "actor": "consumer-run2",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "claim",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "released"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 21,
+              "hash": "3fcab684e539e5e1e1d4b22902ec7edba5762d0174117803e1736855407db3bb",
+              "role": "consumer-run2",
+              "content": "[replay-gate] timestamp=2026-08-29T22:33:34.914119085Z checkpoint=before-xack messageId=01JMQ000000000000000000003 token=e5e59ce83daf-1-before-xack-01JMQ000000000000000000003-6 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 3849,
+          "delayMs": 250,
+          "actor": "consumer-run2",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "claim",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "done"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/consumer-run2.out.txt",
+              "line": 22,
+              "hash": "3559ac14478c428300d26d69569ab78f5663c8b50225d467b832c52bc876dfa0",
+              "role": "consumer-run2",
+              "content": "[consumer] timestamp=2026-08-29T22:33:34.914774442Z level=INFO service=order-service product=redis-streams lab=consumer-crash stream=orders.crash consumer=consumer-2 acked=3 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 5679,
+          "delayMs": 1600,
+          "actor": "broker",
+          "type": "pending-claimed-and-acked",
+          "title": "Broker 状态：pending-claimed-and-acked",
+          "track": "claim",
+          "messageId": "none",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "idle"
+              },
+              {
+                "id": "broker",
+                "label": "Stream",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Consumer Group",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.crash",
+              "consumer": "consumer-2",
+              "status": "done"
+            },
+            "metrics": {
+              "streamLength": 3,
+              "pending": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/redis-streams/consumer-crash/replay.raw.jsonl",
+              "line": 9,
+              "hash": "6cfd538ff8a9389644993c887cfcef546d6c63cef052dda6fe74c972b8e2a9a9",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-08-29T22:33:36.744Z\",\"checkpoint\":\"pending-claimed-and-acked\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"streamLength\":3,\"pending\":0},\"commands\":{\"xlen\":\"3\\n\",\"xpending\":\"0\\n\\n\\n\\n\",\"groups\":\"name\\norders-crash-group\\nconsumers\\n2\\npending\\n0\\nlast-delivered-id\\n1788042808161-0\\nentries-read\\n3\\nlag\\n0\\n\",\"consumers\":\"name\\nconsumer-1\\npending\\n0\\nidle\\n7839\\ninactive\\n7839\\nname\\nconsumer-2\\npending\\n0\\nidle\\n3022\\ninactive\\n3022\\n\",\"pel\":\"\\n\"}}"
+            }
+          ]
+        }
+      ],
+      "branchFrom": {
+        "track": "crash",
+        "step": 18
+      }
+    }
+  ],
+  "assertions": [
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 1,
+      "hash": "949c42344e787a005877d32994e6a83503dc002bbfb0fd872a2b58a5d411270b",
+      "role": "assert",
+      "content": "PASS pendingAfterCrash: 1"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 2,
+      "hash": "21be8cda30117f6ba51073aef2019cfed2f73796d0d71c2503080db2a967608b",
+      "role": "assert",
+      "content": "PASS crashExitCode: 137"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 3,
+      "hash": "9d7c8f4400b823dca026a462f0e533b774f12d4512a3a655e4ca8bc1e8a7d6aa",
+      "role": "assert",
+      "content": "PASS crashAfterBusinessCommit: 1"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 4,
+      "hash": "415fa5061f92bfa8062675fb0e23a213fe73455e9a723238416d85731460a8f2",
+      "role": "assert",
+      "content": "PASS receivedTotal: 4"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 5,
+      "hash": "b0811be1f2bf64855629dc5cd676e98d0dd5dd9218da6b73b1ced950e6fa10e7",
+      "role": "assert",
+      "content": "PASS redeliveredCount: 1"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 6,
+      "hash": "bbf5409a36b810bc59c48a4bf917439bb6edd7caa425499c9875009abd71d480",
+      "role": "assert",
+      "content": "PASS duplicatesObserved: 1"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 7,
+      "hash": "a5f3fcc8e9fdeb1482c3148bf02d8326671bcdc68f8b21cbddb27264487a77a2",
+      "role": "assert",
+      "content": "PASS duplicatesApplied: 0"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 8,
+      "hash": "da1bdcb561ec6f972364800edc29cf351b7edd9446cb437f554d98c34501810b",
+      "role": "assert",
+      "content": "PASS uniqueMessageIds: 3"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 9,
+      "hash": "de9bf54983b6e0ed977ce5efc27aaea62881231cff18b9f9688930aad6463c10",
+      "role": "assert",
+      "content": "PASS business_rows: 3"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 10,
+      "hash": "5d3923bc42d404a3b0b58a25ec1832ea1c828c161945969e00232d78d321084c",
+      "role": "assert",
+      "content": "PASS streamLengthAfter: 3"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 11,
+      "hash": "3c61935a8c698cc6a52c66a6c52e1067a6d97b42be4a1dead4930dac76ffe4ce",
+      "role": "assert",
+      "content": "PASS pendingAfter: 0"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 12,
+      "hash": "0bcdfa44d0884862f5553c535e9b0ff511b93864cbdcf2454925ad28e69bea64",
+      "role": "assert",
+      "content": "PASS consumer-run2.exitCode: 0"
+    },
+    {
+      "file": "demos/redis-streams/consumer-crash/assert.out.txt",
+      "line": 13,
+      "hash": "9ceca2d7c97276e5cc6ead25d74e96dac0d99ea445badd3ae22bb96cbe285a56",
+      "role": "assert",
+      "content": "RESULT: all assertions passed"
+    }
+  ],
+  "document": "/playground/consumer-crash"
+}
