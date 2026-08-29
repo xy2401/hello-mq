@@ -190,4 +190,29 @@ const versions = {
   maven: tool('mvn', ['--version']),
   jq: tool('jq'),
 }
-for (const entry of selected) await collect(entry, versions)
+const collectionStartedAt = new Date().toISOString()
+const results = []
+for (const entry of selected) {
+  try {
+    await collect(entry, versions)
+    results.push({ scenario: `${entry.product}/${entry.id}`, status: 'passed' })
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error)
+    console.error(`FAILED ${entry.product}/${entry.id}: ${message}`)
+    results.push({ scenario: `${entry.product}/${entry.id}`, status: 'failed', error: message })
+  }
+}
+const summary = {
+  schemaVersion: 1,
+  startedAt: collectionStartedAt,
+  finishedAt: new Date().toISOString(),
+  requested: filter,
+  tools: versions,
+  passed: results.filter((result) => result.status === 'passed').length,
+  failed: results.filter((result) => result.status === 'failed').length,
+  results,
+}
+fs.writeFileSync(path.join(ROOT, 'demos', 'playground-collection-summary.json'), `${JSON.stringify(summary, null, 2)}\n`)
+console.log(`\nCollection summary: passed=${summary.passed} failed=${summary.failed}`)
+for (const result of results) console.log(`${result.status === 'passed' ? 'PASS' : 'FAIL'} ${result.scenario}${result.error ? `: ${result.error}` : ''}`)
+if (summary.failed > 0) process.exitCode = 1

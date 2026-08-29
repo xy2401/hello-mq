@@ -224,6 +224,23 @@ function checkDemoBuildEntry() {
   ok('demo Maven entry resolves from LAB_DIR')
 }
 
+function checkCrashRecoveryPhases() {
+  for (const product of ['rabbitmq', 'redis-streams']) {
+    const file = path.join(ROOT, 'demos', product, 'consumer-crash', 'run.sh')
+    const text = fs.readFileSync(file, 'utf8')
+    if (/^compose up -d\s*$/m.test(text)) {
+      fail(`${product}/consumer-crash must not restart all services during recovery`)
+    }
+    if (!text.includes('compose up -d --no-deps consumer-run2')) {
+      fail(`${product}/consumer-crash recovery must start only consumer-run2`)
+    }
+    if (!text.includes('compose up -d --no-deps inspect-db')) {
+      fail(`${product}/consumer-crash inspection must not restart consumer-run1`)
+    }
+  }
+  ok('crash recovery phases do not restart the crashed consumer')
+}
+
 checkMarkdownLinks()
 checkNavLinks()
 checkEnvVersions()
@@ -234,6 +251,7 @@ checkBrokerTemplates()
 checkSourcesCheckedAt()
 checkScriptSyntax()
 checkDemoBuildEntry()
+checkCrashRecoveryPhases()
 
 if (failures.length > 0) {
   console.error(`\n[check] ${failures.length} problem(s) found`)

@@ -45,14 +45,43 @@ jobs:
         run: npm ci
 
       - name: 顺序采集 11 个交互回放场景
+        id: collect
+        continue-on-error: true
         run: npm run collect:playground
 
-      - name: 严格校验证据并构建文档
+      - name: 严格校验证据
+        id: verify
+        if: always()
+        continue-on-error: true
+        run: npm run check:playground
+
+      - name: 构建文档
+        id: docs
+        if: always()
+        continue-on-error: true
+        run: npm run docs:build
+
+      - name: 汇总采集结果
+        if: always()
+        shell: bash
         run: |
-          npm run check:playground
-          npm run docs:build
+          echo "## MQ Playground 采集结果" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 采集：${{ steps.collect.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 证据校验：${{ steps.verify.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "- 文档构建：${{ steps.docs.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f demos/playground-collection-summary.json ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat demos/playground-collection-summary.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "采集器未生成汇总文件，请查看步骤日志和诊断制品。" >> "$GITHUB_STEP_SUMMARY"
+          fi
 
       - name: 提交规范化证据
+        if: steps.collect.outcome == 'success' && steps.verify.outcome == 'success' && steps.docs.outcome == 'success'
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
@@ -94,4 +123,9 @@ jobs:
             demos/redis-streams/*/capture.json
             demos/redis-streams/*/replay.raw.jsonl
             demos/redis-streams/*/replay.json
+            demos/playground-collection-summary.json
           if-no-files-found: warn
+
+      - name: 传播采集失败
+        if: always() && (steps.collect.outcome != 'success' || steps.verify.outcome != 'success' || steps.docs.outcome != 'success')
+        run: exit 1

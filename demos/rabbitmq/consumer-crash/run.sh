@@ -9,7 +9,9 @@ ensure_jar rabbitmq
 compose up -d consumer-run1
 compose wait consumer-run1 || true
 replay_checkpoint consumer-crashed-before-ack
-compose up -d
+compose up -d --no-deps consumer-run2
+compose wait consumer-run2 || true
+compose up -d --no-deps inspect-db
 compose wait inspect-db || true
 collect_logs setup producer consumer-run1 consumer-run2 inspect-db
 

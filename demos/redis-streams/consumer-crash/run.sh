@@ -12,7 +12,9 @@ compose wait consumer-run1 || true
 assert_eq "pendingAfterCrash" "$(compose exec -T redis redis-cli XPENDING orders.crash orders-crash-group | head -n 1)" 1
 replay_checkpoint pending-after-crash
 
-compose up -d
+compose up -d --no-deps consumer-run2
+compose wait consumer-run2 || true
+compose up -d --no-deps inspect-db
 compose wait inspect-db || true
 collect_logs setup producer consumer-run1 consumer-run2 inspect-db
 
