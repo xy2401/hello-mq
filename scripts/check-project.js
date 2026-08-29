@@ -254,8 +254,18 @@ function checkLabTimeouts() {
   if (!collector.includes('HELLO_MQ_SCENARIO_TIMEOUT_SECONDS') || !collector.includes('captureTimeoutDiagnostics')) {
     fail('playground collector must enforce a scenario timeout and preserve diagnostics')
   }
-  if (!smoke.includes('timeout --signal=TERM --kill-after=45s 660s bash')) {
+  if (!smoke.includes('timeout --signal=TERM --kill-after=45s 660s bash')
+    || !smoke.includes('timeout --signal=TERM --kill-after=45s 1260s npm run collect:playground')) {
     fail('smoke workflow must bound each lab independently')
+  }
+  if (!common.includes('capture_failure_diagnostics') || !common.includes('failure-compose.out.txt')) {
+    fail('failed labs must preserve bounded Docker Compose diagnostics before cleanup')
+  }
+  if (!smoke.includes('publish-evidence:')
+    || !smoke.includes('npm run check:playground')
+    || !smoke.includes('git push origin HEAD:main')
+    || !smoke.includes('refresh MQ playground evidence [skip ci]')) {
+    fail('verified replay evidence must be checked and committed directly to main')
   }
   if (!common.includes('wait_healthy()') || !common.includes('Waiting for %s health')) {
     fail('run-common.sh must report bounded healthcheck progress for long-running services')

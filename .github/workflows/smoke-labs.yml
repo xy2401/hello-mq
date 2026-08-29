@@ -10,9 +10,10 @@ on:
 jobs:
   labs:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     env:
       HELLO_MQ_COMPOSE_TIMEOUT_SECONDS: '540'
+      HELLO_MQ_SCENARIO_TIMEOUT_SECONDS: '540'
     strategy:
       fail-fast: false
       max-parallel: 2
@@ -20,48 +21,70 @@ jobs:
         include:
           - product: rabbitmq
             lab: basic
+            capture: false
           - product: rabbitmq
             lab: routing
+            capture: true
           - product: rabbitmq
             lab: consumer-crash
+            capture: true
           - product: rabbitmq
             lab: retry-dlq
+            capture: true
           - product: rabbitmq
             lab: backlog-recovery
+            capture: true
           - product: kafka
             lab: basic
+            capture: true
           - product: kafka
             lab: consumer-group
+            capture: true
           - product: kafka
             lab: ordering-replay
+            capture: true
           - product: kafka
             lab: idempotence-transaction
+            capture: true
           - product: rocketmq
             lab: basic
+            capture: false
           - product: rocketmq
             lab: fifo-delay
+            capture: false
           - product: rocketmq
             lab: transaction
+            capture: false
           - product: rocketmq
             lab: retry-dlq
+            capture: false
           - product: pulsar
             lab: basic
+            capture: false
           - product: pulsar
             lab: subscriptions
+            capture: false
           - product: pulsar
             lab: redelivery-replay
+            capture: false
           - product: nats
             lab: core-pubsub
+            capture: false
           - product: nats
             lab: jetstream-replay
+            capture: false
           - product: redis-streams
             lab: basic
+            capture: false
           - product: redis-streams
             lab: consumer-crash
+            capture: true
           - product: artemis
             lab: basic
+            capture: false
           - product: artemis
             lab: retry-dlq
+            capture: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -69,10 +92,24 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
+      - uses: actions/setup-node@v4
+        if: matrix.capture
+        with:
+          node-version: '22'
+          cache: npm
+      - name: install evidence tooling
+        if: matrix.capture
+        run: npm ci
       - name: run lab
         id: lab
         continue-on-error: true
-        run: timeout --signal=TERM --kill-after=45s 660s bash "demos/${{ matrix.product }}/${{ matrix.lab }}/run.sh"
+        shell: bash
+        run: |
+          if [ "${{ matrix.capture }}" = "true" ]; then
+            timeout --signal=TERM --kill-after=45s 1260s npm run collect:playground -- --scenario "${{ matrix.product }}/${{ matrix.lab }}"
+          else
+            timeout --signal=TERM --kill-after=45s 660s bash "demos/${{ matrix.product }}/${{ matrix.lab }}/run.sh"
+          fi
 
       - name: summarize lab
         if: always()
@@ -101,9 +138,75 @@ jobs:
             demos/${{ matrix.product }}/${{ matrix.lab }}/
           if-no-files-found: ignore
 
+      - name: stage replay evidence
+        if: steps.lab.outcome == 'success' && matrix.capture
+        shell: bash
+        run: |
+          mkdir -p evidence-staging
+          scenarios=("${{ matrix.lab }}")
+          if [ "${{ matrix.lab }}" = "consumer-crash" ]; then
+            scenarios+=(basic)
+          fi
+          for scenario in "${scenarios[@]}"; do
+            find "demos/${{ matrix.product }}/$scenario" -maxdepth 1 -type f \
+              \( -name '*.out.txt' -o -name 'replay.raw.jsonl' -o -name 'capture.json' -o -name 'replay.json' \) \
+              -exec cp --parents {} evidence-staging/ \;
+          done
+
+      - name: upload replay evidence
+        if: steps.lab.outcome == 'success' && matrix.capture
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-evidence-${{ matrix.product }}-${{ matrix.lab }}
+          path: evidence-staging/
+          if-no-files-found: error
+
       - name: propagate lab failure
         if: always() && steps.lab.outcome != 'success'
         run: exit 1
+
+  publish-evidence:
+    name: commit verified replay evidence
+    needs: labs
+    if: success()
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - name: download replay evidence
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lab-evidence-*
+          path: collected-evidence
+          merge-multiple: true
+      - name: restore and verify evidence
+        shell: bash
+        run: |
+          test -d collected-evidence/demos
+          cp -R collected-evidence/demos/. demos/
+          npm ci
+          npm run check:playground
+      - name: commit evidence to main
+        shell: bash
+        run: |
+          git add demos/rabbitmq demos/kafka demos/redis-streams
+          if git diff --cached --quiet; then
+            echo "证据内容未变化，无需提交。" >> "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "chore: refresh MQ playground evidence [skip ci]"
+          git pull --rebase origin main
+          git push origin HEAD:main
 
   diagnostics:
     name: combined failure diagnostics
