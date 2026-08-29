@@ -104,3 +104,36 @@ jobs:
       - name: propagate lab failure
         if: always() && steps.lab.outcome != 'success'
         run: exit 1
+
+  diagnostics:
+    name: combined failure diagnostics
+    needs: labs
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - name: download failed lab artifacts
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lab-diagnostics-*
+          path: smoke-diagnostics
+
+      - name: summarize available diagnostics
+        if: always()
+        shell: bash
+        run: |
+          echo "## Smoke Lab 失败诊断" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          if [ -d smoke-diagnostics ]; then
+            find smoke-diagnostics -mindepth 1 -maxdepth 1 -type d -printf -- '- `%f`\n' | sort >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "本次没有失败诊断制品。" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: upload combined diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: smoke-labs-diagnostics-${{ github.run_id }}
+          path: smoke-diagnostics/
+          if-no-files-found: ignore

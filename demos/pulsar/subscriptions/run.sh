@@ -29,10 +29,10 @@ wait_subscribed consumer-ex-1
 collect_logs setup
 
 # --- 阶段 1：Exclusive。ex-1 独占消费；ex-2 在 ex-1 在线时加入必须被拒绝（非零退出）。
-compose up -d producer-exclusive
+compose up -d --no-deps producer-exclusive
 compose wait producer-exclusive || true
 sleep 4
-compose up -d consumer-ex-2
+compose up -d --no-deps consumer-ex-2
 compose wait consumer-ex-2 || true
 ex2_code="$(service_exit_code consumer-ex-2)"
 assert_eq "exclusiveSecondConsumerRejected" "$([ "$ex2_code" != "0" ] && echo true || echo false)" true
@@ -42,10 +42,10 @@ assert_eq "produced" "$(count_log producer-exclusive 'status=produced')" 3
 assert_eq "exclusiveReceived" "$(count_log consumer-ex-1 'status=received')" 3
 
 # --- 阶段 2：Shared。两个消费者瓜分 3 条消息，每条恰被消费一次。
-compose up -d consumer-shared-1 consumer-shared-2
+compose up -d --no-deps consumer-shared-1 consumer-shared-2
 wait_subscribed consumer-shared-1
 wait_subscribed consumer-shared-2
-compose up -d producer-shared
+compose up -d --no-deps producer-shared
 compose wait producer-shared || true
 compose wait consumer-shared-1 consumer-shared-2 || true
 collect_logs consumer-shared-1 consumer-shared-2
@@ -55,10 +55,11 @@ assert_eq "sharedS1GotMessages" "$(gt0 "$(count_log consumer-shared-1 'status=re
 assert_eq "sharedS2GotMessages" "$(gt0 "$(count_log consumer-shared-2 'status=received')")" true
 
 # --- 阶段 3：Failover。主（priority=10）收全量、备份 0 条；主备均退出后备份提升为主收新一轮全量。
-compose up -d consumer-failover-primary consumer-failover-replica
+compose up -d --no-deps consumer-failover-primary
 wait_subscribed consumer-failover-primary
+compose up -d --no-deps consumer-failover-replica
 wait_subscribed consumer-failover-replica
-compose up -d producer-failover
+compose up -d --no-deps producer-failover
 compose wait producer-failover || true
 compose wait consumer-failover-primary || true
 compose wait consumer-failover-replica || true
@@ -66,19 +67,19 @@ collect_logs consumer-failover-primary consumer-failover-replica
 assert_eq "failoverPrimaryReceived" "$(count_log consumer-failover-primary 'status=received')" 3
 assert_eq "failoverReplicaReceived" "$(count_log consumer-failover-replica 'status=received')" 0
 
-compose up -d consumer-failover-promoted
+compose up -d --no-deps consumer-failover-promoted
 wait_subscribed consumer-failover-promoted
-compose up -d producer-failover-promoted
+compose up -d --no-deps producer-failover-promoted
 compose wait producer-failover-promoted || true
 compose wait consumer-failover-promoted || true
 collect_logs consumer-failover-promoted
 assert_eq "failoverPromotedReceived" "$(count_log consumer-failover-promoted 'status=received')" 3
 
 # --- 阶段 4：Key_Shared。两个 key 各 3 条，同 key 粘连同一消费者。
-compose up -d consumer-keyshared-1 consumer-keyshared-2
+compose up -d --no-deps consumer-keyshared-1 consumer-keyshared-2
 wait_subscribed consumer-keyshared-1
 wait_subscribed consumer-keyshared-2
-compose up -d producer-keyshared
+compose up -d --no-deps producer-keyshared
 compose wait producer-keyshared || true
 compose wait consumer-keyshared-1 consumer-keyshared-2 || true
 collect_logs consumer-keyshared-1 consumer-keyshared-2

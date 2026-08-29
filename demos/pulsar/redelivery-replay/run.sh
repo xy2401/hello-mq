@@ -38,7 +38,7 @@ assert_eq "dlqIsPoison" "$(count_log consumer-dlq 'aggregateId=order-poison.*sta
 
 # reset-cursor 到 earliest 后全量回放：回放消费者用新库 + --no-business，只收不写库。
 compose exec -T pulsar bin/pulsar-admin topics reset-cursor persistent://public/default/orders-redelivery \
-  --subscription orders-redeliver-sub --message-id earliest
+  --subscription orders-redeliver-sub --messageId earliest
 compose up -d consumer-replay
 compose wait consumer-replay || true
 collect_logs consumer-replay

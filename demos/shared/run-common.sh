@@ -18,6 +18,7 @@ case "$COMPOSE_TIMEOUT_SECONDS" in
   0) printf 'HELLO_MQ_COMPOSE_TIMEOUT_SECONDS must be greater than zero\n' >&2; exit 2 ;;
 esac
 : > "$ASSERT_FILE"
+rm -f "$LAB_DIR/failure-compose.out.txt"
 
 # replay_checkpoint <名称>：仅在证据采集模式下暂停宿主编排脚本。
 # collector 读取真实 Broker 状态后创建同名 .release 文件；30 秒无响应即失败，避免实验永久挂起。
@@ -102,6 +103,33 @@ wait_healthy() {
   done
 }
 
+# RocketMQ Broker 的 TCP healthcheck 通过后，仍需等待它向 NameServer 注册路由；
+# 否则 Proxy 启动时创建系统 Topic 会偶发失败。
+wait_rocketmq_registered() {
+  local limit="${HELLO_MQ_ROCKETMQ_ROUTE_TIMEOUT_SECONDS:-120}"
+  local started now elapsed next_report=0 out=""
+  started="$(date +%s)"
+  while true; do
+    if out="$(compose exec -T broker sh mqadmin clusterList -n namesrv:9876 2>&1)" &&
+      printf '%s\n' "$out" | grep -q 'hello-mq-broker'; then
+      printf 'RocketMQ Broker registered after %ss\n' "$(($(date +%s) - started))"
+      return 0
+    fi
+    now="$(date +%s)"
+    elapsed=$((now - started))
+    if [ "$elapsed" -ge "$limit" ]; then
+      printf 'RocketMQ Broker route registration timeout after %ss\n%s\n' "$limit" "$out" >&2
+      compose logs --tail 100 --no-color --no-log-prefix namesrv broker >&2 || true
+      return 1
+    fi
+    if [ "$elapsed" -ge "$next_report" ]; then
+      printf 'Waiting for RocketMQ Broker route registration: elapsed=%ss/%ss\n' "$elapsed" "$limit"
+      next_report=$((elapsed + 15))
+    fi
+    sleep 2
+  done
+}
+
 cleanup() {
   local -a base=(docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE")
   if command -v timeout >/dev/null 2>&1; then
@@ -113,7 +141,37 @@ cleanup() {
     "${base[@]}" down --timeout 5 --volumes --remove-orphans >/dev/null 2>&1 || true
   fi
 }
-trap cleanup EXIT
+
+capture_failure_diagnostics() {
+  local exit_code="$1"
+  local target="$LAB_DIR/failure-compose.out.txt"
+  local -a base=(docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE")
+  {
+    printf 'scenario=%s/%s\nexitCode=%s\ncapturedAt=%s\n\n' "$PRODUCT" "$LAB" "$exit_code" "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+    printf '%s\n' '--- docker compose ps --all ---'
+    if command -v timeout >/dev/null 2>&1; then
+      timeout --signal=KILL 10s "${base[@]}" ps --all || true
+      printf '\n%s\n' '--- docker compose logs --tail 200 ---'
+      timeout --signal=KILL 20s "${base[@]}" logs --tail 200 --no-color --no-log-prefix || true
+    else
+      "${base[@]}" ps --all || true
+      printf '\n%s\n' '--- docker compose logs --tail 200 ---'
+      "${base[@]}" logs --tail 200 --no-color --no-log-prefix || true
+    fi
+  } > "$target" 2>&1
+}
+
+on_exit() {
+  local status=$?
+  trap - EXIT
+  set +e
+  if [ "$status" -ne 0 ]; then
+    capture_failure_diagnostics "$status"
+  fi
+  cleanup
+  exit "$status"
+}
+trap on_exit EXIT
 
 # ensure_jar <product>：jar 缺失时才触发 Maven 构建（只建该模块及其依赖）。
 ensure_jar() {

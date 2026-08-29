@@ -32,7 +32,8 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: "1"
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: "1"
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: "1"
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "0"
+      # 给同组的两个消费者留出同时加入窗口，避免第一个消费者在 rebalance 前吃完全部消息。
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: "3000"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "false"
       KAFKA_LOG_DIRS: /tmp/kraft-combined-logs
     # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。

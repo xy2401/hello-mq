@@ -16,7 +16,10 @@ for _ in $(seq 1 60); do
   fi
   sleep 1
 done
-compose up -d
+compose up -d --no-deps producer-live
+compose wait producer-live || true
+compose wait consumer || true
+compose up -d --no-deps inspect-db
 compose wait inspect-db || true
 collect_logs setup producer-lost consumer producer-live inspect-db
 

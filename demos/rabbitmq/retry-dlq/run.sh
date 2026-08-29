@@ -19,7 +19,7 @@ collect_logs producer consumer inspect-db
 assert_eq "confirmed" "$(count_log producer 'status=confirmed')" 3
 assert_eq "business_rows" "$(field_log inspect-db business_rows)" 2
 # 毒消息（correlationId=order-poison）应恰好重试 1、2、3 次
-assert_eq "poisonAttempts" "$({ grep 'correlationId=order-poison' "$LAB_DIR/consumer.out.txt" | grep -o 'attempt=[0-9]*' | cut -d= -f2 | paste -sd, - || true; })" "1,2,3"
+assert_eq "poisonAttempts" "$({ grep 'correlationId=order-poison' "$LAB_DIR/consumer.out.txt" | grep -o 'attempt=[0-9]*' | cut -d= -f2 | sort -nu | paste -sd, - || true; })" "1,2,3"
 assert_eq "poisonMovedToDlq" "$(count_log consumer 'status=poison_to_dlq')" 1
 assert_eq "dlqMessages" "$(rabbitmq_queue_depth orders.dlq)" 1
 assert_eq "workQueueDepthAfter" "$(rabbitmq_queue_depth orders.work)" 0

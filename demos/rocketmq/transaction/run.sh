@@ -47,7 +47,10 @@ create_group() { # <group> [updateSubGroup 额外参数...]
 }
 
 ensure_jar rocketmq
-compose up -d proxy
+compose up -d broker
+wait_healthy broker
+wait_rocketmq_registered
+compose up -d --no-deps proxy
 wait_healthy proxy
 create_topic orders-txn TRANSACTION
 create_group orders-txn-group

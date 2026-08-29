@@ -20,7 +20,9 @@ assert_eq "confirmed" "$(count_log producer 'status=confirmed')" 6
 assert_eq "backlogDepth" "$(rabbitmq_queue_depth orders.backlog)" 6
 replay_checkpoint backlog-without-consumer
 
-compose up -d
+compose up -d --no-deps consumer
+compose wait consumer || true
+compose up -d --no-deps inspect-db
 compose wait inspect-db || true
 collect_logs setup producer consumer inspect-db
 

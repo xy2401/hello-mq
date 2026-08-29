@@ -54,7 +54,10 @@ consume_diff() {
 }
 
 ensure_jar rocketmq
-compose up -d proxy
+compose up -d broker
+wait_healthy broker
+wait_rocketmq_registered
+compose up -d --no-deps proxy
 wait_healthy proxy
 create_topic orders-basic NORMAL
 create_group orders-basic-group
