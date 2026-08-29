@@ -4,6 +4,7 @@ import com.hellomq.shared.Envelope;
 import com.hellomq.shared.IdempotencyStore;
 import com.hellomq.shared.Json;
 import com.hellomq.shared.LabLogger;
+import com.hellomq.shared.ReplayGate;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.Timer;
@@ -95,6 +96,7 @@ public final class Consumer {
               .put("redelivered", false)
               .status("received")
               .emit();
+          ReplayGate.awaitCheckpoint("after-delivery", envelope.getMessageId());
 
           IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
           String status = result == IdempotencyStore.Result.PROCESSED ? "business_committed" : "duplicate_skipped";
@@ -107,6 +109,7 @@ public final class Consumer {
               .put("attempt", "1")
               .status(status)
               .emit();
+          ReplayGate.awaitCheckpoint("before-offset-commit", envelope.getMessageId());
           consumer.commitSync();
         }
         if (expected >= 0 && received >= expected) break;

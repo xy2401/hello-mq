@@ -69,6 +69,16 @@ bash demos/kafka/ordering-replay/run.sh   # 任意产品同理
 for s in demos/*/*/run.sh; do bash "$s"; done   # 全量运行
 ```
 
+交互回放证据需要 Docker、Compose、Bash、Maven 与 jq。采集命令顺序运行实验，保存角色日志、Broker 检查点、采集元数据与规范化 `replay.json`；普通文档构建不会启动 Broker：
+
+```bash
+npm run collect:playground
+npm run collect:playground -- --product rabbitmq
+npm run collect:playground -- --scenario rabbitmq/consumer-crash
+npm run check:playground:structure  # 只检查采集与页面基础设施
+npm run check:playground            # 要求 11 个场景全部已有已验证快照
+```
+
 ## 资源与安全提示
 
 - 所有 Broker 端口仅绑定 `127.0.0.1`，不暴露公网。

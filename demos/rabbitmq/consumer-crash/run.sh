@@ -8,6 +8,7 @@ source "$LAB_DIR/../../shared/run-common.sh"
 ensure_jar rabbitmq
 compose up -d consumer-run1
 compose wait consumer-run1 || true
+replay_checkpoint consumer-crashed-before-ack
 compose up -d
 compose wait inspect-db || true
 collect_logs setup producer consumer-run1 consumer-run2 inspect-db
@@ -22,5 +23,6 @@ assert_eq "duplicatesObserved" "$(count_log consumer-run2 'status=duplicate_skip
 assert_eq "uniqueMessageIds" "$(unique_logs 'messageId=[^ ]*' consumer-run1 consumer-run2)" 3
 assert_eq "business_rows" "$(field_log inspect-db business_rows)" 3
 assert_eq "queueDepthAfter" "$(rabbitmq_queue_depth orders.crash)" 0
+replay_checkpoint redelivery-recovered
 assert_exit consumer-run2 0
 finish

@@ -4,6 +4,7 @@ import com.hellomq.shared.Envelope;
 import com.hellomq.shared.IdempotencyStore;
 import com.hellomq.shared.Json;
 import com.hellomq.shared.LabLogger;
+import com.hellomq.shared.ReplayGate;
 import com.rabbitmq.client.AMQP;
 import com.rabbitmq.client.Channel;
 import com.rabbitmq.client.Connection;
@@ -117,11 +118,13 @@ public final class Consumer {
         .put("redelivered", delivery.getEnvelope().isRedeliver())
         .status("received")
         .emit();
+    ReplayGate.awaitCheckpoint("after-delivery", envelope.getMessageId());
 
     try {
       IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
       if (result == IdempotencyStore.Result.PROCESSED) {
         log.entry().envelope(envelope).put("destination", queue).put("attempt", attempt).status("business_committed").emit();
+        ReplayGate.awaitCheckpoint("before-ack", envelope.getMessageId());
         if (!retryMode && crashAt > 0 && okCount.get() + 1 == crashAt) {
           log.entry().envelope(envelope).put("destination", queue).status("crash_injected").emit();
           Runtime.getRuntime().halt(137);
@@ -130,6 +133,7 @@ public final class Consumer {
         okCount.incrementAndGet();
       } else {
         log.entry().envelope(envelope).put("destination", queue).put("attempt", attempt).status("duplicate_skipped").emit();
+        ReplayGate.awaitCheckpoint("before-ack", envelope.getMessageId());
         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         okCount.incrementAndGet();
       }
@@ -143,12 +147,14 @@ public final class Consumer {
             .emit();
         channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);
       } else if (attempt >= maxAttempts) {
+        ReplayGate.awaitCheckpoint("before-dlq", envelope.getMessageId());
         channel.basicPublish("", dlq, delivery.getProperties(), delivery.getBody());
         log.entry().envelope(envelope).put("destination", queue).put("attempt", attempt).status("poison_to_dlq").emit();
         channel.basicAck(delivery.getEnvelope().getDeliveryTag(), false);
         poisonDlqed.set(true);
       } else {
         log.entry().envelope(envelope).put("destination", queue).put("attempt", attempt).status("retry").emit();
+        ReplayGate.awaitCheckpoint("before-retry", envelope.getMessageId());
         channel.basicNack(delivery.getEnvelope().getDeliveryTag(), false, false);
       }
     }

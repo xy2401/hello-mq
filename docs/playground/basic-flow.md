@@ -1,5 +1,7 @@
 # 基础收发流程（basic）
 
+[在交互实验台回放 RabbitMQ basic](/playground/?product=rabbitmq&scenario=basic)
+
 > 本页结论：用 RabbitMQ 复现一条最小可靠链路——Publisher Confirms 确认生产、手动 ACK 确认消费、幂等表落库；三个状态各自独立，可在日志与断言中逐一核对。
 
 ## 适用场景

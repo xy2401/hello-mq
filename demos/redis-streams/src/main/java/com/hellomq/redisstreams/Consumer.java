@@ -4,6 +4,7 @@ import com.hellomq.shared.Envelope;
 import com.hellomq.shared.IdempotencyStore;
 import com.hellomq.shared.Json;
 import com.hellomq.shared.LabLogger;
+import com.hellomq.shared.ReplayGate;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -122,6 +123,7 @@ public final class Consumer {
           .put("redelivered", redelivered)
           .status("received")
           .emit();
+      ReplayGate.awaitCheckpoint("after-delivery", envelope.getMessageId());
 
       IdempotencyStore.Result result = store.process(envelope, IdempotencyStore.orderWriter());
       if (result == IdempotencyStore.Result.PROCESSED) {
@@ -133,6 +135,7 @@ public final class Consumer {
       } else {
         log.entry().envelope(envelope).put("destination", stream).put("attempt", attempt).status("duplicate_skipped").emit();
       }
+      ReplayGate.awaitCheckpoint("before-xack", envelope.getMessageId());
       jedis.xack(stream, group, entry.getID());
       acked.incrementAndGet();
     } catch (Exception e) {

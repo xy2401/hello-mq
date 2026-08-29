@@ -1,5 +1,7 @@
 # 消费者崩溃与重投（consumer-crash）
 
+[在交互实验台查看崩溃与恢复轨道](/playground/?product=rabbitmq&scenario=consumer-crash&track=crash)
+
 > 本页结论：消费者在「业务已提交、ACK 未发出」之间崩溃，RabbitMQ 会重投同一条消息；幂等表让这次重投只产生一次 `duplicate_skipped`，而不会重复落库——这正是 at-least-once 下业务必须预期重复的含义。
 
 ## 适用场景

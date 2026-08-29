@@ -18,6 +18,7 @@ compose wait producer || true
 collect_logs producer
 assert_eq "confirmed" "$(count_log producer 'status=confirmed')" 6
 assert_eq "backlogDepth" "$(rabbitmq_queue_depth orders.backlog)" 6
+replay_checkpoint backlog-without-consumer
 
 compose up -d
 compose wait inspect-db || true
@@ -29,5 +30,6 @@ assert_eq "businessCommitted" "$(count_log consumer 'status=business_committed')
 assert_eq "businessDuplicatesSkipped" "$(count_log consumer 'status=duplicate_skipped')" 3
 assert_eq "business_rows" "$(field_log inspect-db business_rows)" 3
 assert_eq "queueDepthAfter" "$(rabbitmq_queue_depth orders.backlog)" 0
+replay_checkpoint backlog-recovered
 assert_exit consumer 0
 finish

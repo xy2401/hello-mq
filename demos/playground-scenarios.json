@@ -1,0 +1,13 @@
+[
+  {"id":"basic","product":"rabbitmq","title":"基础收发","model":"队列与手动 ACK","description":"发布确认、队列投递、业务提交与 ACK 的最小闭环。","document":"/playground/basic-flow","expectedTracks":["observed"],"evidenceStatus":"pending"},
+  {"id":"consumer-crash","product":"rabbitmq","title":"消费者崩溃与重投","model":"ACK 前崩溃","description":"业务提交后、ACK 前崩溃，恢复后观察重投与幂等拦截。","document":"/playground/consumer-crash","expectedTracks":["normal","crash","recovery"],"evidenceStatus":"pending"},
+  {"id":"retry-dlq","product":"rabbitmq","title":"毒消息、重试与 DLQ","model":"TTL + DLX 重试环","description":"毒消息耗尽重试次数后进入死信队列。","document":"/playground/poison-message","expectedTracks":["normal","poison","dlq"],"evidenceStatus":"pending"},
+  {"id":"backlog-recovery","product":"rabbitmq","title":"积压与追赶","model":"消费者离线与恢复","description":"消费者离线形成积压，恢复后追赶至队列清空。","document":"/playground/backlog-recovery","expectedTracks":["offline","recovery"],"evidenceStatus":"pending"},
+  {"id":"routing","product":"rabbitmq","title":"Topic 路由","model":"Exchange 与 Binding","description":"同一事件按 routing key 投递到不同绑定队列。","document":"/playground/poison-message#routing","expectedTracks":["observed"],"evidenceStatus":"pending"},
+  {"id":"basic","product":"kafka","title":"基础收发","model":"分区与手动提交 offset","description":"幂等生产、分区投递、业务提交与 offset 提交。","document":"/playground/basic-flow","expectedTracks":["observed"],"evidenceStatus":"pending"},
+  {"id":"consumer-group","product":"kafka","title":"消费组分配","model":"组内竞争与组间广播","description":"观察组成员、分区归属和各消费组独立进度。","document":"/playground/ordering","expectedTracks":["observed"],"evidenceStatus":"pending"},
+  {"id":"ordering-replay","product":"kafka","title":"顺序与回放","model":"同 key 保序与新组回放","description":"首次消费后以新消费组从 offset 0 重放。","document":"/playground/ordering","expectedTracks":["initial","replay"],"evidenceStatus":"pending"},
+  {"id":"idempotence-transaction","product":"kafka","title":"事务可见性","model":"commit / abort 与 read_committed","description":"比较已提交事务和已中止事务对消费者的可见性。","document":"/playground/ordering","expectedTracks":["commit","abort"],"evidenceStatus":"pending"},
+  {"id":"basic","product":"redis-streams","title":"基础收发","model":"Stream 消费组与 XACK","description":"XADD、XREADGROUP、业务提交与 XACK 的最小闭环。","document":"/playground/basic-flow","expectedTracks":["observed"],"evidenceStatus":"pending"},
+  {"id":"consumer-crash","product":"redis-streams","title":"PEL 与接管","model":"ACK 前崩溃与 XCLAIM","description":"崩溃后条目留在 PEL，由另一消费者 XCLAIM 接管。","document":"/playground/consumer-crash","expectedTracks":["normal","crash","claim"],"evidenceStatus":"pending"}
+]

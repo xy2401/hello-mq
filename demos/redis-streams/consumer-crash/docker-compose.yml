@@ -9,8 +9,11 @@ x-java-base: &java-base
     - ../target/hello-mq-redis-streams.jar:/app/demo.jar:ro
     - ../../shared/fixtures:/app/fixtures:ro
     - idempotency:/data
+    - ./.replay-gate:/replay-gate
   environment:
     HELLOMQ_REDIS_HOST: redis
+    HELLO_MQ_REPLAY_CAPTURE: ${HELLO_MQ_REPLAY_CAPTURE:-0}
+    HELLO_MQ_REPLAY_GATE_DIR: /replay-gate
 
 services:
   redis:

@@ -1,5 +1,7 @@
 # 顺序、消费组与回放（Kafka）
 
+[在交互实验台查看首次消费与 offset 回放](/playground/?product=kafka&scenario=ordering-replay&track=initial)
+
 > 本页结论：Kafka 的顺序只在分区内成立——同 key 进同分区、组内瓜分分区、新消费组可从 earliest 全量回放；本页用三个实验分别验证，并给出与 RabbitMQ 的语义对照。
 
 ## 适用场景

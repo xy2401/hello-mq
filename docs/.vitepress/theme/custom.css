@@ -3,8 +3,6 @@
   --vp-c-brand-2: #f0793f;
   --vp-c-brand-3: #e05e2b;
   --vp-c-brand-soft: rgba(224, 94, 43, 0.14);
-  /* 侧边栏与正文同背景，明暗主题下都不出现色块差 */
-  --vp-sidebar-bg-color: var(--vp-c-bg);
 }
 
 .dark {
@@ -88,4 +86,14 @@
   overflow: auto;
   font-size: 13px;
   line-height: 1.55;
+}
+/* MQ 证据回放页扩大正文区域；仅作用于 /playground/ 总入口。 */
+.mq-playground-page .VPDoc:not(.has-sidebar) .container,
+.mq-playground-page .VPDoc .container {
+  max-width: 1440px;
+}
+
+.mq-playground-page .VPDoc .content,
+.mq-playground-page .VPDoc .content-container {
+  max-width: none;
 }

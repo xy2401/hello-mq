@@ -5,6 +5,12 @@ import { nav, sidebar } from './nav.mjs'
 
 const base = process.env.DOCS_BASE || '/'
 
+function markProductPage(pageData: any) {
+  if (!pageData.relativePath.startsWith('products/')) return
+  const pageClasses = String(pageData.frontmatter.pageClass ?? '').split(/\s+/).filter(Boolean)
+  pageData.frontmatter.pageClass = [...new Set([...pageClasses, 'product-doc-page'])].join(' ')
+}
+
 const config = defineConfig({
   base,
   lang: 'zh-CN',
@@ -15,6 +21,7 @@ const config = defineConfig({
   cleanUrls: true,
   lastUpdated: true,
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
+  transformPageData: markProductPage,
   themeConfig: {
     logo: '/favicon.svg',
     nav,

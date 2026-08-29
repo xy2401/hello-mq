@@ -1,5 +1,7 @@
 # 毒消息、重试与 DLQ（routing / retry-dlq）
 
+[在交互实验台查看重试与 DLQ 轨道](/playground/?product=rabbitmq&scenario=retry-dlq&track=poison)
+
 > 本页结论：Topic Exchange 按路由键把同一事件分发给不同订阅者；毒消息经「TTL + DLX 回环」有限重试 3 次后被隔离进 DLQ，正常消息不受阻塞——RabbitMQ 的重试是组合配置出来的模式，不是 Broker 内置的消费重试。
 
 ## routing：Topic Exchange 分发 {#routing}

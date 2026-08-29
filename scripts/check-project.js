@@ -41,7 +41,7 @@ function linkToFile(baseDir, link) {
   if (link.startsWith('http://') || link.startsWith('https://') || link.startsWith('#') || link.startsWith('mailto:')) {
     return null
   }
-  const clean = link.split('#')[0]
+  const clean = link.split(/[?#]/)[0]
   if (!clean) return null
   if (clean.startsWith('/')) {
     const p = path.join(DOCS, clean)

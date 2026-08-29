@@ -8,6 +8,10 @@ x-java-base: &java-base
     - ../target/hello-mq-rabbitmq.jar:/app/demo.jar:ro
     - ../../shared/fixtures:/app/fixtures:ro
     - idempotency:/data
+    - ./.replay-gate:/replay-gate
+  environment:
+    HELLO_MQ_REPLAY_CAPTURE: ${HELLO_MQ_REPLAY_CAPTURE:-0}
+    HELLO_MQ_REPLAY_GATE_DIR: /replay-gate
 
 services:
   rabbitmq:

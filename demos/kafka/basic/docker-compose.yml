@@ -7,6 +7,10 @@ x-java-base: &java-base
   volumes:
     - ../target/hello-mq-kafka.jar:/app/demo.jar:ro
     - ../../shared/fixtures:/app/fixtures:ro
+    - ./.replay-gate:/replay-gate
+  environment:
+    HELLO_MQ_REPLAY_CAPTURE: ${HELLO_MQ_REPLAY_CAPTURE:-0}
+    HELLO_MQ_REPLAY_GATE_DIR: /replay-gate
 
 services:
   kafka:

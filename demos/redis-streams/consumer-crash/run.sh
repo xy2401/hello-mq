@@ -10,6 +10,7 @@ ensure_jar redis-streams
 compose up -d consumer-run1
 compose wait consumer-run1 || true
 assert_eq "pendingAfterCrash" "$(compose exec -T redis redis-cli XPENDING orders.crash orders-crash-group | head -n 1)" 1
+replay_checkpoint pending-after-crash
 
 compose up -d
 compose wait inspect-db || true
@@ -33,5 +34,6 @@ assert_eq "uniqueMessageIds" "$(unique_logs 'messageId=[^ ]*' consumer-run1 cons
 assert_eq "business_rows" "$business_rows" 3
 assert_eq "streamLengthAfter" "$(compose exec -T redis redis-cli XLEN orders.crash)" 3
 assert_eq "pendingAfter" "$(compose exec -T redis redis-cli XPENDING orders.crash orders-crash-group | head -n 1)" 0
+replay_checkpoint pending-claimed-and-acked
 assert_exit consumer-run2 0
 finish

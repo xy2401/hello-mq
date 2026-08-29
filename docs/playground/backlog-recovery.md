@@ -1,5 +1,7 @@
 # 积压与追赶（backlog-recovery）
 
+[在交互实验台查看离线积压与恢复追赶](/playground/?product=rabbitmq&scenario=backlog-recovery&track=offline)
+
 > 本页结论：消费者离线期间，durable 队列把消息安全地积压在 Broker 端；消费者恢复后从积压点继续追赶，最终队列清零、业务恰好落库一次——积压不等于丢失，但积压期间的容量与追赶速度必须被当作运维指标管理。
 
 ## 适用场景

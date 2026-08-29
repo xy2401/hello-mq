@@ -11,7 +11,33 @@ PROJECT="hello-mq-${PRODUCT}-${LAB}"
 ENV_FILE="$LAB_DIR/../../../.env.versions"
 ASSERT_FILE="$LAB_DIR/assert.out.txt"
 FAILURES=0
+REPLAY_GATE_SEQUENCE=0
 : > "$ASSERT_FILE"
+
+# replay_checkpoint <名称>：仅在证据采集模式下暂停宿主编排脚本。
+# collector 读取真实 Broker 状态后创建同名 .release 文件；30 秒无响应即失败，避免实验永久挂起。
+replay_checkpoint() {
+  local checkpoint="$1" token reached release deadline
+  case "${HELLO_MQ_REPLAY_CAPTURE:-0}" in
+    1|true|yes) ;;
+    *) return 0 ;;
+  esac
+  REPLAY_GATE_SEQUENCE=$((REPLAY_GATE_SEQUENCE + 1))
+  token="shell-${REPLAY_GATE_SEQUENCE}-$(printf '%s' "$checkpoint" | tr -c 'A-Za-z0-9_.-' '_')"
+  mkdir -p "$LAB_DIR/.replay-gate"
+  reached="$LAB_DIR/.replay-gate/${token}.reached"
+  release="$LAB_DIR/.replay-gate/${token}.release"
+  printf 'timestamp=%s checkpoint=%s messageId=none\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$checkpoint" > "$reached"
+  deadline=$(( $(date +%s) + 30 ))
+  while [ ! -f "$release" ]; do
+    if [ "$(date +%s)" -ge "$deadline" ]; then
+      printf 'Replay checkpoint timed out: %s\n' "$checkpoint" >&2
+      return 1
+    fi
+    sleep 0.1
+  done
+  rm -f "$release"
+}
 
 compose() {
   docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE" "$@"
@@ -34,6 +60,7 @@ ensure_jar() {
 # compose_up <终止服务...>：后台启动完整流程，等待终止服务退出（编排顺序由 compose depends_on 保证）。
 compose_up() {
   compose up -d
+  replay_checkpoint services-started
   compose wait "$@" || true
 }
 
@@ -93,6 +120,7 @@ assert_exit() {
 }
 
 finish() {
+  replay_checkpoint final-state
   if [ "$FAILURES" -gt 0 ]; then
     printf 'RESULT: %d assertion(s) FAILED\n' "$FAILURES" >> "$ASSERT_FILE"
     cat "$ASSERT_FILE" >&2
