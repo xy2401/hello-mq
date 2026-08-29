@@ -29,7 +29,9 @@ public final class ReplayGate {
 
     Path directory = Path.of(System.getenv().getOrDefault("HELLO_MQ_REPLAY_GATE_DIR", "/replay-gate"));
     Files.createDirectories(directory);
-    String token = safe(checkpoint) + "-" + safe(messageId) + "-" + SEQUENCE.incrementAndGet();
+    String instance = System.getenv().getOrDefault("HOSTNAME", "local")
+        + "-" + ProcessHandle.current().pid();
+    String token = token(checkpoint, messageId, instance, SEQUENCE.incrementAndGet());
     Path reached = directory.resolve(token + ".reached");
     Path release = directory.resolve(token + ".release");
     String record = "timestamp=" + Instant.now() + " checkpoint=" + checkpoint + " messageId=" + messageId;
@@ -63,5 +65,9 @@ public final class ReplayGate {
   private static String safe(String value) {
     if (value == null || value.isBlank()) return "none";
     return value.replaceAll("[^A-Za-z0-9_.-]", "_");
+  }
+
+  static String token(String checkpoint, String messageId, String instance, long sequence) {
+    return safe(instance) + "-" + safe(checkpoint) + "-" + safe(messageId) + "-" + sequence;
   }
 }

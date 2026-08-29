@@ -131,6 +131,7 @@ function checkComposeFiles() {
       continue
     }
     const services = Object.keys(doc.services ?? {})
+    const baseVolumes = doc['x-java-base']?.volumes ?? []
     if (new Set(services).size !== services.length) fail(`duplicate service names in ${file}`)
     for (const [name, service] of Object.entries(doc.services ?? {})) {
       for (const port of service.ports ?? []) {
@@ -142,6 +143,13 @@ function checkComposeFiles() {
       }
       if (typeof service.image === 'string' && /(^|:)latest($|@)/.test(service.image)) {
         fail(`service ${name} uses latest image`)
+      }
+      const command = Array.isArray(service.command) ? service.command.map(String) : [String(service.command ?? '')]
+      if (playgroundComposeFiles.has(file) && command.includes('consume')) {
+        const volumes = service.volumes ?? baseVolumes
+        if (!volumes.some((volume) => String(volume).includes(':/replay-gate'))) {
+          fail(`replay consumer ${name} misses /replay-gate mount: ${path.relative(ROOT, file)}`)
+        }
       }
     }
   }
@@ -262,6 +270,7 @@ function checkLabTimeouts() {
     fail('failed labs must preserve bounded Docker Compose diagnostics before cleanup')
   }
   if (!smoke.includes('publish-evidence:')
+    || !smoke.includes('needs: evidence-labs')
     || !smoke.includes('npm run check:playground')
     || !smoke.includes('git push origin HEAD:main')
     || !smoke.includes('refresh MQ playground evidence [skip ci]')) {
@@ -279,6 +288,100 @@ function checkLabTimeouts() {
   ok('lab, Compose and collector timeouts are enforced')
 }
 
+function checkScenarioStability() {
+  const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8')
+  const natsHealth = '["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8222/healthz"]'
+  for (const lab of ['core-pubsub', 'jetstream-replay']) {
+    if (!read(`demos/nats/${lab}/docker-compose.yml`).includes(natsHealth)) {
+      fail(`nats/${lab} must use the BusyBox-compatible health command`)
+    }
+  }
+
+  if (!read('demos/pulsar/redelivery-replay/run.sh').includes('compose up -d --no-deps consumer-replay')) {
+    fail('Pulsar replay must not restart producer dependencies after resetting the cursor')
+  }
+  const subscriptions = read('demos/pulsar/subscriptions/docker-compose.yml')
+  if (!subscriptions.includes('--consumer=a-primary')
+    || !subscriptions.includes('--consumer=b-replica')
+    || (subscriptions.match(/--priority=0/g) ?? []).length < 2
+    || subscriptions.includes('--priority=10')) {
+    fail('Pulsar failover consumers must share priority 0 and use stable a-primary/b-replica names')
+  }
+
+  for (const compose of [
+    'demos/artemis/basic/docker-compose.yml',
+    'demos/artemis/retry-dlq/docker-compose.yml',
+    'demos/artemis/docker/docker-compose.yml',
+  ]) {
+    if (!read(compose).includes('/var/lib/artemis-instance/etc-override/broker.xml:ro')) {
+      fail(`${compose} must mount the Artemis override at the official image path`)
+    }
+  }
+  for (const script of ['demos/artemis/basic/run.sh', 'demos/artemis/retry-dlq/run.sh']) {
+    const text = read(script)
+    if (!text.includes('brokerNioJournal') || !text.includes('brokerOrdersDlq')) {
+      fail(`${script} must verify that the custom NIO and orders-dlq configuration was loaded`)
+    }
+  }
+
+  const replayGate = read('demos/shared/src/main/java/com/hellomq/shared/ReplayGate.java')
+  const collector = read('scripts/collect-playground.js')
+  if (!replayGate.includes('System.getenv().getOrDefault("HOSTNAME", "local")')
+    || !replayGate.includes('ProcessHandle.current().pid()')) {
+    fail('ReplayGate token must include container identity and process identity')
+  }
+  if (!collector.includes("fs.rmSync(path.join(gate, name), { force: true })")) {
+    fail('collector must delete a reached gate after releasing it')
+  }
+
+  const kafkaProducer = read('demos/kafka/src/main/java/com/hellomq/kafka/Producer.java')
+  if (!kafkaProducer.includes('ThreadLocalRandom.current()') || kafkaProducer.includes('RandomGenerator.getDefault()')) {
+    fail('Kafka trace IDs must use ThreadLocalRandom supported by the slim JRE')
+  }
+
+  const workflow = YAML.parse(read('.github/workflows/smoke-labs.yml'))
+  const manualWorkflow = YAML.parse(read('.github/workflows/collect-playground-evidence.yml'))
+  const evidenceJobs = workflow.jobs?.['evidence-labs']?.strategy?.matrix?.include ?? []
+  const smokeJobs = workflow.jobs?.['smoke-labs']?.strategy?.matrix?.include ?? []
+  if (evidenceJobs.length !== 9) fail(`evidence-labs must contain 9 collectors, found ${evidenceJobs.length}`)
+  if (smokeJobs.length !== 11) fail(`smoke-labs must contain 11 non-replay labs, found ${smokeJobs.length}`)
+  const jobIds = (jobs) => jobs.map((job) => `${job.product}/${job.lab}`).sort()
+  const expectedEvidence = [
+    'rabbitmq/routing', 'rabbitmq/consumer-crash', 'rabbitmq/retry-dlq', 'rabbitmq/backlog-recovery',
+    'kafka/basic', 'kafka/consumer-group', 'kafka/ordering-replay', 'kafka/idempotence-transaction',
+    'redis-streams/consumer-crash',
+  ].sort()
+  const expectedSmoke = [
+    'rocketmq/basic', 'rocketmq/fifo-delay', 'rocketmq/transaction', 'rocketmq/retry-dlq',
+    'pulsar/basic', 'pulsar/subscriptions', 'pulsar/redelivery-replay',
+    'nats/core-pubsub', 'nats/jetstream-replay', 'artemis/basic', 'artemis/retry-dlq',
+  ].sort()
+  if (JSON.stringify(jobIds(evidenceJobs)) !== JSON.stringify(expectedEvidence)) {
+    fail('evidence-labs matrix does not match the 9 required collectors')
+  }
+  if (JSON.stringify(jobIds(smokeJobs)) !== JSON.stringify(expectedSmoke)) {
+    fail('smoke-labs matrix does not match the 11 required non-replay labs')
+  }
+  if (workflow.jobs?.['publish-evidence']?.needs !== 'evidence-labs') {
+    fail('publish-evidence must depend only on evidence-labs')
+  }
+  if (workflow.jobs?.['publish-evidence']?.concurrency?.group !== 'playground-evidence-main') {
+    fail('publish-evidence must share the playground-evidence-main concurrency group')
+  }
+  if (manualWorkflow.concurrency?.group !== 'playground-evidence-main'
+    || !read('.github/workflows/collect-playground-evidence.yml').includes('[skip ci]')) {
+    fail('manual collection must share the main-write concurrency group and skip recursive CI')
+  }
+  const diagnosticsNeeds = workflow.jobs?.diagnostics?.needs ?? []
+  if (!diagnosticsNeeds.includes('evidence-labs') || !diagnosticsNeeds.includes('smoke-labs')) {
+    fail('diagnostics must aggregate evidence and smoke matrices')
+  }
+  if (read('.github/workflows/smoke-labs.yml').includes('-printf --')) {
+    fail('diagnostic find command passes an invalid -- argument after -printf')
+  }
+  ok('replay gates, broker scenarios and split CI workflow are structurally stable')
+}
+
 checkMarkdownLinks()
 checkNavLinks()
 checkEnvVersions()
@@ -291,6 +394,7 @@ checkScriptSyntax()
 checkDemoBuildEntry()
 checkCrashRecoveryPhases()
 checkLabTimeouts()
+checkScenarioStability()
 
 if (failures.length > 0) {
   console.error(`\n[check] ${failures.length} problem(s) found`)

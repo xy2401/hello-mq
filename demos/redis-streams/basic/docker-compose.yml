@@ -55,6 +55,7 @@ services:
     volumes:
       - ../target/hello-mq-redis-streams.jar:/app/demo.jar:ro
       - ../../shared/fixtures:/app/fixtures:ro
+      - ./.replay-gate:/replay-gate
       - idempotency:/data
     depends_on:
       producer:

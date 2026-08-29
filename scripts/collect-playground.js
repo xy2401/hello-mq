@@ -184,6 +184,7 @@ async function collect(entry, versions) {
       }
       fs.appendFileSync(rawFile, `${JSON.stringify({ kind: 'broker-state', timestamp: new Date().toISOString(), checkpoint: fields.checkpoint ?? name, messageId: fields.messageId, adapterOk: state.ok, metrics: state.metrics, commands: state.commands })}\n`)
       fs.writeFileSync(path.join(gate, name.replace(/\.reached$/, '.release')), 'release\n')
+      fs.rmSync(path.join(gate, name), { force: true })
     }
   }, 150)
 

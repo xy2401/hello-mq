@@ -94,8 +94,8 @@ public final class Producer {
     }
   }
 
-  private static String randomTraceId() {
-    java.util.random.RandomGenerator random = java.util.random.RandomGenerator.getDefault();
+  static String randomTraceId() {
+    java.util.concurrent.ThreadLocalRandom random = java.util.concurrent.ThreadLocalRandom.current();
     StringBuilder sb = new StringBuilder(32);
     for (int i = 0; i < 32; i++) {
       sb.append("0123456789abcdef".charAt(random.nextInt(16)));

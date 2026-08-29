@@ -39,6 +39,7 @@ public final class Consumer {
         Session session = connection.createSession(false, Session.CLIENT_ACKNOWLEDGE)) {
       var queue = session.createQueue(queueName);
       long startedAt = System.currentTimeMillis();
+      long lastMessageAt = startedAt;
       int received = 0;
 
       try (MessageConsumer consumer = session.createConsumer(queue)) {
@@ -51,6 +52,7 @@ public final class Consumer {
         while (true) {
           var message = consumer.receive(1000);
           if (message instanceof TextMessage text) {
+            lastMessageAt = System.currentTimeMillis();
             received++;
             Envelope envelope = Json.mapper().readValue(text.getText(), Envelope.class);
             int attempt = failedAttempts.merge(envelope.getMessageId(), 1, Integer::sum);
@@ -113,8 +115,11 @@ public final class Consumer {
           boolean poisonDone =
               failAggregate.isEmpty()
                   || failedAttempts.values().stream().anyMatch((a) -> a >= maxAttempts);
-          if (expectedReached && poisonDone) break;
-          if (System.currentTimeMillis() - startedAt > hardTimeoutMs) break;
+          long now = System.currentTimeMillis();
+          // 最后一次 recover 后给 Broker 留出 DLQ 转移窗口；如果仍继续重投，下一条消息会重置等待时间。
+          boolean poisonSettled = failAggregate.isEmpty() || (poisonDone && now - lastMessageAt >= 2_000);
+          if (expectedReached && poisonSettled) break;
+          if (now - startedAt > hardTimeoutMs) break;
         }
       }
       log.entry()

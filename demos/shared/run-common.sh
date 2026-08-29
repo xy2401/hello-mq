@@ -146,15 +146,34 @@ capture_failure_diagnostics() {
   local exit_code="$1"
   local target="$LAB_DIR/failure-compose.out.txt"
   local -a base=(docker compose -p "$PROJECT" -f "$LAB_DIR/docker-compose.yml" --env-file "$ENV_FILE")
+  local -a container_ids=()
   {
     printf 'scenario=%s/%s\nexitCode=%s\ncapturedAt=%s\n\n' "$PRODUCT" "$LAB" "$exit_code" "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
     printf '%s\n' '--- docker compose ps --all ---'
     if command -v timeout >/dev/null 2>&1; then
       timeout --signal=KILL 10s "${base[@]}" ps --all || true
+      printf '\n%s\n' '--- docker health logs ---'
+      mapfile -t container_ids < <(timeout --signal=KILL 10s "${base[@]}" ps --all -q || true)
+      if [ "${#container_ids[@]}" -gt 0 ]; then
+        timeout --signal=KILL 15s docker inspect \
+          --format 'container={{.Name}} status={{.State.Status}} health={{json .State.Health}}' \
+          "${container_ids[@]}" || true
+      else
+        printf '%s\n' 'no containers found'
+      fi
       printf '\n%s\n' '--- docker compose logs --tail 200 ---'
       timeout --signal=KILL 20s "${base[@]}" logs --tail 200 --no-color --no-log-prefix || true
     else
       "${base[@]}" ps --all || true
+      printf '\n%s\n' '--- docker health logs ---'
+      mapfile -t container_ids < <("${base[@]}" ps --all -q || true)
+      if [ "${#container_ids[@]}" -gt 0 ]; then
+        docker inspect \
+          --format 'container={{.Name}} status={{.State.Status}} health={{json .State.Health}}' \
+          "${container_ids[@]}" || true
+      else
+        printf '%s\n' 'no containers found'
+      fi
       printf '\n%s\n' '--- docker compose logs --tail 200 ---'
       "${base[@]}" logs --tail 200 --no-color --no-log-prefix || true
     fi

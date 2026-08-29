@@ -25,7 +25,7 @@ services:
     # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
     healthcheck:
       # 镜像内是 BusyBox wget，不支持 GNU wget 的 --spider。
-      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8222/healthz"]
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8222/healthz"]
       interval: 5s
       timeout: 5s
       retries: 20

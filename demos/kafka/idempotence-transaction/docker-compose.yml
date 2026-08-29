@@ -90,6 +90,7 @@ services:
     volumes:
       - ../target/hello-mq-kafka.jar:/app/demo.jar:ro
       - ../../shared/fixtures:/app/fixtures:ro
+      - ./.replay-gate:/replay-gate
       - idempotency:/data
     depends_on:
       producer-abort:

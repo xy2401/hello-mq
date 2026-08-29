@@ -54,7 +54,7 @@ assert_eq "sharedUnique" "$(unique_logs 'messageId=[^ ]*' consumer-shared-1 cons
 assert_eq "sharedS1GotMessages" "$(gt0 "$(count_log consumer-shared-1 'status=received')")" true
 assert_eq "sharedS2GotMessages" "$(gt0 "$(count_log consumer-shared-2 'status=received')")" true
 
-# --- 阶段 3：Failover。主（priority=10）收全量、备份 0 条；主备均退出后备份提升为主收新一轮全量。
+# --- 阶段 3：Failover。同 priority 按 consumer name 稳定排序，a-primary 收全量、b-replica 备用。
 compose up -d --no-deps consumer-failover-primary
 wait_subscribed consumer-failover-primary
 compose up -d --no-deps consumer-failover-replica

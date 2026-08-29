@@ -8,7 +8,8 @@ on:
   workflow_dispatch:
 
 jobs:
-  labs:
+  evidence-labs:
+    name: evidence (${{ matrix.product }}/${{ matrix.lab }})
     runs-on: ubuntu-latest
     timeout-minutes: 25
     env:
@@ -20,71 +21,23 @@ jobs:
       matrix:
         include:
           - product: rabbitmq
-            lab: basic
-            capture: false
-          - product: rabbitmq
             lab: routing
-            capture: true
           - product: rabbitmq
             lab: consumer-crash
-            capture: true
           - product: rabbitmq
             lab: retry-dlq
-            capture: true
           - product: rabbitmq
             lab: backlog-recovery
-            capture: true
           - product: kafka
             lab: basic
-            capture: true
           - product: kafka
             lab: consumer-group
-            capture: true
           - product: kafka
             lab: ordering-replay
-            capture: true
           - product: kafka
             lab: idempotence-transaction
-            capture: true
-          - product: rocketmq
-            lab: basic
-            capture: false
-          - product: rocketmq
-            lab: fifo-delay
-            capture: false
-          - product: rocketmq
-            lab: transaction
-            capture: false
-          - product: rocketmq
-            lab: retry-dlq
-            capture: false
-          - product: pulsar
-            lab: basic
-            capture: false
-          - product: pulsar
-            lab: subscriptions
-            capture: false
-          - product: pulsar
-            lab: redelivery-replay
-            capture: false
-          - product: nats
-            lab: core-pubsub
-            capture: false
-          - product: nats
-            lab: jetstream-replay
-            capture: false
-          - product: redis-streams
-            lab: basic
-            capture: false
           - product: redis-streams
             lab: consumer-crash
-            capture: true
-          - product: artemis
-            lab: basic
-            capture: false
-          - product: artemis
-            lab: retry-dlq
-            capture: false
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-java@v4
@@ -93,30 +46,24 @@ jobs:
           java-version: '21'
           cache: maven
       - uses: actions/setup-node@v4
-        if: matrix.capture
         with:
           node-version: '22'
           cache: npm
       - name: install evidence tooling
-        if: matrix.capture
         run: npm ci
-      - name: run lab
+      - name: collect replay evidence
         id: lab
         continue-on-error: true
         shell: bash
         run: |
-          if [ "${{ matrix.capture }}" = "true" ]; then
-            timeout --signal=TERM --kill-after=45s 1260s npm run collect:playground -- --scenario "${{ matrix.product }}/${{ matrix.lab }}"
-          else
-            timeout --signal=TERM --kill-after=45s 660s bash "demos/${{ matrix.product }}/${{ matrix.lab }}/run.sh"
-          fi
+          timeout --signal=TERM --kill-after=45s 1260s npm run collect:playground -- --scenario "${{ matrix.product }}/${{ matrix.lab }}"
 
-      - name: summarize lab
+      - name: summarize evidence lab
         if: always()
         shell: bash
         run: |
           lab_dir="demos/${{ matrix.product }}/${{ matrix.lab }}"
-          echo "## ${{ matrix.product }}/${{ matrix.lab }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "## Evidence ${{ matrix.product }}/${{ matrix.lab }}" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           echo "执行结果：${{ steps.lab.outcome }}" >> "$GITHUB_STEP_SUMMARY"
           if [ -f "$lab_dir/assert.out.txt" ]; then
@@ -133,13 +80,12 @@ jobs:
         if: always() && steps.lab.outcome != 'success'
         uses: actions/upload-artifact@v4
         with:
-          name: lab-diagnostics-${{ matrix.product }}-${{ matrix.lab }}
-          path: |
-            demos/${{ matrix.product }}/${{ matrix.lab }}/
+          name: lab-diagnostics-evidence-${{ matrix.product }}-${{ matrix.lab }}
+          path: demos/${{ matrix.product }}/${{ matrix.lab }}/
           if-no-files-found: ignore
 
       - name: stage replay evidence
-        if: steps.lab.outcome == 'success' && matrix.capture
+        if: steps.lab.outcome == 'success'
         shell: bash
         run: |
           mkdir -p evidence-staging
@@ -154,22 +100,102 @@ jobs:
           done
 
       - name: upload replay evidence
-        if: steps.lab.outcome == 'success' && matrix.capture
+        if: steps.lab.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: lab-evidence-${{ matrix.product }}-${{ matrix.lab }}
           path: evidence-staging/
           if-no-files-found: error
 
-      - name: propagate lab failure
+      - name: propagate evidence failure
+        if: always() && steps.lab.outcome != 'success'
+        run: exit 1
+
+  smoke-labs:
+    name: smoke (${{ matrix.product }}/${{ matrix.lab }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      HELLO_MQ_COMPOSE_TIMEOUT_SECONDS: '540'
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        include:
+          - product: rocketmq
+            lab: basic
+          - product: rocketmq
+            lab: fifo-delay
+          - product: rocketmq
+            lab: transaction
+          - product: rocketmq
+            lab: retry-dlq
+          - product: pulsar
+            lab: basic
+          - product: pulsar
+            lab: subscriptions
+          - product: pulsar
+            lab: redelivery-replay
+          - product: nats
+            lab: core-pubsub
+          - product: nats
+            lab: jetstream-replay
+          - product: artemis
+            lab: basic
+          - product: artemis
+            lab: retry-dlq
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: run smoke lab
+        id: lab
+        continue-on-error: true
+        shell: bash
+        run: |
+          timeout --signal=TERM --kill-after=45s 660s bash "demos/${{ matrix.product }}/${{ matrix.lab }}/run.sh"
+
+      - name: summarize smoke lab
+        if: always()
+        shell: bash
+        run: |
+          lab_dir="demos/${{ matrix.product }}/${{ matrix.lab }}"
+          echo "## Smoke ${{ matrix.product }}/${{ matrix.lab }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "执行结果：${{ steps.lab.outcome }}" >> "$GITHUB_STEP_SUMMARY"
+          if [ -f "$lab_dir/assert.out.txt" ]; then
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo '```text' >> "$GITHUB_STEP_SUMMARY"
+            cat "$lab_dir/assert.out.txt" >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "" >> "$GITHUB_STEP_SUMMARY"
+            echo "未生成 assert.out.txt；请查看诊断制品和步骤日志。" >> "$GITHUB_STEP_SUMMARY"
+          fi
+
+      - name: upload diagnostics on failure
+        if: always() && steps.lab.outcome != 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: lab-diagnostics-smoke-${{ matrix.product }}-${{ matrix.lab }}
+          path: demos/${{ matrix.product }}/${{ matrix.lab }}/
+          if-no-files-found: ignore
+
+      - name: propagate smoke failure
         if: always() && steps.lab.outcome != 'success'
         run: exit 1
 
   publish-evidence:
     name: commit verified replay evidence
-    needs: labs
+    needs: evidence-labs
     if: success()
     runs-on: ubuntu-latest
+    concurrency:
+      group: playground-evidence-main
+      cancel-in-progress: false
     permissions:
       contents: write
     steps:
@@ -197,7 +223,9 @@ jobs:
       - name: commit evidence to main
         shell: bash
         run: |
-          git add demos/rabbitmq demos/kafka demos/redis-streams
+          find demos/rabbitmq demos/kafka demos/redis-streams -type f \
+            \( -name '*.out.txt' -o -name 'capture.json' -o -name 'replay.raw.jsonl' -o -name 'replay.json' \) \
+            -print0 | xargs -0 -r git add --
           if git diff --cached --quiet; then
             echo "证据内容未变化，无需提交。" >> "$GITHUB_STEP_SUMMARY"
             exit 0
@@ -210,7 +238,7 @@ jobs:
 
   diagnostics:
     name: combined failure diagnostics
-    needs: labs
+    needs: [evidence-labs, smoke-labs]
     if: always()
     runs-on: ubuntu-latest
     steps:
@@ -228,7 +256,7 @@ jobs:
           echo "## Smoke Lab 失败诊断" >> "$GITHUB_STEP_SUMMARY"
           echo "" >> "$GITHUB_STEP_SUMMARY"
           if [ -d smoke-diagnostics ]; then
-            find smoke-diagnostics -mindepth 1 -maxdepth 1 -type d -printf -- '- `%f`\n' | sort >> "$GITHUB_STEP_SUMMARY"
+            find smoke-diagnostics -mindepth 1 -maxdepth 1 -type d -printf '- `%f`\n' | sort >> "$GITHUB_STEP_SUMMARY"
           else
             echo "本次没有失败诊断制品。" >> "$GITHUB_STEP_SUMMARY"
           fi

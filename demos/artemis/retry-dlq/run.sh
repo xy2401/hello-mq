@@ -6,8 +6,10 @@ source "$LAB_DIR/../../shared/run-common.sh"
 
 ensure_jar artemis
 compose_up dlq-consumer
-collect_logs producer consumer inspect-db dlq-consumer
+collect_logs artemis producer consumer inspect-db dlq-consumer
 
+assert_eq "brokerNioJournal" "$([ "$(count_log artemis 'Using NIO Journal')" -gt 0 ] && echo true || echo false)" true
+assert_eq "brokerOrdersDlq" "$([ "$(count_log artemis 'Deploying address orders-dlq')" -gt 0 ] && echo true || echo false)" true
 assert_eq "confirmed" "$(count_log producer 'status=confirmed')" 2
 assert_eq "okReceived" "$(count_log consumer 'aggregateId=order-1001.*status=received')" 1
 assert_eq "businessCommitted" "$(count_log consumer 'status=business_committed')" 1

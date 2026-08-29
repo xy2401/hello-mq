@@ -20,8 +20,8 @@ services:
       ARTEMIS_USER: admin
       ARTEMIS_PASSWORD: hello-mq-artemis
     volumes:
-      # 镜像仅在文件缺失时生成 etc 配置：挂载自定义 broker.xml 承载实验所需的重试/DLQ 地址设置。
-      - ../broker.xml:/var/lib/artemis/etc/broker.xml
+      # 官方镜像会把此目录中的文件覆盖到实例配置，保证重试与 DLQ 设置生效。
+      - ../broker.xml:/var/lib/artemis-instance/etc-override/broker.xml:ro
     ports:
       # 61616：CORE/AMQP/OPENWIRE/STOMP/MQTT 全协议 acceptor；8161：Web 控制台（hawtio）
       - "127.0.0.1:61616:61616"

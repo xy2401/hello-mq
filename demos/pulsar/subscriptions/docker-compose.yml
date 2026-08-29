@@ -154,7 +154,7 @@ services:
       - --fixtures=/app/fixtures
       - --service-url=pulsar://pulsar:6650
 
-  # --- 阶段 3：Failover 主备。priority 大者为主收全量，备份 0 条；主备均退出后备份提升收新一轮全量。
+  # --- 阶段 3：Failover 主备。同 priority 时按稳定 consumer name 排序：a-primary 先于 b-replica。
   consumer-failover-primary:
     <<: *java-base
     depends_on:
@@ -172,7 +172,7 @@ services:
       - --lab=subscriptions
       - --consumer=a-primary
       - --expected=3
-      - --priority=10
+      - --priority=0
       - --service-url=pulsar://pulsar:6650
 
   consumer-failover-replica:
@@ -191,6 +191,7 @@ services:
       - --db=/data/idempotency-failover-replica.db
       - --lab=subscriptions
       - --consumer=b-replica
+      - --priority=0
       - --total-exit-ms=20000
       - --service-url=pulsar://pulsar:6650
 
