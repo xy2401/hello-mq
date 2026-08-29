@@ -299,6 +299,11 @@ function checkScenarioStability() {
       fail(`nats/${lab} must use host-side readiness for the distroless image`)
     }
   }
+  const natsCoreRun = read('demos/nats/core-pubsub/run.sh')
+  if (!natsCoreRun.includes('compose up -d --no-deps consumer')
+    || /^compose up -d consumer$/m.test(natsCoreRun)) {
+    fail('NATS core consumer must not restart the completed producer-lost dependency')
+  }
 
   if (!read('demos/pulsar/redelivery-replay/run.sh').includes('compose up -d --no-deps consumer-replay')) {
     fail('Pulsar replay must not restart producer dependencies after resetting the cursor')
@@ -333,6 +338,14 @@ function checkScenarioStability() {
   if (!artemisBroker.includes('<redelivery-delay-multiplier>1.0</redelivery-delay-multiplier>')
     || artemisBroker.includes('<redelivery-multiplier>')) {
     fail('Artemis broker.xml must use the schema-valid redelivery-delay-multiplier element')
+  }
+  for (const permission of [
+    'createNonDurableQueue', 'deleteNonDurableQueue', 'createDurableQueue', 'deleteDurableQueue',
+    'createAddress', 'deleteAddress', 'send', 'consume', 'browse', 'manage',
+  ]) {
+    if (!artemisBroker.includes(`<permission type="${permission}" roles="amq"/>`)) {
+      fail(`Artemis amq role is missing ${permission} permission`)
+    }
   }
 
   const replayGate = read('demos/shared/src/main/java/com/hellomq/shared/ReplayGate.java')

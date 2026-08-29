@@ -10,7 +10,8 @@ compose up -d --no-deps nats
 wait_http_ready http://127.0.0.1:8222/healthz nats 90
 compose up -d producer-lost
 compose wait producer-lost || true
-compose up -d consumer
+# producer-lost 是已完成的一次性依赖；禁止 Compose 在启动 consumer 时重新创建并再发布一遍。
+compose up -d --no-deps consumer
 # Core NATS 无缓冲、无确认：必须等订阅抵达服务端再发布，否则 live 消息同样会丢。
 for _ in $(seq 1 60); do
   if compose logs --no-color --no-log-prefix consumer | grep -q 'status=subscribed'; then
