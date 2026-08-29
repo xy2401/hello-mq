@@ -290,10 +290,13 @@ function checkLabTimeouts() {
 
 function checkScenarioStability() {
   const read = (file) => fs.readFileSync(path.join(ROOT, file), 'utf8')
-  const natsHealth = '["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8222/healthz"]'
   for (const lab of ['core-pubsub', 'jetstream-replay']) {
-    if (!read(`demos/nats/${lab}/docker-compose.yml`).includes(natsHealth)) {
-      fail(`nats/${lab} must use the BusyBox-compatible health command`)
+    const compose = read(`demos/nats/${lab}/docker-compose.yml`)
+    const script = read(`demos/nats/${lab}/run.sh`)
+    if (compose.includes('healthcheck:')
+      || !compose.includes('condition: service_started')
+      || !script.includes('wait_http_ready http://127.0.0.1:8222/healthz nats')) {
+      fail(`nats/${lab} must use host-side readiness for the distroless image`)
     }
   }
 
@@ -301,11 +304,14 @@ function checkScenarioStability() {
     fail('Pulsar replay must not restart producer dependencies after resetting the cursor')
   }
   const subscriptions = read('demos/pulsar/subscriptions/docker-compose.yml')
+  const subscriptionsRun = read('demos/pulsar/subscriptions/run.sh')
   if (!subscriptions.includes('--consumer=a-primary')
     || !subscriptions.includes('--consumer=b-replica')
-    || (subscriptions.match(/--priority=0/g) ?? []).length < 2
-    || subscriptions.includes('--priority=10')) {
-    fail('Pulsar failover consumers must share priority 0 and use stable a-primary/b-replica names')
+    || (subscriptions.match(/--priority=0/g) ?? []).length !== 1
+    || (subscriptions.match(/--priority=1/g) ?? []).length < 2
+    || !subscriptionsRun.includes('create-partitioned-topic')
+    || !subscriptionsRun.includes('--partitions 1')) {
+    fail('Pulsar failover must use a single partition and explicit primary/replica priorities')
   }
 
   for (const compose of [
@@ -323,6 +329,11 @@ function checkScenarioStability() {
       fail(`${script} must verify that the custom NIO and orders-dlq configuration was loaded`)
     }
   }
+  const artemisBroker = read('demos/artemis/broker.xml')
+  if (!artemisBroker.includes('<redelivery-delay-multiplier>1.0</redelivery-delay-multiplier>')
+    || artemisBroker.includes('<redelivery-multiplier>')) {
+    fail('Artemis broker.xml must use the schema-valid redelivery-delay-multiplier element')
+  }
 
   const replayGate = read('demos/shared/src/main/java/com/hellomq/shared/ReplayGate.java')
   const collector = read('scripts/collect-playground.js')
@@ -337,6 +348,11 @@ function checkScenarioStability() {
   const kafkaProducer = read('demos/kafka/src/main/java/com/hellomq/kafka/Producer.java')
   if (!kafkaProducer.includes('ThreadLocalRandom.current()') || kafkaProducer.includes('RandomGenerator.getDefault()')) {
     fail('Kafka trace IDs must use ThreadLocalRandom supported by the slim JRE')
+  }
+  const kafkaConsumer = read('demos/kafka/src/main/java/com/hellomq/kafka/Consumer.java')
+  if (!kafkaConsumer.includes('lastCompletedAt = System.currentTimeMillis();')
+    || !kafkaConsumer.includes('idleExpired(received, lastCompletedAt')) {
+    fail('Kafka idle timeout must start after gated message processing completes')
   }
 
   const workflow = YAML.parse(read('.github/workflows/smoke-labs.yml'))

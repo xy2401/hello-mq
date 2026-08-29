@@ -103,6 +103,41 @@ wait_healthy() {
   done
 }
 
+# wait_http_ready <URL> <服务> [秒数]：为 distroless 镜像从宿主机轮询 HTTP 就绪端点。
+# 这类镜像没有 shell、wget 或 curl，不能伪造容器内 healthcheck。
+wait_http_ready() {
+  local url="$1" service="$2" limit="${3:-${HELLO_MQ_HEALTH_TIMEOUT_SECONDS:-240}}"
+  local started now elapsed next_report=0
+  case "$limit" in
+    ''|*[!0-9]*) printf 'HTTP readiness timeout for %s must be a positive integer\n' "$service" >&2; return 2 ;;
+    0) printf 'HTTP readiness timeout for %s must be greater than zero\n' "$service" >&2; return 2 ;;
+  esac
+  if ! command -v curl >/dev/null 2>&1; then
+    printf 'curl is required for host-side readiness check: %s\n' "$url" >&2
+    return 2
+  fi
+  started="$(date +%s)"
+  while true; do
+    if curl --connect-timeout 2 --max-time 5 -fsS "$url" >/dev/null 2>&1; then
+      printf 'Service %s HTTP endpoint is ready after %ss\n' "$service" "$(($(date +%s) - started))"
+      return 0
+    fi
+    now="$(date +%s)"
+    elapsed=$((now - started))
+    if [ "$elapsed" -ge "$limit" ]; then
+      printf 'Service %s HTTP readiness timeout after %ss: %s\n' "$service" "$limit" "$url" >&2
+      compose ps --all "$service" >&2 || true
+      compose logs --tail 100 --no-color --no-log-prefix "$service" >&2 || true
+      return 1
+    fi
+    if [ "$elapsed" -ge "$next_report" ]; then
+      printf 'Waiting for %s HTTP readiness: elapsed=%ss/%ss\n' "$service" "$elapsed" "$limit"
+      next_report=$((elapsed + 15))
+    fi
+    sleep 1
+  done
+}
+
 # RocketMQ Broker 的 TCP healthcheck 通过后，仍需等待它向 NameServer 注册路由；
 # 否则 Proxy 启动时创建系统 Topic 会偶发失败。
 wait_rocketmq_registered() {

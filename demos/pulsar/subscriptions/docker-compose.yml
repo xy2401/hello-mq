@@ -154,7 +154,7 @@ services:
       - --fixtures=/app/fixtures
       - --service-url=pulsar://pulsar:6650
 
-  # --- 阶段 3：Failover 主备。同 priority 时按稳定 consumer name 排序：a-primary 先于 b-replica。
+  # --- 阶段 3：Failover 主备。该实验显式创建单分区 topic，priority 0 高于 1。
   consumer-failover-primary:
     <<: *java-base
     depends_on:
@@ -191,7 +191,7 @@ services:
       - --db=/data/idempotency-failover-replica.db
       - --lab=subscriptions
       - --consumer=b-replica
-      - --priority=0
+      - --priority=1
       - --total-exit-ms=20000
       - --service-url=pulsar://pulsar:6650
 
@@ -231,6 +231,7 @@ services:
       - --lab=subscriptions
       - --consumer=b-replica
       - --expected=3
+      - --priority=1
       - --service-url=pulsar://pulsar:6650
 
   producer-failover-promoted:

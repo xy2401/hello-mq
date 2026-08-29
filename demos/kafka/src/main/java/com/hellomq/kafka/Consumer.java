@@ -74,12 +74,11 @@ public final class Consumer {
           });
 
       int received = 0;
-      long lastRecordAt = System.currentTimeMillis();
+      long lastCompletedAt = System.currentTimeMillis();
       long startedAt = System.currentTimeMillis();
       while (true) {
         var records = consumer.poll(Duration.ofMillis(500));
         for (ConsumerRecord<String, String> record : records) {
-          lastRecordAt = System.currentTimeMillis();
           received++;
           Envelope envelope = Json.mapper().readValue(record.value(), Envelope.class);
           String seq = header(record, "seq");
@@ -111,14 +110,21 @@ public final class Consumer {
               .emit();
           ReplayGate.awaitCheckpoint("before-offset-commit", envelope.getMessageId());
           consumer.commitSync();
+          // 回放门闩会有意暂停处理。空闲时间必须从本条消息完成后计算，
+          // 否则门闩等待本身会被误判为“无消息空闲”，导致仍有 lag 时提前退出。
+          lastCompletedAt = System.currentTimeMillis();
         }
         if (expected >= 0 && received >= expected) break;
-        if (idleExitMs > 0 && received > 0 && System.currentTimeMillis() - lastRecordAt >= idleExitMs) break;
+        if (idleExpired(received, lastCompletedAt, System.currentTimeMillis(), idleExitMs)) break;
         if (System.currentTimeMillis() - startedAt > 110_000) break;
       }
       watchdog.cancel();
       log.entry().put("destination", topic).put("consumer", name).put("received", received).status("done").emit();
     }
+  }
+
+  static boolean idleExpired(int received, long lastCompletedAt, long now, long idleExitMs) {
+    return idleExitMs > 0 && received > 0 && now - lastCompletedAt >= idleExitMs;
   }
 
   private static String header(ConsumerRecord<String, String> record, String key) {

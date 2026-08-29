@@ -22,20 +22,14 @@ services:
     ports:
       - "127.0.0.1:4222:4222"
       - "127.0.0.1:8222:8222"
+    # 官方镜像是 distroless，没有 shell/wget/curl；就绪由 run.sh 从宿主机轮询 /healthz。
     # 实验语义要求每次全新启动：不挂持久卷，down 时数据随容器一起销毁。
-    healthcheck:
-      # 镜像内是 BusyBox wget，不支持 GNU wget 的 --spider。
-      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8222/healthz"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-      start_period: 5s
 
   setup:
     <<: *java-base
     depends_on:
       nats:
-        condition: service_healthy
+        condition: service_started
     command: ["java", "-jar", "/app/demo.jar", "setup", "--lab=core-pubsub"]
 
   producer-lost:

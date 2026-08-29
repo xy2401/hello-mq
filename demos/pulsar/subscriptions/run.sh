@@ -24,7 +24,13 @@ wait_subscribed() {
 gt0() { [ "$1" -gt 0 ] && echo true || echo false; }
 
 ensure_jar pulsar
-compose up -d consumer-ex-1
+compose up -d setup
+compose wait setup
+# Pulsar 4.x 的 priorityLevel 对非分区 Failover topic 不生效；显式创建单分区 topic，
+# 让 priority 0/1 成为可验证、可复现的主备选择依据。
+compose exec -T pulsar bin/pulsar-admin topics create-partitioned-topic \
+  persistent://public/default/orders-subscriptions --partitions 1
+compose up -d --no-deps consumer-ex-1
 wait_subscribed consumer-ex-1
 collect_logs setup
 
@@ -54,7 +60,7 @@ assert_eq "sharedUnique" "$(unique_logs 'messageId=[^ ]*' consumer-shared-1 cons
 assert_eq "sharedS1GotMessages" "$(gt0 "$(count_log consumer-shared-1 'status=received')")" true
 assert_eq "sharedS2GotMessages" "$(gt0 "$(count_log consumer-shared-2 'status=received')")" true
 
-# --- 阶段 3：Failover。同 priority 按 consumer name 稳定排序，a-primary 收全量、b-replica 备用。
+# --- 阶段 3：Failover。单分区 topic 上 priority 0 为主，priority 1 为备用。
 compose up -d --no-deps consumer-failover-primary
 wait_subscribed consumer-failover-primary
 compose up -d --no-deps consumer-failover-replica
