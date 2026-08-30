@@ -63,7 +63,7 @@ v2 消息示例（仅 payload 变化）：
 
 - 旧消费者按 `amount` 取值 → 空/异常；按 number 解析 → 类型错误；缺 `currency` → 入账口径错乱；
 - 新旧生产者共存期间，同一 topic/队列里混着两种结构，消费者随机失败——失败看起来像「偶发抖动」，实为契约事故；
-- Schema 校验失败的毒消息批量进 DLQ（见[毒消息实验](/playground/poison-message)），重试也救不回来。
+- Schema 校验失败的毒消息批量进 DLQ（见 [RabbitMQ 重试与 DLQ](/products/rabbitmq/reliability)），重试也救不回来。
 
 正确做法（任选其一并过渡）：
 

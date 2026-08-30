@@ -70,8 +70,3 @@ docker compose --env-file ../../../.env.versions down --volumes
 
 - run.sh 退出时的 `docker compose down --volumes` 只 down 本实验的 Kafka Compose Project（`hello-mq-kafka-basic`）。
 - 实验 Broker 不挂持久卷：每次实验都是干净状态，日志目录在容器内临时路径；生产存储见 [存储与高可用](/products/kafka/storage-ha)。
-
-## 下一步
-
-- 概念不熟：读 [核心概念映射](/products/kafka/concepts)。
-- 想看顺序与回放：[顺序、消费组与回放实验](/playground/ordering)。

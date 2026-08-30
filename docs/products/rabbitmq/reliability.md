@@ -63,13 +63,25 @@ bash demos/rabbitmq/consumer-crash/run.sh
 
 <LabOutput product="rabbitmq" lab="consumer-crash" />
 
+实验分两轮运行：第一轮在首条消息业务提交后、ACK 前以退出码 137 终止；第二轮恢复消费者，同一 `messageId` 以 `redelivered=true` 再次到达并被幂等表拦截。核心断言为：3 条唯一消息、4 次总投递、1 次重投、1 次 `duplicate_skipped`、业务表仍只有 3 行。[在 RabbitMQ 实验台查看崩溃与恢复轨道](/playground/rabbitmq?scenario=consumer-crash&track=crash)。
+
 ## 失败路径：重试与 DLQ
 
 RabbitMQ 无内置消费重试。推荐模式（本仓库 retry-dlq 实验验证）：
 
 - 工作队列 DLX → 重试队列（TTL 延迟）→ 回环到工作队列；
 - 消费者用 `x-death` 计数限制最大尝试次数；
-- 超限显式投递 DLQ 并告警。详见 [毒消息、重试与 DLQ](/playground/poison-message)。
+- 超限显式投递 DLQ 并告警。
+
+本仓库用 `orders.work`、`orders.retry` 和 `orders.dlq` 验证这条路径：工作队列拒绝消息后经 DLX 进入带 1 秒 TTL 的重试队列，到期再由 DLX 回到工作队列；消费者根据 `x-death` 计算尝试次数，第 3 次失败后把毒消息隔离到 DLQ。正常的两条消息照常落库，毒消息的尝试次数为 1、2、3，最终 `business_rows=2`、`dlqMessages=1`。
+
+```bash
+bash demos/rabbitmq/retry-dlq/run.sh
+```
+
+<LabOutput product="rabbitmq" lab="retry-dlq" />
+
+[在 RabbitMQ 实验台查看重试与 DLQ 轨道](/playground/rabbitmq?scenario=retry-dlq&track=poison)。
 
 ## 顺序与重试的关系
 

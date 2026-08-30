@@ -72,14 +72,12 @@ const matrixSidebar = [
 
 const experimentSidebar = [
   {
-    text: '可复现实验台',
+    text: '消息语义实验台',
     items: [
-      { text: '交互回放', link: '/playground/' },
-      { text: '基础收发流程', link: '/playground/basic-flow' },
-      { text: '消费者崩溃与重投', link: '/playground/consumer-crash' },
-      { text: '毒消息、重试与 DLQ', link: '/playground/poison-message' },
-      { text: '顺序、消费组与回放（Kafka）', link: '/playground/ordering' },
-      { text: '积压与追赶（RabbitMQ）', link: '/playground/backlog-recovery' },
+      { text: '全部回放', link: '/playground/' },
+      { text: 'RabbitMQ', link: '/playground/rabbitmq' },
+      { text: 'Kafka', link: '/playground/kafka' },
+      { text: 'Redis Streams', link: '/playground/redis-streams' },
     ],
   },
 ]

@@ -439,7 +439,7 @@ sequenceDiagram
   C-->>B: ACK
 ```
 
-幂等表（`processed_messages` 唯一键）是这个窗口的唯一防线——详见[消费者崩溃与重投实验](/playground/consumer-crash)。
+幂等表（`processed_messages` 唯一键）是这个窗口的唯一防线——详见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)。
 
 #### 保证成立的条件
 
@@ -634,7 +634,7 @@ flowchart TD
 
 1. **水平扩容消费者**（竞争消费/消费组模型）；日志型注意消费者数 ≤ 分区数。
 2. **限流保护下游**：与其把下游打挂，不如让积压停留在 Broker（配合磁盘容量评估）。
-3. **隔离毒消息**：有限重试 + DLQ，避免同一条坏消息反复阻塞（见[毒消息实验](/playground/poison-message)）。
+3. **隔离毒消息**：有限重试 + DLQ，避免同一条坏消息反复阻塞（见 [RabbitMQ 重试与 DLQ](/products/rabbitmq/reliability)）。
 4. **批量与预取调优**：增大 prefetch/批大小可提升吞吐，但会拉长单条确认延迟、扩大崩溃重复窗口。
 5. **回放预案**：积压清理或位点重置会产生消费洪峰，需预留处理能力。
 

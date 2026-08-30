@@ -49,6 +49,14 @@ bash demos/kafka/consumer-group/run.sh
 
 <LabOutput product="kafka" lab="consumer-group" />
 
+## Offset 回放
+
+`ordering-replay` 同时验证组级位点：消费组 `g1` 首次顺序读取 6 条消息后，新消费组 `g2` 使用 `auto.offset.reset=earliest` 从 offset 0 全量读取。`g1` 的消费不会改变 `g2` 的起点，因为日志保留与消费进度彼此独立。
+
+核心断言为：6 条消息落在同一分区、首次观察顺序为 1 到 6、回放仍读取 6 条且从 offset 0 开始。
+
+[在 Kafka 实验台查看首次消费与回放轨道](/playground/kafka?scenario=ordering-replay&track=initial)。
+
 ## 分区数怎么选
 
 - 分区数 ≈ 目标消费并行度；扩容消费者只能到分区数为止，扩分区不可逆（且会打乱既有 key 分布）。

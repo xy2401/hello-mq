@@ -52,7 +52,7 @@ while (running) {
 以下表述在本仓库视为错误：
 
 1. **「Kafka 保证全局顺序」**
-   真相：顺序只在**分区内**成立。跨分区、再均衡后的交接、多线程消费都可能打乱全局顺序；需要全局顺序只能单分区（牺牲并行度）。本仓库 [ordering-replay 实验](/playground/ordering) 验证的是同 key 同分区的局部顺序。
+   真相：顺序只在**分区内**成立。跨分区、再均衡后的交接、多线程消费都可能打乱全局顺序；需要全局顺序只能单分区（牺牲并行度）。本仓库 [ordering-replay 证据](/products/kafka/routing) 验证的是同 key 同分区的局部顺序。
 
 2. **「提交 offset 等于业务数据库已成功提交」**
    真相：offset 在 Kafka，业务数据在另一个系统，两者之间必有崩溃窗口。正确顺序是业务事务提交后才 commitSync，并用幂等表拦截重读（[basic 实验快照](/products/kafka/reliability) 即此实现）。

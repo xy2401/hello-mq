@@ -13,7 +13,7 @@
 
 <LabOutput product="rabbitmq" lab="retry-dlq" />
 
-实验拓扑与断言细节见[毒消息、重试与 DLQ](/playground/poison-message)。
+实验拓扑与断言细节见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)。
 
 ## 三机制对比（RabbitMQ / RocketMQ / Kafka）
 
@@ -46,7 +46,7 @@ DLQ 只完成「隔离」，治理闭环在 DLQ 之外：
 ## 保证成立的条件 / 不保证什么
 
 - 条件：重试次数可观测（x-death / Broker 计数 / 应用头字段）；DLQ 有告警与回放流程；重试路径幂等。
-- 不保证：重试后消息仍保持原队列顺序；进入 DLQ 的消息会被自动处理；RabbitMQ 队列级 TTL 能表达任意精细的逐条延迟（到期从队头计算，见[毒消息实验](/playground/poison-message)「不保证什么」）。
+- 不保证：重试后消息仍保持原队列顺序；进入 DLQ 的消息会被自动处理；RabbitMQ 队列级 TTL 能表达任意精细的逐条延迟（到期从队头计算，见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)）。
 
 ## 常见误区
 

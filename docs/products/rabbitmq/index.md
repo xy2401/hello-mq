@@ -43,7 +43,7 @@ flowchart LR
 | :--- | :--- |
 | 投递语义 | at-most-once（自动 ACK）/ at-least-once（手动 ACK + Confirms）；无跨系统 exactly-once |
 | 顺序 | 单队列内 FIFO；重试、requeue 会打乱顺序 |
-| 重试/DLQ | 无内置消费重试；TTL + DLX 组合模式（[实验](/playground/poison-message)） |
+| 重试/DLQ | 无内置消费重试；TTL + DLX 组合模式（[可靠性](/products/rabbitmq/reliability)） |
 | 延迟消息 | 队列级/消息级 TTL + DLX 组合；per-message TTL 按队头计算 |
 | 高可用 | Quorum Queue（Raft 多数派复制）；Classic Queue 镜像模式已弃用 |
 | 回放 | 不适用（队列语义，ACK 后删除）；RabbitMQ Streams 是例外 |
@@ -56,7 +56,7 @@ flowchart LR
 4. [可靠性](/products/rabbitmq/reliability)：两段确认与崩溃窗口。
 5. [存储与高可用](/products/rabbitmq/storage-ha)：三种队列与 Quorum 权衡。
 6. [运维与观测](/products/rabbitmq/operations)、[陷阱与检查表](/products/rabbitmq/pitfalls)。
-7. 动手实验：[basic](/playground/basic-flow)、[consumer-crash](/playground/consumer-crash)、[routing 与 retry-dlq](/playground/poison-message)、[cli-tools](/products/rabbitmq/operations)。
+7. 动手实验：[basic](/playground/rabbitmq?scenario=basic)、[consumer-crash](/playground/rabbitmq?scenario=consumer-crash&track=crash)、[routing](/playground/rabbitmq?scenario=routing)、[retry-dlq](/playground/rabbitmq?scenario=retry-dlq&track=poison)、[backlog-recovery](/playground/rabbitmq?scenario=backlog-recovery&track=offline)。
 
 ## 版本基线
 

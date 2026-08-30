@@ -142,10 +142,10 @@ P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」�
 
 ## 通用风险验证清单（任何候选都要过）
 
-1. 重复：at-least-once 下幂等消费是否拦截全部重复（[实验](/playground/consumer-crash)）。
-2. 顺序：失败重试后业务完成顺序是否符合预期（[实验](/playground/ordering)）。
-3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[实验](/playground/poison-message)）。
-4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[实验](/playground/backlog-recovery)）。
+1. 重复：at-least-once 下幂等消费是否拦截全部重复（[RabbitMQ 可靠性](/products/rabbitmq/reliability)）。
+2. 顺序：失败重试后业务完成顺序是否符合预期（[Kafka 分区与分发](/products/kafka/routing)）。
+3. 毒消息：一条坏消息是否会循环重投或阻塞顺序单元（[RabbitMQ 重试与 DLQ](/products/rabbitmq/reliability)）。
+4. 积压：消费者离线再恢复，追赶耗时与 Broker 资源占用（[RabbitMQ 运维与观测](/products/rabbitmq/operations)）。
 5. 副本：少数派节点故障时的可用性与数据完整性（各产品 storage-ha 页）。
 6. 默认值陷阱：对照各产品[陷阱与检查表](/products/rabbitmq/pitfalls)。
 

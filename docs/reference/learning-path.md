@@ -13,8 +13,8 @@
 
 | 读者 | 主要诉求 | 推荐路径 |
 | :--- | :--- | :--- |
-| 后端初学者 | 理解队列、发布订阅、ACK、重试 | [投递语义](/#mq-delivery-semantics) → [RabbitMQ 概念映射](/products/rabbitmq/concepts) → [基础收发实验](/playground/basic-flow) → [崩溃重投实验](/playground/consumer-crash) |
-| Java/服务端开发者 | 可靠投递、幂等、事务一致性 | [可靠性](/products/rabbitmq/reliability) → [毒消息与 DLQ](/playground/poison-message) → 后续 Kafka/RocketMQ 分卷 |
+| 后端初学者 | 理解队列、发布订阅、ACK、重试 | [投递语义](/#mq-delivery-semantics) → [RabbitMQ 概念映射](/products/rabbitmq/concepts) → [基础收发](/products/rabbitmq/quick-start) → [崩溃重投](/products/rabbitmq/reliability) |
+| Java/服务端开发者 | 可靠投递、幂等、事务一致性 | [RabbitMQ 可靠性](/products/rabbitmq/reliability) → [Kafka 可靠性](/products/kafka/reliability) → [RocketMQ 可靠性](/products/rocketmq/reliability) |
 | 架构师 | 产品边界、容量模型、选型 | 基础原理全部 → RabbitMQ [陷阱与检查表](/products/rabbitmq/pitfalls) → 后续横向矩阵 |
 | SRE/平台工程师 | 积压、监控、故障恢复 | [背压与积压](/#mq-backpressure) → [运维与观测](/products/rabbitmq/operations) → 故障实验 |
 | 数据/流处理开发者 | 分区日志、回放、消费组 | [存储与回放](/#mq-storage-and-replay) → [顺序语义](/#mq-ordering) → 后续 Kafka/Pulsar 分卷 |

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { data as catalog } from '../data/replay-evidence.data'
-import type { ReplayAction, ReplayCatalogEntry, ReplayEvent, ReplayTrack } from '../data/replay'
+import type { ReplayAction, ReplayCatalogEntry, ReplayEvent, ReplayNodeState, ReplayProduct, ReplayTrack } from '../data/replay'
 import { clampReplayStep, moveReplayStep, resolveReplayAction } from '../data/replay-player'
 
 const productLabels = {
@@ -10,7 +10,9 @@ const productLabels = {
   'redis-streams': 'Redis Streams',
 } as const
 
-const selectedProduct = ref<keyof typeof productLabels>('rabbitmq')
+const props = defineProps<{ product?: ReplayProduct }>()
+const fixedProduct = computed(() => props.product && productLabels[props.product] ? props.product : undefined)
+const selectedProduct = ref<ReplayProduct>(props.product ?? 'rabbitmq')
 const selectedScenario = ref('basic')
 const selectedTrack = ref('')
 const step = ref(0)
@@ -106,7 +108,8 @@ function chooseProduct() {
   reset()
 }
 
-function chooseScenario() {
+function chooseScenario(scenarioId: string) {
+  selectedScenario.value = scenarioId
   reset()
 }
 
@@ -122,10 +125,16 @@ function setStep(value: number) {
   syncUrl()
 }
 
+function nodeChanged(node: ReplayNodeState) {
+  if (step.value === 0) return false
+  const previous = events.value[step.value - 1]?.state.nodes.find((item) => item.id === node.id)
+  return previous?.status !== node.status
+}
+
 function syncUrl() {
   if (typeof window === 'undefined') return
   const params = new URLSearchParams()
-  params.set('product', selectedProduct.value)
+  if (!fixedProduct.value) params.set('product', selectedProduct.value)
   params.set('scenario', selectedScenario.value)
   if (selectedTrack.value) params.set('track', selectedTrack.value)
   if (step.value > 0) params.set('step', String(step.value))
@@ -135,10 +144,12 @@ function syncUrl() {
 function loadUrl() {
   if (typeof window === 'undefined') return
   const params = new URLSearchParams(window.location.search)
-  const product = params.get('product') as keyof typeof productLabels | null
+  const product = fixedProduct.value ?? params.get('product') as ReplayProduct | null
   const scenarioId = params.get('scenario')
   const requested = catalog.find((item) => item.product === product && item.id === scenarioId)
-  const fallback = catalog.find((item) => item.product === 'rabbitmq' && item.id === 'basic')
+  const fallbackProduct = fixedProduct.value ?? 'rabbitmq'
+  const fallback = catalog.find((item) => item.product === fallbackProduct && item.id === 'basic')
+    ?? catalog.find((item) => item.product === fallbackProduct)
   const resolved = requested ?? fallback
   if (!resolved) return
   selectedProduct.value = resolved.product
@@ -191,16 +202,22 @@ onBeforeUnmount(() => {
 <template>
   <section class="mq-playground" aria-label="MQ Docker 证据回放实验台">
     <div class="mq-playground__toolbar">
-      <label>产品
+      <label v-if="!fixedProduct">产品
         <select v-model="selectedProduct" @change="chooseProduct">
           <option v-for="product in products" :key="product" :value="product">{{ productLabels[product] }}</option>
         </select>
       </label>
-      <label>场景
-        <select v-model="selectedScenario" @change="chooseScenario">
-          <option v-for="item in scenarios" :key="item.id" :value="item.id">{{ item.title }}</option>
-        </select>
-      </label>
+      <div class="mq-playground__scenarios" aria-label="场景">
+        <span>场景</span>
+        <button
+          v-for="item in scenarios"
+          :key="item.id"
+          type="button"
+          :aria-pressed="selectedScenario === item.id"
+          :class="{ current: selectedScenario === item.id }"
+          @click="chooseScenario(item.id)"
+        >{{ item.title }}</button>
+      </div>
       <label v-if="tracks.length > 1">证据轨道
         <select v-model="selectedTrack" @change="chooseTrack">
           <option v-for="item in tracks" :key="item.id" :value="item.id">{{ item.label }}</option>
@@ -214,7 +231,7 @@ onBeforeUnmount(() => {
       <strong>{{ entry?.title }}：尚无可回放的 Docker 证据</strong>
       <p>页面不会推演或伪造结果。请在具备 Docker、Compose、Bash、Maven 与 jq 的环境执行：</p>
       <pre><code>npm run collect:playground -- --scenario {{ entry?.product }}/{{ entry?.id }}</code></pre>
-      <p><a :href="entry?.document">查看实验说明与现有证据</a></p>
+      <p><a :href="entry?.document">查看产品说明与完整证据</a></p>
     </div>
 
     <template v-else>
@@ -234,8 +251,8 @@ onBeforeUnmount(() => {
       </div>
 
       <div class="mq-playground__topology" aria-label="当前拓扑状态">
-        <template v-for="(node, index) in event?.state.nodes ?? scenario.topology" :key="node.id">
-          <div class="mq-playground__node" :data-kind="node.kind" :data-state="node.status">
+        <template v-for="(node, index) in event?.state.nodes ?? scenario.topology" :key="`${node.id}-${node.status}`">
+          <div class="mq-playground__node" :class="{ changed: nodeChanged(node) }" :data-kind="node.kind" :data-state="node.status">
             <span>{{ node.label }}</span><small>{{ node.status }}</small>
           </div>
           <span v-if="index < (event?.state.nodes ?? scenario.topology).length - 1" class="mq-playground__arrow">→</span>
@@ -305,6 +322,9 @@ onBeforeUnmount(() => {
 .mq-playground button { padding: 4px 10px; cursor: pointer; }
 .mq-playground button:disabled { cursor: not-allowed; opacity: .42; }
 .mq-playground button:focus-visible, .mq-playground select:focus-visible { outline: 2px solid var(--vp-c-brand-1); outline-offset: 2px; }
+.mq-playground__scenarios { display: flex; align-items: center; flex-wrap: wrap; gap: 6px; }
+.mq-playground__scenarios > span { margin-right: 2px; color: var(--vp-c-text-2); }
+.mq-playground__scenarios button.current { border-color: var(--vp-c-brand-1); background: var(--vp-c-brand-soft); color: var(--vp-c-brand-1); font-weight: 600; }
 .mq-playground__status { margin-left: auto; padding-left: 10px; border-left: 3px solid var(--vp-c-warning-1); color: var(--vp-c-text-2); }
 .mq-playground__status[data-status='verified'] { border-color: var(--vp-c-success-1); }
 .mq-playground__status[data-status='failed'] { border-color: var(--vp-c-danger-1); }
@@ -317,19 +337,24 @@ onBeforeUnmount(() => {
 .mq-playground__node[data-kind='queue'] { border-top-color: #8b5cf6; }
 .mq-playground__node[data-kind='consumer'] { border-top-color: #f59e0b; }
 .mq-playground__node[data-kind='database'] { border-top-color: #10b981; }
-.mq-playground__node[data-state='failed'] { border-color: var(--vp-c-danger-1); }
+.mq-playground__node[data-state='waiting'] { --mq-node-accent: var(--vp-c-warning-1); }
+.mq-playground__node[data-state='failed'] { --mq-node-accent: var(--vp-c-danger-1); border-color: var(--vp-c-danger-1); }
 .mq-playground__node[data-state='active'] { box-shadow: 0 0 0 2px color-mix(in srgb, var(--vp-c-brand-1) 25%, transparent); }
+.mq-playground__node[data-state='done'] { --mq-node-accent: var(--vp-c-success-1); border-color: var(--vp-c-success-1); background: color-mix(in srgb, var(--vp-c-success-soft) 55%, var(--vp-c-bg)); }
+.mq-playground__node.changed { animation: mq-node-change .7s ease-out; }
 .mq-playground__node span, .mq-playground__node small { display: block; white-space: nowrap; }
 .mq-playground__node small { margin-top: 3px; color: var(--vp-c-text-3); }
+.mq-playground__node[data-state='done'] small { color: var(--vp-c-success-1); font-weight: 700; }
+.mq-playground__node[data-state='failed'] small { color: var(--vp-c-danger-1); font-weight: 700; }
 .mq-playground__arrow { align-self: center; color: var(--vp-c-text-3); }
-.mq-playground__metrics { display: flex; flex-wrap: wrap; margin: 0; padding: 9px 0; border-top: 1px solid var(--vp-c-divider); border-bottom: 1px solid var(--vp-c-divider); }
+.mq-playground__metrics { display: flex; align-items: center; flex-wrap: wrap; box-sizing: border-box; min-height: 39px; margin: 0; padding: 9px 0; border-top: 1px solid var(--vp-c-divider); border-bottom: 1px solid var(--vp-c-divider); }
 .mq-playground__metrics dt { margin-left: 14px; color: var(--vp-c-text-3); }
 .mq-playground__metrics dd { margin: 0 14px 0 5px; font-variant-numeric: tabular-nums; font-weight: 600; }
 .mq-playground__timeline { position: relative; display: flex; gap: 4px; overflow-x: auto; padding: 24px 0 10px; }
 .mq-playground__progress { position: absolute; top: 16px; left: 0; right: 0; height: 2px; background: var(--vp-c-divider); }
 .mq-playground__progress span { display: block; height: 100%; background: var(--vp-c-brand-1); transition: width .2s; }
 .mq-playground__timeline button { position: relative; min-width: 78px; padding: 8px 6px 4px; border: 0; background: transparent; color: var(--vp-c-text-3); }
-.mq-playground__timeline button > span { position: absolute; top: -18px; left: 50%; width: 18px; height: 18px; border: 2px solid var(--vp-c-divider); border-radius: 50%; background: var(--vp-c-bg); line-height: 14px; transform: translateX(-50%); }
+.mq-playground__timeline button > span { position: absolute; top: -20px; left: 50%; box-sizing: border-box; width: 24px; height: 24px; border: 2px solid var(--vp-c-divider); border-radius: 50%; background: var(--vp-c-bg); font-size: 11px; line-height: 20px; transform: translateX(-50%); }
 .mq-playground__timeline button.passed, .mq-playground__timeline button.current { color: var(--vp-c-text-1); }
 .mq-playground__timeline button.passed > span, .mq-playground__timeline button.current > span { border-color: var(--vp-c-brand-1); }
 .mq-playground__timeline button.current > span { background: var(--vp-c-brand-1); color: white; }
@@ -354,5 +379,11 @@ onBeforeUnmount(() => {
 }
 @media (prefers-reduced-motion: reduce) {
   .mq-playground__progress span { transition: none; }
+  .mq-playground__node.changed { animation: none; }
+}
+@keyframes mq-node-change {
+  0% { transform: translateY(0); box-shadow: 0 0 0 0 color-mix(in srgb, var(--mq-node-accent, var(--vp-c-brand-1)) 38%, transparent); }
+  35% { transform: translateY(-3px); box-shadow: 0 0 0 7px color-mix(in srgb, var(--mq-node-accent, var(--vp-c-brand-1)) 18%, transparent); }
+  100% { transform: translateY(0); box-shadow: 0 0 0 0 transparent; }
 }
 </style>

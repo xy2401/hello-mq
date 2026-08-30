@@ -29,7 +29,7 @@ docker compose -p <project> exec rabbitmq \
 
 补充观测点：
 
-- **redeliver 速率**：突增通常意味着消费者崩溃或处理异常（对照 [consumer-crash 实验](/playground/consumer-crash) 的 `redelivered=true` 日志）。
+- **redeliver 速率**：突增通常意味着消费者崩溃或处理异常（对照 [可靠性](/products/rabbitmq/reliability) 中 consumer-crash 的 `redelivered=true` 日志）。
 - **连接/Channel 数**：连接泄漏与 Channel 暴涨是常见故障。
 - **DLQ 深度**：DLQ 有消息 = 有失败需要人工处理，应直接告警。
 
@@ -45,6 +45,18 @@ docker compose -p <project> exec rabbitmq \
 | 消息「消失」 | 是否发到未绑定的 Exchange（开 mandatory + basicReturn 观察）；是否被 TTL/max-length 淘汰 |
 | 消费停滞 | Unacked 是否打满 prefetch；消费者进程是否存活 |
 | 重启后消息没了 | 队列/消息是否 durable+persistent；是否用了 Classic 单副本队列 |
+
+## 积压与恢复追赶
+
+`backlog-recovery` 实验先在没有消费者在线时发布 6 条持久化消息，确认 `messages_ready=6`；随后启动消费者追赶，最终收到 6 条不同 `messageId`，队列深度归零。两轮消息使用相同的 3 个业务订单号，因此业务幂等把写入收敛为 3 行，另 3 条记录为 `duplicate_skipped`。
+
+```bash
+bash demos/rabbitmq/backlog-recovery/run.sh
+```
+
+<LabOutput product="rabbitmq" lab="backlog-recovery" />
+
+[在 RabbitMQ 实验台查看离线积压与恢复轨道](/playground/rabbitmq?scenario=backlog-recovery&track=offline)。积压不等于丢失；生产环境还必须监控积压增长斜率、磁盘水位与追赶吞吐，不能只等待队列最终清零。
 
 ## 安全基线（单节点实验版）
 

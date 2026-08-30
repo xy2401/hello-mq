@@ -43,7 +43,7 @@ flowchart LR
 
 竞争消费不改变投递语义：
 
-- RabbitMQ 消费者崩溃，未 ACK 的消息重新入队并投给其他消费者——本仓库实验可复现（见[消费者崩溃与重投](/playground/consumer-crash)）。
+- RabbitMQ 消费者崩溃，未 ACK 的消息重新入队并投给其他消费者——本仓库实验可复现（见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)）。
 - Kafka 消费者崩溃，从上次已提交 offset 起重读，重投单位是「一批」而不是一条（见 [Kafka 可靠性](/products/kafka/reliability)）。
 
 结论：at-least-once 下业务**必须预期重复**，竞争消费越容易崩溃重启，越需要[幂等消费](/reference/patterns/idempotent-consumer)兜底。

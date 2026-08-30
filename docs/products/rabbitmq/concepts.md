@@ -67,7 +67,7 @@ Producer、Exchange、Queue、Consumer、Message。无「Topic 即队列」概�
 
 ### 9. 失败处理
 
-无内置消费重试。模式：TTL + DLX 重试环、延迟重投、DLQ 隔离。见 [毒消息实验](/playground/poison-message)。
+无内置消费重试。模式：TTL + DLX 重试环、延迟重投、DLQ 隔离。见 [可靠性](/products/rabbitmq/reliability)。
 
 ### 10. 高可用与扩展
 
@@ -87,7 +87,7 @@ Quorum Queue（Raft 多数派）为现代默认；Classic Queue 单副本；Stre
 | :--- | :--- |
 | Broker 层 | Quorum Queue 多数派落盘后确认；或单节点下消息已持久化且节点存活 |
 | Client 层 | Producer 开启 Confirms 并处理 nack；Consumer 手动 ACK，处理完成才确认 |
-| Business 层 | 业务写入与幂等记录同事务；DB 提交后才 ACK（崩溃窗口见 [实验](/playground/consumer-crash)） |
+| Business 层 | 业务写入与幂等记录同事务；DB 提交后才 ACK（崩溃窗口见 [可靠性](/products/rabbitmq/reliability)） |
 
 ## 官方资料
 

@@ -73,7 +73,7 @@
       capability: '顺序消息',
       cells: [
         { level: 'composed', note: '单队列 + 单消费者（prefetch=1）', link: '/matrix/ordering' },
-        { level: 'native', note: '分区内有序；同 key 进同分区', link: '/playground/ordering' },
+        { level: 'native', note: '分区内有序；同 key 进同分区', link: '/products/kafka/routing' },
         { level: 'native', note: 'FIFO Topic + MessageGroup', link: '/matrix/ordering' },
         { level: 'composed', note: '分区 + Key_Shared/Exclusive 订阅', link: '/matrix/ordering' },
         { level: 'composed', note: '单 Stream 天然 FIFO（无分区）；组内并行消费会破坏处理顺序', link: '/matrix/ordering' },
@@ -112,7 +112,7 @@
       capability: '消息回放',
       cells: [
         { level: 'none', note: 'ACK 即删，无日志可回放', link: '/matrix/replay-retention' },
-        { level: 'native', note: '按 offset/时间戳重置消费组位点', link: '/playground/ordering' },
+        { level: 'native', note: '按 offset/时间戳重置消费组位点', link: '/products/kafka/routing' },
         { level: 'native', note: '重置消费位点（mqadmin resetOffset）', link: '/matrix/replay-retention' },
         { level: 'native', note: 'reset-cursor 到 earliest/时间戳', link: '/matrix/replay-retention' },
         { level: 'native', note: 'XACK 不删除；新建消费组从 0-0 或按 Entry ID 重读（受 XTRIM 限制）', link: '/matrix/replay-retention' },

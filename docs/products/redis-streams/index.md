@@ -65,8 +65,8 @@ flowchart LR
 
 本仓库提供三个可重复实验：
 
-- `redis-streams basic`（L1）：XADD + Consumer Group + XACK + 幂等落库，验证「消费后条目仍在 Stream」。
-- `redis-streams consumer-crash`（L2）：XACK 前崩溃 → 条目滞留 PEL → XCLAIM 接管 → 幂等表拦截重复。
+- [`redis-streams basic`](/playground/redis-streams?scenario=basic)（L1）：XADD + Consumer Group + XACK + 幂等落库，验证「消费后条目仍在 Stream」。
+- [`redis-streams consumer-crash`](/playground/redis-streams?scenario=consumer-crash&track=crash)（L2）：XACK 前崩溃 → 条目滞留 PEL → XCLAIM 接管 → 幂等表拦截重复。
 - `redis-streams cli-tools`：纯镜像自带 `redis-cli` 六件套完成 XADD/XREADGROUP/XACK 闭环（见 [运维与观测](/products/redis-streams/operations)）。
 
 ```bash

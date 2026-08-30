@@ -27,7 +27,7 @@
 
 <LabOutput product="rabbitmq" lab="consumer-crash" />
 
-完整实验步骤与断言解读见[消费者崩溃与重投](/playground/consumer-crash)。Kafka 分卷从 offset 语义给出同样的结论（见 [Kafka 可靠性](/products/kafka/reliability)「崩溃窗口与幂等消费」）：**「提交 offset 等于业务已成功」是禁止表述**——那是两个系统上的两个独立动作。
+完整实验步骤与断言解读见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)。Kafka 分卷从 offset 语义给出同样的结论（见 [Kafka 可靠性](/products/kafka/reliability)「崩溃窗口与幂等消费」）：**「提交 offset 等于业务已成功」是禁止表述**——那是两个系统上的两个独立动作。
 
 ## 去重键怎么选
 
@@ -41,7 +41,7 @@
 
 - 幂等记录要有**保留策略**（按业务窗口保留，如 7～30 天后归档），否则表无限增长；归档窗口外的极老重投按新消息处理，业务键约束兜底。
 - 用 Redis `SETNX` 做去重时，注意它与业务写入**不在同一事务**：标记成功、业务失败后 Redis 键还在，重投会被错误跳过。分布式锁/缓存只适合做前置快筛，最终裁决要落在与业务同库的唯一键上。
-- 不要根据 `redelivered=true` 直接跳过：重投的消息可能第一次就没处理完，必须走完整幂等流程（见[消费者崩溃与重投](/playground/consumer-crash)常见误区）。
+- 不要根据 `redelivered=true` 直接跳过：重投的消息可能第一次就没处理完，必须走完整幂等流程（见 [RabbitMQ 可靠性](/products/rabbitmq/reliability)）。
 
 ## 与重试的关系
 

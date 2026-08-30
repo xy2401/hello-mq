@@ -24,7 +24,7 @@ flowchart LR
 - **订阅独立**：订阅 1 积压或离线，不影响订阅 2 的消费进度（存储侧的影响见下文「不保证什么」）。
 - **订阅内部仍是工作队列**：同一订阅的多个消费者竞争消费（见[工作队列](/reference/patterns/work-queue)）。
 
-本仓库 routing 实验演示了 Topic Exchange 的绑定分发，断言「同一条消息被复制到多个队列」：见[毒消息、重试与 DLQ](/playground/poison-message)的 routing 部分。
+本仓库 routing 实验演示了 Topic Exchange 的绑定分发，断言「同一条消息被复制到多个队列」：见 [RabbitMQ 路由与分发](/products/rabbitmq/routing)。
 
 ## 四产品实现对照
 

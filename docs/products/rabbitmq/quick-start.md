@@ -50,6 +50,8 @@ docker compose --env-file ../../../.env.versions down --volumes
 [consumer] ... messageId=... attempt=1 status=business_committed
 ```
 
+完整流程的 Docker 日志、队列状态和数据库断言也可在 [RabbitMQ 实验台](/playground/rabbitmq?scenario=basic)逐步查看。回放数据来自同一个 `basic` 实验，不由浏览器模拟。
+
 ## 管理界面
 
 容器运行期间访问 <http://127.0.0.1:15672>（默认账号 `guest/guest`，仅限 localhost）。可以在 Queues 页面观察 `orders.basic` 的 Ready/Unacked 数量变化。
@@ -58,8 +60,3 @@ docker compose --env-file ../../../.env.versions down --volumes
 
 - run.sh 退出时的 `docker compose down --volumes` 只 down 本实验的 Compose Project（`hello-mq-rabbitmq-basic`），不会碰其他容器或卷。
 - 本仓库的实验 Broker 不挂持久卷：每次实验都是干净状态，避免脏数据干扰断言；生产环境的存储与高可用见 [存储与高可用](/products/rabbitmq/storage-ha)。
-
-## 下一步
-
-- 概念不熟：读 [核心概念映射](/products/rabbitmq/concepts)。
-- 想看失败路径：直接做 [消费者崩溃与重投](/playground/consumer-crash) 实验。

@@ -70,7 +70,7 @@ at-least-once 是标准姿势（业务提交后才 ack）；崩溃窗口下的�
 
 ### 9. 失败处理
 
-Broker 内置消费重试与 DLQ：失败按消费组重试策略（次数 + 间隔）重投，达到上限进 `%DLQ%<消费组名>`。详见 [可靠性](/products/rocketmq/reliability) 与 [retry-dlq 实验](/playground/poison-message)。
+Broker 内置消费重试与 DLQ：失败按消费组重试策略（次数 + 间隔）重投，达到上限进 `%DLQ%<消费组名>`。详见 [可靠性](/products/rocketmq/reliability)。
 
 ### 10. 高可用与扩展
 

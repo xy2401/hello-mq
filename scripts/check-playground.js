@@ -30,6 +30,9 @@ assert.deepEqual(
 let pending = 0
 for (const entry of manifest) {
   const key = `${entry.product}/${entry.id}`
+  assert.match(entry.document, /^\/products\//, `${key}: 实验说明必须归入对应产品正文`)
+  const documentPath = entry.document.split('#')[0]
+  assert.ok(fs.existsSync(path.join(ROOT, 'docs', `${documentPath.slice(1)}.md`)), `${key}: 产品说明不存在 ${documentPath}`)
   const directory = path.join(ROOT, 'demos', entry.product, entry.id)
   assert.ok(fs.existsSync(path.join(directory, 'run.sh')), `${key}: 缺少 run.sh`)
   const composeFile = path.join(directory, 'docker-compose.yml')
@@ -81,6 +84,13 @@ for (const entry of manifest) {
 const index = fs.readFileSync(path.join(ROOT, 'docs', 'playground', 'index.md'), 'utf8')
 assert.equal((index.match(/<MqPlayground\s*\/>/g) ?? []).length, 1, 'playground/index.md 必须且只能加载一个 MqPlayground')
 assert.ok(!index.includes('<LabOutput'), '交互总入口不应退化为静态 LabOutput')
+const playgroundDocs = fs.readdirSync(path.join(ROOT, 'docs', 'playground')).filter((file) => file.endsWith('.md'))
+assert.deepEqual(playgroundDocs, ['index.md', 'kafka.md', 'rabbitmq.md', 'redis-streams.md'], 'playground 只保留总入口和按产品拆分的演示页')
+for (const product of Object.keys(expected)) {
+  const page = fs.readFileSync(path.join(ROOT, 'docs', 'playground', `${product}.md`), 'utf8')
+  assert.equal((page.match(new RegExp(`<MqPlayground\\s+product="${product}"\\s*\\/>`, 'g')) ?? []).length, 1, `${product} 演示页必须加载固定产品的 MqPlayground`)
+  assert.ok(!page.includes('<LabOutput'), `${product} 演示页不应退化为说明文档`)
+}
 
 console.log(`playground infrastructure: PASS; verified=${manifest.length - pending}; pending=${pending}`)
 if (pending && !strict) console.warn('Docker 证据尚未补采；npm run check:playground 将执行严格校验。')
