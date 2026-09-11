@@ -11,7 +11,7 @@
     "digest": "sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
   },
   "capture": {
-    "capturedAt": "2026-09-10T08:18:33.507Z",
+    "capturedAt": "2026-09-11T08:13:25.189Z",
     "exitCode": 0,
     "timedOut": false,
     "timeoutSeconds": 540,
@@ -23,7 +23,7 @@
       "maven": "Apache Maven 3.9.16 (2bdd9fddda4b155ebf8000e807eb73fd829a51d5)",
       "jq": "jq-1.7"
     },
-    "sourceRevision": "b2b5195da046ea2f963f5b697a5ccf04df9f6bea"
+    "sourceRevision": "9806de0d47c6f2f7ee99c0821d951ace923ea234"
   },
   "topology": [
     {
@@ -119,15 +119,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/producer.out.txt",
               "line": 4,
-              "hash": "76cb51af57d8f738792d16842d6ecdcc22bcfa3827b73eb212d96a0a85bd6d75",
+              "hash": "8646f381955fa609a25a7567a3f7f0cb2bd4284484047bb36659b490b92c7c9b",
               "role": "producer",
-              "content": "[producer] timestamp=2026-09-10T08:18:10.687356923Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work routingKey=orders.work durationMs=3 status=confirmed"
+              "content": "[producer] timestamp=2026-09-11T08:13:02.561854358Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work routingKey=orders.work durationMs=2 status=confirmed"
             }
           ]
         },
         {
           "sequence": 1,
-          "relativeMs": 3,
+          "relativeMs": 4,
           "delayMs": 250,
           "actor": "producer",
           "type": "confirmed",
@@ -180,15 +180,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/producer.out.txt",
               "line": 5,
-              "hash": "82b9692737167afc9c49b8c0fee08d66ada7dcc696e893a7ea40648798ad06ce",
+              "hash": "cb81e3eee909b04de5274479740ba246af9b531b3fe2e60db786862a28328032",
               "role": "producer",
-              "content": "[producer] timestamp=2026-09-10T08:18:10.690884115Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work routingKey=orders.work durationMs=0 status=confirmed"
+              "content": "[producer] timestamp=2026-09-11T08:13:02.565096988Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work routingKey=orders.work durationMs=0 status=confirmed"
             }
           ]
         },
         {
           "sequence": 2,
-          "relativeMs": 4,
+          "relativeMs": 5,
           "delayMs": 250,
           "actor": "producer",
           "type": "confirmed",
@@ -241,9 +241,9 @@
             {
               "file": "demos/rabbitmq/retry-dlq/producer.out.txt",
               "line": 6,
-              "hash": "9161da5b90d5ec54ef380c5e4b6467e781406bed1ca20ff2d96137c8d1a60f41",
+              "hash": "5f669e258b8c033720a6a10fce160d17ed541abfbfc32b0dba9c9fbc8cad623c",
               "role": "producer",
-              "content": "[producer] timestamp=2026-09-10T08:18:10.691983269Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work routingKey=orders.work durationMs=0 status=confirmed"
+              "content": "[producer] timestamp=2026-09-11T08:13:02.566201522Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work routingKey=orders.work durationMs=0 status=confirmed"
             }
           ]
         },
@@ -301,16 +301,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/producer.out.txt",
               "line": 7,
-              "hash": "dc93977828fa74cf0060bd7f80bf25539ca4d3ac81cf4ce751cacecdc54b0c40",
+              "hash": "aa48032018d29ed2fd523a93e6b69333904c30a3060e3aefd3565b38b3fe15c5",
               "role": "producer",
-              "content": "[producer] timestamp=2026-09-10T08:18:10.692088756Z level=INFO service=order-service product=rabbitmq lab=retry-dlq destination=orders.work confirmed=3 status=done"
+              "content": "[producer] timestamp=2026-09-11T08:13:02.566334229Z level=INFO service=order-service product=rabbitmq lab=retry-dlq destination=orders.work confirmed=3 status=done"
             }
           ]
         },
         {
           "sequence": 4,
-          "relativeMs": 711,
-          "delayMs": 706,
+          "relativeMs": 872,
+          "delayMs": 867,
           "actor": "consumer",
           "type": "received",
           "title": "Consumer 收到消息",
@@ -365,15 +365,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 4,
-              "hash": "1dc0577329ce9fa05e54fd170974e5268b3d41e19d41ba1c17962d61439a2b2a",
+              "hash": "4889c3f45eeba2fe83ff30ad04ae4af2381068db54c8ec8de4d6b3f427bcdb94",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:11.398104998Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-09-11T08:13:03.433641809Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
           "sequence": 5,
-          "relativeMs": 723,
+          "relativeMs": 886,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -429,16 +429,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 5,
-              "hash": "4443f732abfed25cef7261ba2aec2924e33da124ef076e93506f0a070b23c20b",
+              "hash": "3c2a48a5ce716dc87783603a69b21d17ee017dabd752ceb1e4ff31de8f7a28c9",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:11.410897360Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=9fe2f2dc84ed-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:03.447978262Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=f0bb58a89974-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
             }
           ]
         },
         {
           "sequence": 6,
-          "relativeMs": 2173,
-          "delayMs": 1450,
+          "relativeMs": 2204,
+          "delayMs": 1318,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -498,15 +498,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 1,
-              "hash": "90201a3615df62f308ff95042858903867f74afb8ada8dac1a7e340e15748742",
+              "hash": "0a4b3b0b2ba365399e8bc823cfee279806e3a9aa3b847e1bf475ddd1d28207fc",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:12.860Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:04.765Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 7,
-          "relativeMs": 2231,
+          "relativeMs": 2295,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -567,15 +567,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 6,
-              "hash": "b3486f0d8c6fe00637bf6cb5e93385a815d38635c297c68e10b233cd5c5505bd",
+              "hash": "0e0d0f091b0523bd6535f1c6af7bc113c98749033518f6fa1d75168e75b9b52a",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:12.918081378Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=9fe2f2dc84ed-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:04.856595155Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=f0bb58a89974-1-after-delivery-01JMQ000000000000000000001-1 status=released"
             }
           ]
         },
         {
           "sequence": 8,
-          "relativeMs": 2240,
+          "relativeMs": 2306,
           "delayMs": 250,
           "actor": "consumer",
           "type": "business_committed",
@@ -636,15 +636,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 7,
-              "hash": "038677c5b7fa72022d81c0f5c7eb2afadcd4acec2c0f3944ed80787c11403b81",
+              "hash": "a1fa434a12b795ca744f870ad69dbaec2db678cc837d258c74a302341e77951d",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:12.927819326Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work attempt=1 status=business_committed"
+              "content": "[consumer] timestamp=2026-09-11T08:13:04.867898978Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.work attempt=1 status=business_committed"
             }
           ]
         },
         {
           "sequence": 9,
-          "relativeMs": 2241,
+          "relativeMs": 2307,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -705,16 +705,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 8,
-              "hash": "1ccb8a551d828e0fcff2b123ee613a4c0096ee14239b679588403673ecc3817d",
+              "hash": "e14d8f43280276b1345888fd1e809c6556d75c3786a57503b6cdfe04df204da8",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:12.928277785Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=9fe2f2dc84ed-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:04.868522278Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=f0bb58a89974-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
             }
           ]
         },
         {
           "sequence": 10,
-          "relativeMs": 3579,
-          "delayMs": 1338,
+          "relativeMs": 3687,
+          "delayMs": 1380,
           "actor": "broker",
           "type": "before-ack",
           "title": "Broker 状态：before-ack",
@@ -774,15 +774,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 2,
-              "hash": "76ca846601db3e6a135242e76dccf609f11a18bd8a36564903408e812c893a47",
+              "hash": "5e6945881b88043696d07f14066cc91a47fe04f133d778d37bf28e79186f1163",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:14.266Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:06.248Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 11,
-          "relativeMs": 3644,
+          "relativeMs": 3710,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -843,15 +843,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 9,
-              "hash": "cd36a379448380ef345850472f44bbef2a9a2dc74c40b732c2b20255d915e6b1",
+              "hash": "28933869eeda4bc50afa9b5427d062166d07021d0627293b040c3b5b66a587fc",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:14.331942062Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=9fe2f2dc84ed-1-before-ack-01JMQ000000000000000000001-2 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:06.271781094Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=f0bb58a89974-1-before-ack-01JMQ000000000000000000001-2 status=released"
             }
           ]
         },
         {
           "sequence": 12,
-          "relativeMs": 3647,
+          "relativeMs": 3712,
           "delayMs": 250,
           "actor": "consumer",
           "type": "received",
@@ -912,15 +912,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 10,
-              "hash": "5f4b10804cefd9bada90244e7e4446f3dd6cee812d865bba456edf6ed52f9ba1",
+              "hash": "0d2ab064b6888b20b9d9688ae66f966c13d65b162544dae5907f014352ab2bc7",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:14.334155963Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-09-11T08:13:06.273963438Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
           "sequence": 13,
-          "relativeMs": 3647,
+          "relativeMs": 3713,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -981,16 +981,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 11,
-              "hash": "73d1fc18f5fac2733aa057ded9c1738c14031bcbb4061354d7b2af58e8d55e41",
+              "hash": "426588028d736abd92c24a2e53eabc77cde2cfc90c5d98503cddd9e0a4001818",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:14.334724018Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=9fe2f2dc84ed-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:06.274506709Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=f0bb58a89974-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
             }
           ]
         },
         {
           "sequence": 14,
-          "relativeMs": 4952,
-          "delayMs": 1305,
+          "relativeMs": 5058,
+          "delayMs": 1345,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -1050,15 +1050,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 3,
-              "hash": "a34311394f6e19c5cc2635d24d1aa2fd0bb4b1943e40eadb80b90fec78239e9c",
+              "hash": "81b9af8c228143a7e34a26ce8a47f5843020fdc925256ce4cc7899b34bcfc12e",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:15.639Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:07.619Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 15,
-          "relativeMs": 5049,
+          "relativeMs": 5115,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -1119,15 +1119,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 12,
-              "hash": "e73409c88350950103c8a2290117e1f78f928eef3d7588c70ab6abae48a4e8d3",
+              "hash": "fe7f6dd93d91d04460b03c0ddda314a8b6b315469ee5e8cefb1586d3479b0182",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:15.736955919Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=9fe2f2dc84ed-1-after-delivery-01JMQ000000000000000000002-3 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:07.676762689Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=f0bb58a89974-1-after-delivery-01JMQ000000000000000000002-3 status=released"
             }
           ]
         },
         {
           "sequence": 16,
-          "relativeMs": 5052,
+          "relativeMs": 5118,
           "delayMs": 250,
           "actor": "consumer",
           "type": "business_committed",
@@ -1188,15 +1188,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 13,
-              "hash": "ac905c46a64c73c5c85b40acb58c2859e8ba595188041045c1ffde62ebf49685",
+              "hash": "55a8a9d4fd2c8bd29fa9c87f649e546e6c33721e3acfcdce1004f00600fa46be",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:15.739068586Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work attempt=1 status=business_committed"
+              "content": "[consumer] timestamp=2026-09-11T08:13:07.679296887Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.work attempt=1 status=business_committed"
             }
           ]
         },
         {
           "sequence": 17,
-          "relativeMs": 5052,
+          "relativeMs": 5118,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -1257,16 +1257,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 14,
-              "hash": "ba7c58ab8540d07573aa6ae1da0aa99d5912e150e704b7a8fc832037dd6e635c",
+              "hash": "2a0b626b80f8deda934a3f7ca92a3328d99813fc8adf453edbf3d4d5a978df95",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:15.739512807Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=9fe2f2dc84ed-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:07.679779806Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=f0bb58a89974-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
             }
           ]
         },
         {
           "sequence": 18,
-          "relativeMs": 6351,
-          "delayMs": 1299,
+          "relativeMs": 6627,
+          "delayMs": 1509,
           "actor": "broker",
           "type": "before-ack",
           "title": "Broker 状态：before-ack",
@@ -1326,15 +1326,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 4,
-              "hash": "25a26830ba22b969dc0563fd6fa14d98dfa599fe6098540b1e195789c58588d5",
+              "hash": "1330c3ad02b670580ede70d17aa74d64c0a54d0f8861f0fb11aeb29170812240",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:17.038Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:09.188Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 19,
-          "relativeMs": 6354,
+          "relativeMs": 6721,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -1395,15 +1395,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 15,
-              "hash": "da7e9338630bb8acf2b0d2baed0fbfc38c7f19513cc8eecabd10bde3bcd577cd",
+              "hash": "83f3163bfeaad53931d58a97cee1c618da32d223d9e46c82a517b5d14870160a",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:17.041576514Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=9fe2f2dc84ed-1-before-ack-01JMQ000000000000000000002-4 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:09.282235827Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=f0bb58a89974-1-before-ack-01JMQ000000000000000000002-4 status=released"
             }
           ]
         },
         {
           "sequence": 20,
-          "relativeMs": 6356,
+          "relativeMs": 6722,
           "delayMs": 250,
           "actor": "consumer",
           "type": "received",
@@ -1464,15 +1464,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 16,
-              "hash": "c21bb464e499b690d68eb2bcf0269f90ac901611524d74bf61a1441f322291de",
+              "hash": "a46f3c4899a3b1d3b5e5a4dc2c6be28dc431655e4d66ba5643bf9d55aaad5f0c",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:17.043022799Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-09-11T08:13:09.283830165Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
           "sequence": 21,
-          "relativeMs": 6356,
+          "relativeMs": 6723,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -1533,16 +1533,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 17,
-              "hash": "117a9be57c4e706e812a3e259f44bff60b254f6b488afc41b3b9679a906319e9",
+              "hash": "40536fac391d5be32908e2491e8999deee5b61d7c1de6b937310c5bcabaf4574",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:17.043494561Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-5 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:09.284296363Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-5 status=waiting"
             }
           ]
         },
         {
           "sequence": 22,
-          "relativeMs": 7855,
-          "delayMs": 1499,
+          "relativeMs": 8002,
+          "delayMs": 1279,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -1602,15 +1602,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 5,
-              "hash": "ae29b1dd7d49cdac42c25c8af8de4300bf9ad563bc082b449aa2517f54a19033",
+              "hash": "62196b7c06b4e172abf76a4eebfd7bd36f273da046b32aeac6f82d01454ebeb2",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:18.542Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:10.563Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 23,
-          "relativeMs": 7860,
+          "relativeMs": 8025,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -1671,15 +1671,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 18,
-              "hash": "99508db4d9e2ad09bb8b2793afb325e68725aef66201c7e86ab7b37e643cde5e",
+              "hash": "106bb568039aaa438e400ef357b17454c7d0263da836db21828315a7eebffa6d",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:18.547099123Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-5 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:10.586386193Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-5 status=released"
             }
           ]
         },
         {
           "sequence": 24,
-          "relativeMs": 7861,
+          "relativeMs": 8026,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -1740,16 +1740,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 20,
-              "hash": "80640247d7cb6fff3cbfd0dca996e241454b0315c1ce5708420af11a1871166d",
+              "hash": "903404f54849fd4b86f4bb0b996bdbc2095f3bf88d8457ef1e9314026b999915",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:18.548466378Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-retry-01JMQ00000000000000000000P-6 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:10.587627564Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-retry-01JMQ00000000000000000000P-6 status=waiting"
             }
           ]
         },
         {
           "sequence": 25,
-          "relativeMs": 9263,
-          "delayMs": 1402,
+          "relativeMs": 9429,
+          "delayMs": 1403,
           "actor": "consumer",
           "type": "released",
           "title": "采集完成，解除门闩",
@@ -1809,16 +1809,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 21,
-              "hash": "8a53083b228d33e6d2a2bb3e37db10b9e17f0ed4feff55da60ef8d9463a6e9e3",
+              "hash": "c7d4d6bd4a2697e33ebdfb83eb6440933e6fa951a77fe8f30f9c1ba78c884512",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:19.950598742Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-retry-01JMQ00000000000000000000P-6 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:11.990317617Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-retry-01JMQ00000000000000000000P-6 status=released"
             }
           ]
         },
         {
           "sequence": 26,
-          "relativeMs": 10267,
-          "delayMs": 1004,
+          "relativeMs": 10432,
+          "delayMs": 1003,
           "actor": "consumer",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
@@ -1878,16 +1878,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 23,
-              "hash": "22d4a76c093be2dbc20a8ac081107724f66db1bd45dd8547914a6475ce5ced97",
+              "hash": "d64c22bd30df26dba951ff73ea61cb0560cae26d22ab2d2065259151d0faaeff",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:20.954421882Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-7 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:12.993937131Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-7 status=waiting"
             }
           ]
         },
         {
           "sequence": 27,
-          "relativeMs": 11570,
-          "delayMs": 1303,
+          "relativeMs": 11873,
+          "delayMs": 1441,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -1947,15 +1947,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 7,
-              "hash": "54e7734f9eb57b66a436fa086b88fb24840575d939ac5eab70a3b1be8a5047a2",
+              "hash": "8d36f6ab0e303f79791f43174c1aaca9a21a546a836a80a1e0667f1ff88e1013",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:22.257Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:14.434Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 28,
-          "relativeMs": 11670,
+          "relativeMs": 11935,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -2016,15 +2016,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 24,
-              "hash": "485e82c351ab70a5a0d82ed1f66ff1a94dd5c27caf181d96b8130f8d64242342",
+              "hash": "a7236139459cf1189c13a1f929c28ddb021141aef1619869d38c17def787903a",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:22.357547692Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-7 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:14.496318477Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-7 status=released"
             }
           ]
         },
         {
           "sequence": 29,
-          "relativeMs": 11671,
+          "relativeMs": 11937,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -2085,16 +2085,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 26,
-              "hash": "0c8b5d5d55a39973408fb119980adc28749ab48358f52a2ca436b183c06fbafb",
+              "hash": "413e6e653244360f0a44f4c81699602985d58435d1dcf9083b7de71731d69315",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:22.358793005Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-retry-01JMQ00000000000000000000P-8 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:14.498539842Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-retry-01JMQ00000000000000000000P-8 status=waiting"
             }
           ]
         },
         {
           "sequence": 30,
-          "relativeMs": 13174,
-          "delayMs": 1503,
+          "relativeMs": 13339,
+          "delayMs": 1402,
           "actor": "consumer",
           "type": "released",
           "title": "采集完成，解除门闩",
@@ -2154,16 +2154,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 27,
-              "hash": "68731f945dc76c5765d406b4a522fd7ddb693e2a46720b1e2294d904d420b8e6",
+              "hash": "bf25f655f544af0987c7765819c16eea4dd055d432223d1b5542341ccc7414b2",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:23.861607686Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-retry-01JMQ00000000000000000000P-8 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:15.900802565Z checkpoint=before-retry messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-retry-01JMQ00000000000000000000P-8 status=released"
             }
           ]
         },
         {
           "sequence": 31,
-          "relativeMs": 14180,
-          "delayMs": 1006,
+          "relativeMs": 14342,
+          "delayMs": 1003,
           "actor": "consumer",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
@@ -2223,16 +2223,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 29,
-              "hash": "a6fc4731699df2bd71ef999b86a435dd6ad682579cfb68b95f9c7580e40a3c42",
+              "hash": "dd5a22db40e1234c15e7c787005288b16731a79d826eb9f39a7adacf0cd012dd",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:24.867828896Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-9 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:16.903887501Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-9 status=waiting"
             }
           ]
         },
         {
           "sequence": 32,
-          "relativeMs": 15535,
-          "delayMs": 1355,
+          "relativeMs": 15670,
+          "delayMs": 1328,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -2292,15 +2292,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 9,
-              "hash": "5c900e05cc472e51b9f253b83543f6fec8ce25eb43fb4ed09230fb6a3c5f1f88",
+              "hash": "2e21109f93b95d1124cef22a99c533377c97e62785778d4915e3bd2d4fb616fb",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:26.222Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:18.231Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 33,
-          "relativeMs": 15583,
+          "relativeMs": 15745,
           "delayMs": 250,
           "actor": "consumer",
           "type": "released",
@@ -2361,15 +2361,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 30,
-              "hash": "5103af43db2aaa6c723f41de8ca326bda195ada9827cfe5c529fbb22019242b5",
+              "hash": "6f1adf75192a2a7544312c4e685b98606dd75e2094e19d1341613d881fa3dd8d",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:26.270422745Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-after-delivery-01JMQ00000000000000000000P-9 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:18.306530674Z checkpoint=after-delivery messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-after-delivery-01JMQ00000000000000000000P-9 status=released"
             }
           ]
         },
         {
           "sequence": 34,
-          "relativeMs": 15584,
+          "relativeMs": 15746,
           "delayMs": 250,
           "actor": "consumer",
           "type": "waiting",
@@ -2430,16 +2430,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 31,
-              "hash": "71979aec17f2954fec96efc92530d7442122fe1e9e75b6e872dda5d5b82542f5",
+              "hash": "04c72d1ceb053f5c330b8c9f6bd0148e9584e48a60b9e9bc73aba82d7d543db1",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:26.271556192Z checkpoint=before-dlq messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-dlq-01JMQ00000000000000000000P-10 status=waiting"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:18.307609823Z checkpoint=before-dlq messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-dlq-01JMQ00000000000000000000P-10 status=waiting"
             }
           ]
         },
         {
           "sequence": 35,
-          "relativeMs": 16986,
-          "delayMs": 1402,
+          "relativeMs": 17048,
+          "delayMs": 1302,
           "actor": "consumer",
           "type": "released",
           "title": "采集完成，解除门闩",
@@ -2499,15 +2499,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 32,
-              "hash": "24976475e5ba5198c47c46cb806c43b7c886ae59cafcaf240e5a05129a202056",
+              "hash": "130cb2a7f12f981fabdfd1a96973c20dfe7d7319f2f78298e48f9bf715e0dcc6",
               "role": "consumer",
-              "content": "[replay-gate] timestamp=2026-09-10T08:18:27.673755335Z checkpoint=before-dlq messageId=01JMQ00000000000000000000P token=9fe2f2dc84ed-1-before-dlq-01JMQ00000000000000000000P-10 status=released"
+              "content": "[replay-gate] timestamp=2026-09-11T08:13:19.609691888Z checkpoint=before-dlq messageId=01JMQ00000000000000000000P token=f0bb58a89974-1-before-dlq-01JMQ00000000000000000000P-10 status=released"
             }
           ]
         },
         {
           "sequence": 36,
-          "relativeMs": 16989,
+          "relativeMs": 17054,
           "delayMs": 250,
           "actor": "consumer",
           "type": "done",
@@ -2567,16 +2567,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 34,
-              "hash": "1ee50648a335163db8a74a7a6dcdbfea5da341365d147622fa8d594644227857",
+              "hash": "3b10c0bc8cf9eefc8f4eff8e01e252e40464bb5552fd22081c8cd4587c933ed8",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:27.676762930Z level=INFO service=order-service product=rabbitmq lab=retry-dlq queue=orders.work received=5 status=done"
+              "content": "[consumer] timestamp=2026-09-11T08:13:19.615877200Z level=INFO service=order-service product=rabbitmq lab=retry-dlq queue=orders.work received=5 status=done"
             }
           ]
         },
         {
           "sequence": 37,
-          "relativeMs": 17627,
-          "delayMs": 638,
+          "relativeMs": 17806,
+          "delayMs": 752,
           "actor": "inspect-db",
           "type": "snapshot",
           "title": "snapshot",
@@ -2637,15 +2637,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/inspect-db.out.txt",
               "line": 4,
-              "hash": "c2bdb6b4c33996eb99c3dfe11421a78be07775ae1cbafaef0e9ffc4f591bfc9c",
+              "hash": "b5f663ca99e3807fa6b8fa97029f499d28020274bed672c272dc654ee9178fcd",
               "role": "inspect-db",
-              "content": "[inspect] timestamp=2026-09-10T08:18:28.314045380Z level=INFO service=order-service product=rabbitmq lab=retry-dlq business_rows=2 processed_rows=2 status=snapshot"
+              "content": "[inspect] timestamp=2026-09-11T08:13:20.367710151Z level=INFO service=order-service product=rabbitmq lab=retry-dlq business_rows=2 processed_rows=2 status=snapshot"
             }
           ]
         },
         {
           "sequence": 38,
-          "relativeMs": 21361,
+          "relativeMs": 21262,
           "delayMs": 1600,
           "actor": "broker",
           "type": "final-state",
@@ -2708,9 +2708,9 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 11,
-              "hash": "6a25cba0954d3bf8621923444831fbcc1b6b8b7bac52d48d2088fde884bcf997",
+              "hash": "8f831d9fbba7bab1549065d0ba4c2862ffe2c7a243ed2d32d8a178d970569df1",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:32.048Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":1},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:23.823Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":1},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ],
           "actions": [
@@ -2784,16 +2784,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 19,
-              "hash": "446f30c67f876bef1ce31a8d56878f3d524710b5def7d81478547a4646235b24",
+              "hash": "7ccaf9914924c7bd720b6f6d8b87e6566ef76cde5599510f82f916cfbb37202d",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:18.548021437Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=1 status=retry"
+              "content": "[consumer] timestamp=2026-09-11T08:13:10.587209857Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=1 status=retry"
             }
           ]
         },
         {
           "sequence": 1,
-          "relativeMs": 1400,
-          "delayMs": 1400,
+          "relativeMs": 1321,
+          "delayMs": 1321,
           "actor": "broker",
           "type": "before-retry",
           "title": "Broker 状态：before-retry",
@@ -2850,16 +2850,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 6,
-              "hash": "b9188c60286e70f2e8ae6e686067e59bc9f17bb79bdfedc94f60d744f80974d8",
+              "hash": "10f8d1dfdad227447e3ddd71833d4ccf4841075b0a0899f378aec02991f5160a",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:19.948Z\",\"checkpoint\":\"before-retry\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:11.908Z\",\"checkpoint\":\"before-retry\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 2,
-          "relativeMs": 2405,
-          "delayMs": 1005,
+          "relativeMs": 2406,
+          "delayMs": 1085,
           "actor": "consumer",
           "type": "received",
           "title": "Consumer 收到消息",
@@ -2919,16 +2919,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 22,
-              "hash": "d9dec7344cf194ae5bb5071f61ddb96f3fb4ce18db63a9c13ed4518537f66d61",
+              "hash": "972461430869f336c3c7c413b1215fa7cafa7153cf4256bbf2be6e5a3b6f6a32",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:20.953855831Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=2 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-09-11T08:13:12.993405051Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=2 redelivered=false status=received"
             }
           ]
         },
         {
           "sequence": 3,
-          "relativeMs": 3810,
-          "delayMs": 1405,
+          "relativeMs": 3910,
+          "delayMs": 1504,
           "actor": "consumer",
           "type": "retry",
           "title": "消息进入重试环",
@@ -2988,16 +2988,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 25,
-              "hash": "ab6868cefd4f9aaa7d914356e88b298c951c627ba423db2c7c4673032637c886",
+              "hash": "5ae450e3b7a793057f8db5a448530400ebce696dc3389aeaa4518c32cb189135",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:22.358363961Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=2 status=retry"
+              "content": "[consumer] timestamp=2026-09-11T08:13:14.497230654Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=2 status=retry"
             }
           ]
         },
         {
           "sequence": 4,
-          "relativeMs": 5246,
-          "delayMs": 1436,
+          "relativeMs": 5228,
+          "delayMs": 1318,
           "actor": "broker",
           "type": "before-retry",
           "title": "Broker 状态：before-retry",
@@ -3057,16 +3057,16 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 8,
-              "hash": "42642a50cd84de2433c7d054c6f40965c66c19f2a740bd86be74534f2cb7fac7",
+              "hash": "094e62458dd676d54bd6340b5f529ebf84f6d38ebe525097fce1387abfe7f0d8",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:23.794Z\",\"checkpoint\":\"before-retry\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:15.815Z\",\"checkpoint\":\"before-retry\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 5,
           "relativeMs": 6316,
-          "delayMs": 1070,
+          "delayMs": 1088,
           "actor": "consumer",
           "type": "received",
           "title": "Consumer 收到消息",
@@ -3126,9 +3126,9 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 28,
-              "hash": "075f2a71b864c46156c0fa19d8159e7fb9b224e7b410d60deec4686b2d7eecc2",
+              "hash": "802521dcfd782baa2b0cab64c198b1b1685504caeab57181648dc2c613e25542",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:24.864849281Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=3 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-09-11T08:13:16.903365019Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work consumer=consumer-1 attempt=3 redelivered=false status=received"
             }
           ],
           "actions": [
@@ -3206,15 +3206,15 @@
             {
               "file": "demos/rabbitmq/retry-dlq/replay.raw.jsonl",
               "line": 10,
-              "hash": "25077f03222576df035e07e6bb4f1a1666ec74f1f6066080129ca8f2b8e750fb",
+              "hash": "ba6436dfda0e8161f87a37176ee9ce25a17291fd574e4ada609f70097fa0e48b",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-10T08:18:27.627Z\",\"checkpoint\":\"before-dlq\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-09-11T08:13:19.599Z\",\"checkpoint\":\"before-dlq\",\"messageId\":\"01JMQ00000000000000000000P\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.dlq\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.retry\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.work\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.dlq\\\",\\\"routing_key\\\":\\\"orders.dlq\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.retry\\\",\\\"routing_key\\\":\\\"orders.retry\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.work\\\",\\\"routing_key\\\":\\\"orders.work\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 1,
-          "relativeMs": 49,
+          "relativeMs": 13,
           "delayMs": 250,
           "actor": "consumer",
           "type": "poison_to_dlq",
@@ -3272,9 +3272,9 @@
             {
               "file": "demos/rabbitmq/retry-dlq/consumer.out.txt",
               "line": 33,
-              "hash": "328c2da1e0e90a3c43b19ded2e1a24a2465c87384fb50559472c66e4900cd511",
+              "hash": "29fd2311dd644142ac034b17126a2010d1e8c08ecece322684240e7b3a21b353",
               "role": "consumer",
-              "content": "[consumer] timestamp=2026-09-10T08:18:27.676421707Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=3 status=poison_to_dlq"
+              "content": "[consumer] timestamp=2026-09-11T08:13:19.612066426Z level=INFO service=order-service product=rabbitmq lab=retry-dlq messageId=01JMQ00000000000000000000P eventType=order.created schemaVersion=1 aggregateId=order-poison traceId=0000000000000000000000000000000P correlationId=order-poison destination=orders.work attempt=3 status=poison_to_dlq"
             }
           ]
         }
