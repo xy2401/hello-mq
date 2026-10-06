@@ -67,6 +67,8 @@ flowchart LR
 
 ## 版本基线
 
+[完整版本目录](./version/)列出本仓库已收录的版本主题；已有运行基线与镜像证据继续以本页说明为准。
+
 - Broker / NameServer / Proxy：Apache RocketMQ 5.5.0（`apache/rocketmq:5.5.0`，镜像 tag+digest 双锁定，见 `.env.versions` 的 `ROCKETMQ_IMAGE`）。
 - Java 客户端：`org.apache.rocketmq:rocketmq-client-java:5.2.0`（5.x gRPC 客户端，经 proxy `127.0.0.1:8081` 连接）。
 - 官方文档：<https://rocketmq.apache.org/docs/>（checkedAt: 2026-08-19）。
@@ -76,3 +78,7 @@ flowchart LR
 - RocketMQ 文档首页：<https://rocketmq.apache.org/docs/>（checkedAt: 2026-08-19）
 - 领域模型（Message）：<https://rocketmq.apache.org/docs/domainModel/04main>（checkedAt: 2026-08-19）
 - Topic：<https://rocketmq.apache.org/docs/domainModel/02topic>（checkedAt: 2026-08-19）
+
+## 实验入口与范围
+
+本产品没有独立浏览器回放工作台；按快速开始页在本机复现场景。 [Docker 验证证据](./DockerTooling)列出已采集结果与缺口；已有动手命令和版本基线保持适用。

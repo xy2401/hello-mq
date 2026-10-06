@@ -1,3 +1,4 @@
+import { installUiLabels } from './ui-labels'
 import DefaultTheme from 'vitepress/theme'
 import CapabilityMatrix from './components/CapabilityMatrix.vue'
 import ConfigDiff from './components/ConfigDiff.vue'
@@ -14,6 +15,7 @@ import './custom.css'
 export default {
   extends: DefaultTheme,
   enhanceApp({ app }) {
+    installUiLabels(app)
     app.component('CapabilityMatrix', CapabilityMatrix)
     app.component('ConfigDiff', ConfigDiff)
     app.component('LabOutput', LabOutput)

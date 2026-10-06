@@ -1,6 +1,6 @@
 # 产品分卷
 
-> 七个产品各有一卷 8 页的讲解，全部按同一套公共维度展开：总览、快速开始、核心概念映射、路由/分发、可靠性、存储与高可用、运维与观测、陷阱与检查表。先读[基础原理](/#mq-fundamentals)再进分卷，或直接用[横向矩阵](/matrix/)做比较。
+> 八个产品按同一套公共维度展开：总览、快速开始、核心概念映射、路由/分发、可靠性、存储与高可用、运维与观测、陷阱与检查表。先读[基础原理](/#mq-fundamentals)再进分卷，或直接用[横向矩阵](/matrix/)做比较。
 
 | 产品 | 定位 | 实验 | 入口 |
 | :--- | :--- | :--- | :--- |
@@ -11,6 +11,7 @@
 | <ProductLogo product="redis" /> **Redis Streams** | Redis 内的追加日志与消费组（PEL、XCLAIM、轻量可靠队列） | 2 个 | [进入分卷](/products/redis-streams/) |
 | <ProductLogo product="nats" /> **NATS + JetStream** | 低延迟连接总线（Core）+ 内建持久事件流（JetStream） | 2 个 | [进入分卷](/products/nats/) |
 | **ActiveMQ Artemis** | 多协议 JMS Broker（anycast/multicast、服务端重试与死信、XA 事务） | 2 个 | [进入分卷](/products/artemis/) |
+| **ActiveMQ Classic** | 传统 JMS Broker 与 OpenWire/KahaDB 生态，配置及默认值与 Artemis 分开学习 | [见验证证据](/products/activemq-classic/DockerTooling) | [进入分卷](/products/activemq-classic/) |
 
 ## 怎么读每一卷
 

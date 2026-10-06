@@ -77,6 +77,12 @@ bash demos/redis-streams/docker/run.sh
 
 ## 版本基线
 
+[完整版本目录](./version/)列出本仓库已收录的版本主题；已有运行基线与镜像证据继续以本页说明为准。
+
 - Broker：Redis 8.2.1（镜像 tag+digest 双锁定，见 `.env.versions`）。
 - Java 客户端：`redis.clients:jedis:6.0.0`。
 - 官方文档：<https://redis.io/docs/latest/develop/data-types/streams/>（checkedAt: 2026-08-19）。
+
+## 实验入口与范围
+
+[交互证据回放](/playground/redis-streams)展示已采集场景，页面不会启动真实 Broker。 [Docker 验证证据](./DockerTooling)列出已采集结果与缺口；已有动手命令和版本基线保持适用。

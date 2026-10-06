@@ -6,7 +6,7 @@
 
 | 工具 | 版本 | 用途 |
 | :--- | :--- | :--- |
-| Node.js | ≥ 20 | VitePress 文档站 |
+| Node.js | 20.19+（20.x）或22.16+ | VitePress 文档站 |
 | Docker Engine + Compose v2 | 近期稳定版 | 实验编排（broker 与 producer/consumer 全在容器内） |
 | JDK | ≥ 21（构建产物目标为 Java 21） | 标准 Demo |
 | Maven | ≥ 3.9 | Demo 构建（run.sh 在 jar 缺失时自动触发） |

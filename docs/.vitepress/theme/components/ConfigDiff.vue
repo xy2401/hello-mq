@@ -36,13 +36,15 @@ const RISK: Record<'high' | 'safe', string> = { high: '⚠️ 风险', safe: '�
 .config-diff__title {
   font-weight: 600;
   margin-bottom: 8px;
+  overflow-wrap: anywhere;
 }
 .config-diff__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr));
   gap: 12px;
 }
 .config-diff__pane {
+  min-width: 0;
   border: 1px solid var(--vp-c-divider);
   border-radius: 6px;
   background: var(--vp-c-bg);
@@ -50,17 +52,26 @@ const RISK: Record<'high' | 'safe', string> = { high: '⚠️ 风险', safe: '�
 }
 .config-diff__pane-head {
   display: flex;
+  flex-wrap: wrap;
+  align-items: center;
   justify-content: space-between;
   gap: 8px;
   padding: 6px 10px;
   font-size: 13px;
   border-bottom: 1px solid var(--vp-c-divider);
 }
+.config-diff__pane-head > strong,
+.config-diff__pane-head > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
 .config-diff__pane-head span {
   color: var(--vp-c-text-2);
   font-weight: 400;
 }
 .config-diff__pane pre {
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0;
   padding: 10px;
   font-size: 12px;
@@ -77,6 +88,8 @@ const RISK: Record<'high' | 'safe', string> = { high: '⚠️ 风险', safe: '�
   color: var(--vp-c-text-3);
 }
 .config-diff__risk {
+  flex-shrink: 0;
+  white-space: nowrap;
   font-size: 11px;
   font-weight: 600;
   padding: 1px 8px;

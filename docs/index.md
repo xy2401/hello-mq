@@ -13,7 +13,7 @@ hero:
       text: 理解核心原理
       link: /#mq-fundamentals
     - theme: alt
-      text: 🧪 可复现实验台
+      text: 🧪 MQ 交互回放实验台
       link: /playground/
     - theme: alt
       text: ⚖️ 能力对比矩阵
@@ -34,6 +34,10 @@ features:
     details: 7 大能力矩阵 × 30+ 技术特性对照表，帮你根据吞吐量需求、一致性要求、运维成本筛选最佳方案。
 ---
 
+<script setup>
+import { withBase } from "vitepress";
+</script>
+
 ## 🎯 典型消息系统快速入口
 
 前 5 个为高频使用场景的代表性产品，其余 3 个可在导航栏「更多」下拉中查看。
@@ -48,24 +52,24 @@ features:
 
 <div class="grid-container" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 24px;">
 
-<a href="/products/" style="text-decoration: none;">
+<a :href="withBase('/products/')" style="text-decoration: none;">
   <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
     <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">📚 查看所有 8 个产品</h3>
     <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">包括 NATS JetStream、ActiveMQ Artemis、ActiveMQ Classic</p>
   </div>
 </a>
 
-<a href="/matrix/" style="text-decoration: none;">
+<a :href="withBase('/matrix/')" style="text-decoration: none;">
   <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
     <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">⚖️ 横向能力对比矩阵</h3>
     <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">投递语义、顺序保证、重试与 DLQ、延迟消息、回放保留、扩展复制、安全模型七大维度深度对比</p>
   </div>
 </a>
 
-<a href="/playground/" style="text-decoration: none;">
+<a :href="withBase('/playground/')" style="text-decoration: none;">
   <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
-    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">🔬 15+ 可复现实验手册</h3>
-    <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">基础收发、消费者崩溃重投、毒消息 DLQ、事务回查、顺序回放、积压追赶等完整故障演练脚本</p>
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">🔬 MQ 交互回放实验台</h3>
+    <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">回放 RabbitMQ、Kafka 与 Redis Streams 的已采集证据；页面不会启动 Broker，其他产品的本地实验见产品文档。</p>
   </div>
 </a>
 

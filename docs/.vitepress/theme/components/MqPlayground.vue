@@ -357,7 +357,7 @@ onBeforeUnmount(() => {
 .mq-playground__timeline button > span { position: absolute; top: -20px; left: 50%; box-sizing: border-box; width: 24px; height: 24px; border: 2px solid var(--vp-c-divider); border-radius: 50%; background: var(--vp-c-bg); font-size: 11px; line-height: 20px; transform: translateX(-50%); }
 .mq-playground__timeline button.passed, .mq-playground__timeline button.current { color: var(--vp-c-text-1); }
 .mq-playground__timeline button.passed > span, .mq-playground__timeline button.current > span { border-color: var(--vp-c-brand-1); }
-.mq-playground__timeline button.current > span { background: var(--vp-c-brand-1); color: white; }
+.mq-playground__timeline button.current > span { background: var(--doc-action-bg); color: white; }
 .mq-playground__actions { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; padding: 10px 0; border-top: 1px solid var(--vp-c-divider); }
 .mq-playground__actions > span { color: var(--vp-c-text-2); font-size: 13px; }
 .mq-playground__actions button { border-color: var(--vp-c-brand-1); color: var(--vp-c-brand-1); }

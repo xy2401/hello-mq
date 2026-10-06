@@ -76,6 +76,12 @@ bash demos/artemis/docker/run.sh
 
 ## 版本基线
 
+[完整版本目录](./version/)列出本仓库已收录的版本主题；已有运行基线与镜像证据继续以本页说明为准。
+
 - Broker：ActiveMQ Artemis 2.44.0（镜像 tag+digest 双锁定，见 `.env.versions`）。
 - Java 客户端：`org.apache.activemq:artemis-jakarta-client-all:2.44.0`（Jakarta JMS API）。
 - 官方文档：<https://activemq.apache.org/components/artemis/>（checkedAt: 2026-08-19）。
+
+## 实验入口与范围
+
+本产品没有独立浏览器回放工作台；按快速开始页在本机复现场景。 [Docker 验证证据](./DockerTooling)列出已采集结果与缺口；已有动手命令和版本基线保持适用。

@@ -757,7 +757,7 @@ function copyText(text: string, targetKey: string) {
 }
 
 .dt-terminal-copy-btn:hover {
-  background: var(--vp-c-brand-1);
+  background: var(--doc-action-bg);
   color: white;
   border-color: var(--vp-c-brand-1);
 }
@@ -923,7 +923,7 @@ function copyText(text: string, targetKey: string) {
   font-size: 0.6rem;
   padding: 0.02rem 0.25rem;
   border-radius: 2px;
-  background: var(--vp-c-brand-1);
+  background: var(--doc-action-bg);
   color: white;
 }
 

@@ -1,3 +1,4 @@
+import { sharedThemeLabels } from './shared-ui'
 import { defineConfig } from 'vitepress'
 import { withMermaid } from 'vitepress-plugin-mermaid'
 // @ts-ignore -- 纯 JS 模块，config 与 check-project 共享同一数据源
@@ -23,6 +24,7 @@ const config = defineConfig({
   head: [['link', { rel: 'icon', type: 'image/svg+xml', href: `${base}favicon.svg` }]],
   transformPageData: markProductPage,
   themeConfig: {
+    ...sharedThemeLabels,
     logo: '/favicon.svg',
     nav,
     sidebar,
@@ -34,7 +36,6 @@ const config = defineConfig({
       message: '以统一实验验证消息系统语义边界',
       copyright: 'MIT License',
     },
-    search: { provider: 'local' },
   },
   mermaid: {
     theme: 'neutral',

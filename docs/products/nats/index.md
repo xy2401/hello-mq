@@ -70,6 +70,12 @@ bash demos/nats/docker/run.sh
 
 ## 版本基线
 
+[完整版本目录](./version/)列出本仓库已收录的版本主题；已有运行基线与镜像证据继续以本页说明为准。
+
 - Broker：NATS Server 2.11.5（镜像 tag+digest 双锁定，见 `.env.versions`；JetStream 以 `-js` 启用）。
 - Java 客户端：`io.nats:jnats:2.21.1`。
 - 官方文档：<https://docs.nats.io/>（checkedAt: 2026-08-19）。
+
+## 实验入口与范围
+
+本产品没有独立浏览器回放工作台；按快速开始页在本机复现场景。 [Docker 验证证据](./DockerTooling)列出已采集结果与缺口；已有动手命令和版本基线保持适用。
