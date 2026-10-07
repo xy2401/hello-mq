@@ -87,14 +87,6 @@ const productsSidebar = [
     text: '产品分卷',
     items: [
       { text: '总览', link: '/products/' },
-      { text: 'RabbitMQ', link: '/products/rabbitmq/' },
-      { text: 'Kafka', link: '/products/kafka/' },
-      { text: 'RocketMQ', link: '/products/rocketmq/' },
-      { text: 'Pulsar', link: '/products/pulsar/' },
-      { text: 'Redis Streams', link: '/products/redis-streams/' },
-      { text: 'NATS', link: '/products/nats/' },
-      { text: 'ActiveMQ Artemis', link: '/products/artemis/' },
-      { text: 'ActiveMQ Classic', link: '/products/activemq-classic/' },
     ],
   },
 ]
