@@ -2,7 +2,7 @@
 
 > 本页结论：八个产品全部有 Docker/CLI 证据。Kafka、Pulsar、Redis Streams、RocketMQ、Artemis、ActiveMQ Classic 六个产品可用镜像自带入口完成状态、创建、生产、消费和复查；RabbitMQ 的队列与状态操作自带，收发需借道 management HTTP API；NATS 官方镜像是 distroless，只有 `/nats-server`，状态走 8222 监控端点。本页命令与输出摘自 `demos/<产品>/docker/` 真实快照。
 
-版本基线见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。八组快照采集于 2026-08-20，每组实验的断言全部通过（各 `assert.out.txt` 结果均为 `RESULT: all assertions passed`）。本页只比较「镜像自带命令」这一层，管理插件、Web UI 与指标体系见[运维与观测](/matrix/operations)。
+版本基线见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。八组快照采集于 2026-08-20，每组实验的断言全部通过（各 `assert.out.txt` 结果均为 `RESULT: all assertions passed`）。本页只比较「镜像自带命令」这一层，管理插件、Web UI 与指标体系见[运维与观测](/matrix/operations)。
 
 ## 核心对照表
 
@@ -157,7 +157,7 @@ CLI 的长项是**快、零依赖、贴近排障现场**：容器起来就能用
 | 类型化载荷与 Schema 演进 | 只有字符串/字节 | 客户端序列化：见 [Schema 演进](/reference/patterns/schema-evolution) |
 | 批量、连接复用、背压、监听器 | 无 | SDK 运行时能力 |
 
-分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/products/rabbitmq/quick-start)与[实验台总览](/playground/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
+分工结论：**冒烟与排障用 CLI，生产流量走 SDK**。本站各产品分卷的动手实验（如 [RabbitMQ 快速开始](/products/rabbitmq/quick-start)与[🧪 实验台](/playground/)）全部用 Java 客户端实现，与本页的 CLI 实验互为对照。
 
 ## 怎么复现
 

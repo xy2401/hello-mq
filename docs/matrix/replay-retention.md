@@ -2,7 +2,7 @@
 
 > 本页结论：RabbitMQ 与 Artemis 是队列语义——ACK 即删、不可回放；Kafka、RocketMQ、Pulsar、Redis Streams、NATS JetStream 都是日志语义——消费不删除消息，可按位点/序列号回放，保留由各自的修剪/保留策略决定；注意 NATS 的 WorkQueue/Interest 保留策略是日志模型中的例外（确认即删）。
 
-覆盖 spec §8.2「顺序与回放矩阵」的回放部分与「存储与保留矩阵」。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「顺序与回放矩阵」的回放部分与「存储与保留矩阵」。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 存储与保留
 

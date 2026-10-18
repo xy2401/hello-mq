@@ -2,7 +2,7 @@
 
 > 本页结论：RocketMQ 与 Artemis 提供 Broker 内置的消费重试与 DLQ（RocketMQ：retryMaxTimes + %DLQ%；Artemis：address-setting max-delivery-attempts + dead-letter-address）；Pulsar 以原生重投机制 + 客户端 DeadLetterPolicy 组合实现；NATS JetStream 有原生重投（AckWait/MaxDeliver）但无 DLQ；RabbitMQ 靠 TTL+DLX 组合模式；Redis Streams 靠 PEL + XCLAIM 组合；Kafka 完全依赖应用层 Retry Topic 或框架，Broker 没有内置消费重试。
 
-覆盖 spec §8.2「重试/延迟/DLQ 矩阵」的重试与 DLQ 部分（延迟消息见[延迟/定时消息](/matrix/delayed-messages)）。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「重试/延迟/DLQ 矩阵」的重试与 DLQ 部分（延迟消息见[延迟/定时消息](/matrix/delayed-messages)）。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 重试与 DLQ 能力
 

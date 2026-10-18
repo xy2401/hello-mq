@@ -8,6 +8,7 @@ import ProductLogo from './components/ProductLogo.vue'
 import TopologyDiagram from './components/TopologyDiagram.vue'
 import VersionBadge from './components/VersionBadge.vue'
 import DockerTooling from './components/DockerTooling.vue'
+import DockerCommands from './components/docker-commands/DockerCommands.vue'
 import MqPlayground from './components/MqPlayground.vue'
 import './doc-baseline.css'
 import './custom.css'
@@ -24,6 +25,7 @@ export default {
     app.component('TopologyDiagram', TopologyDiagram)
     app.component('VersionBadge', VersionBadge)
     app.component('DockerTooling', DockerTooling)
+    app.component('DockerCommands', DockerCommands)
     app.component('MqPlayground', MqPlayground)
   },
 }

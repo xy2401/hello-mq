@@ -68,4 +68,4 @@ flowchart LR
 
 ## 实验入口与范围
 
-[交互证据回放](/playground/rabbitmq)展示已采集场景，页面不会启动真实 Broker。 [Docker 验证证据](./DockerTooling)列出已采集结果与缺口；已有动手命令和版本基线保持适用。
+[交互证据回放](/playground/rabbitmq)展示已采集场景，页面不会启动真实 Broker。[容器内命令](./docker-commands)提供完整文件清单及命令归属，[命令示例与结果](./docker-command-ops)按步骤展示采集记录；[历史 Docker 证据](./DockerTooling)保留原环境结果。

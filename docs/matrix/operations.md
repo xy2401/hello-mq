@@ -2,7 +2,7 @@
 
 > 本页结论：七个产品都有官方 CLI/管理端与核心指标体系，但形态不同——RabbitMQ 自带管理 UI 与 Prometheus 端点，Kafka 靠 CLI + JMX + 第三方 Schema Registry，RocketMQ 靠 mqadmin/Dashboard + 内置重试与事务状态观测，Pulsar 靠 pulsar-admin + 原生 Schema Registry，Redis 靠 redis-cli + INFO 命令族，NATS 靠 nats CLI + 内置监控 HTTP 端点，Artemis 靠 artemis CLI + hawtio Web 控制台 + JMX；积压观测指标名不同但语义一致。
 
-覆盖 spec §8.2「运维矩阵」的工具/指标/Schema 部分（安全能力部分见[安全](/matrix/security)）。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「运维矩阵」的工具/指标/Schema 部分（安全能力部分见[安全](/matrix/security)）。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 管理工具
 

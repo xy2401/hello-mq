@@ -24,4 +24,4 @@
 
 ## 与各产品能力的关系
 
-模式是产品无关的设计；各产品对模式的原生支持程度不同（例如重试与 DLQ 在 RocketMQ 是 Broker 内置、在 Kafka 是应用层实现），对照见 [横向矩阵](/matrix/) 与 [重试与 DLQ 模式页](/reference/patterns/retry-and-dlq)。
+模式是产品无关的设计；各产品对模式的原生支持程度不同（例如重试与 DLQ 在 RocketMQ 是 Broker 内置、在 Kafka 是应用层实现），对照见 [⚖️ 对比矩阵](/matrix/) 与 [重试与 DLQ 模式页](/reference/patterns/retry-and-dlq)。

@@ -2,7 +2,7 @@
 
 > 本页结论：七个产品的高可用模型差异极大——RabbitMQ 以队列为单位做 Raft 多数派复制（Quorum Queue），Kafka 以分区为单位做 ISR 副本，RocketMQ 以 Broker 为单位做主从/DLedger 复制，Pulsar 把存储下沉到 BookKeeper、Broker 本身无状态，Redis 靠主从复制 + Sentinel 故障转移（Stream 是单 key 无法分片），NATS JetStream 以 Stream 为单位做 Raft 复制，Artemis 以 Broker 为单位做 live/backup 对（复制或共享存储）；扩展粒度与多租户能力同样由各自架构决定。
 
-覆盖 spec §8.2「高可用与扩展矩阵」，并合并「存储与高可用」「扩展与并行」两个主题。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「高可用与扩展矩阵」，并合并「存储与高可用」「扩展与并行」两个主题。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 复制与高可用
 

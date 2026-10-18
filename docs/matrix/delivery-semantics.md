@@ -2,7 +2,7 @@
 
 > 本页结论：八个产品都能构建 at-least-once 链路，但手段不同——RabbitMQ 靠两段独立确认（Confirms + ACK），Kafka 靠 acks + offset 提交，RocketMQ 靠发送响应 + Broker 内置重投，Pulsar 靠 ack/negativeAck + 游标，Redis Streams 靠 XADD 返回 + 手动 XACK + PEL，NATS 靠 Core 的无确认速递或 JetStream 的 PublishAck + 显式 Ack，Artemis 靠 JMS send 阻塞落 journal + 显式 acknowledge + 服务端重投策略，ActiveMQ Classic 靠 persistent 同步 send + SESSION_TRANSACTED 事务消费 + Broker 端 redeliveryPolicy 重投；exactly-once 只在有限边界内成立。
 
-覆盖 spec §8.2 的矩阵：消息模型矩阵、路由矩阵、确认与投递矩阵、事务矩阵。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2 的矩阵：消息模型矩阵、路由矩阵、确认与投递矩阵、事务矩阵。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 消息模型矩阵
 

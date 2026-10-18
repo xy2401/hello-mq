@@ -22,9 +22,9 @@ export const nav = [
 
 const referenceSidebar = [
   {
-    text: '实践入口',
+    text: '📚 参考资料',
     items: [
-      { text: '参考资料总览', link: '/reference/' },
+      { text: '📚 参考资料', link: '/reference/' },
       { text: '快速开始', link: '/reference/getting-started' },
       { text: '学习路径', link: '/reference/learning-path' },
       { text: '实验约定', link: '/reference/lab-conventions' },
@@ -52,9 +52,9 @@ const referenceSidebar = [
 
 const matrixSidebar = [
   {
-    text: '横向矩阵',
+    text: '⚖️ 对比矩阵',
     items: [
-      { text: '总览与读法', link: '/matrix/' },
+      { text: '⚖️ 对比矩阵', link: '/matrix/' },
       { text: '投递语义', link: '/matrix/delivery-semantics' },
       { text: '顺序', link: '/matrix/ordering' },
       { text: '重试与 DLQ', link: '/matrix/retry-dlq' },
@@ -72,9 +72,9 @@ const matrixSidebar = [
 
 const experimentSidebar = [
   {
-    text: '消息语义实验台',
+    text: '🧪 实验台',
     items: [
-      { text: '全部回放', link: '/playground/' },
+      { text: '🧪 实验台', link: '/playground/' },
       { text: 'RabbitMQ', link: '/playground/rabbitmq' },
       { text: 'Kafka', link: '/playground/kafka' },
       { text: 'Redis Streams', link: '/playground/redis-streams' },
@@ -162,7 +162,11 @@ function productDetailSidebar(productName, base) {
         { text: '运维与观测', link: `${base}/operations` },
         { text: '陷阱与检查表', link: `${base}/pitfalls` },
         { text: '版本演进', link: `${base}/version/`, collapsed: false, items: productVersionItems[base.split('/').at(-1)] },
-        { text: 'Docker 验证', link: `${base}/DockerTooling` },
+        ...(base === '/products/rabbitmq' ? [
+          { text: '容器内命令', link: `${base}/docker-commands` },
+          { text: '命令示例与结果', link: `${base}/docker-command-ops` },
+        ] : []),
+        { text: base === '/products/rabbitmq' ? '历史 Docker 证据' : 'Docker 验证', link: `${base}/DockerTooling` },
       ],
     },
   ]

@@ -2,7 +2,7 @@
 
 > 本页结论：消息产品选型是约束求解，不是选冠军。给定「消息规模/顺序/回放/延迟/事务/团队熟悉度」等输入，可以推导出候选（不超过 2 个）、权衡、必须验证的风险和最小 PoC 清单；不存在任何场景都最优的万能冠军。
 
-版本基线见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。本页对应 spec §8.2「选型矩阵」与 §8.3 的输入 → 输出格式。
+版本基线见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。本页对应 spec §8.2「选型矩阵」与 §8.3 的输入 → 输出格式。
 
 ## 没有万能冠军
 
@@ -152,4 +152,4 @@ P1 两个产品覆盖的是「不值得为四款 P0 引入独立消息平台」�
 ## 相关页面
 
 - 各维度矩阵：[投递语义](/matrix/delivery-semantics) · [顺序](/matrix/ordering) · [重试与 DLQ](/matrix/retry-dlq) · [延迟/定时消息](/matrix/delayed-messages) · [回放与保留](/matrix/replay-retention) · [存储与高可用](/matrix/storage-ha-scaling) · [安全](/matrix/security) · [运维观测](/matrix/operations)
-- 返回：[矩阵总览](/matrix/)
+- 返回：[⚖️ 对比矩阵](/matrix/)

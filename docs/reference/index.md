@@ -1,4 +1,4 @@
-# 参考资料
+# 📚 参考资料 {#参考资料}
 
 消息系统的实践方法、消息模式、生产运维和证据规范统一收录在这里。
 
@@ -7,7 +7,7 @@
 - [快速开始](/reference/getting-started)
 - [学习路径](/reference/learning-path)
 - [实验约定](/reference/lab-conventions)
-- [可复现实验台](/playground/)
+- [🧪 实验台](/playground/)
 
 ## 协议资料
 

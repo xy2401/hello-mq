@@ -2,7 +2,7 @@
 
 > 本页结论：八个产品都只提供「某个单元内有序」——RabbitMQ 单队列、Kafka 分区、RocketMQ MessageGroup、Pulsar 分区+订阅类型、Redis Streams 单 Stream、NATS 单 Stream、Artemis 单队列（或 Message Group）、ActiveMQ Classic 单队列（或 Message Group JMSXGroupID）；Redis/NATS/Artemis/Classic 没有分区概念，顺序单元就是整个 Queue 或 Stream。全局顺序只能靠单一顺序单元 + 单消费者换来，且失败重试会不同程度地破坏顺序。
 
-覆盖 spec §8.2「顺序与回放矩阵」的顺序部分。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「顺序与回放矩阵」的顺序部分。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 最小顺序单元
 

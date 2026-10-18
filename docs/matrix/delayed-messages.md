@@ -2,7 +2,7 @@
 
 > 本页结论：RocketMQ 与 Artemis 提供原生延迟消息——RocketMQ 的 Delay 类型可指定投递时间戳，Artemis 用 `_AMQ_SCHED_DELAY` 属性指定延迟毫秒数；RabbitMQ 用 TTL+DLX 组合近似（精度受队头过期检查限制）；Kafka、Pulsar、Redis Streams、NATS 均无内置机制，需要业务自建定时层（Redis 常用 ZSET 到期表，NATS 依赖外部调度器）。
 
-覆盖 spec §8.2「重试/延迟/DLQ 矩阵」的延迟部分。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。
+覆盖 spec §8.2「重试/延迟/DLQ 矩阵」的延迟部分。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。
 
 ## 延迟/定时能力
 

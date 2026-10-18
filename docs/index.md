@@ -13,10 +13,10 @@ hero:
       text: 理解核心原理
       link: /#mq-fundamentals
     - theme: alt
-      text: 🧪 MQ 交互回放实验台
+      text: 🧪 实验台
       link: /playground/
     - theme: alt
-      text: ⚖️ 能力对比矩阵
+      text: ⚖️ 对比矩阵
       link: /matrix/
 
 features:
@@ -61,14 +61,14 @@ import { withBase } from "vitepress";
 
 <a :href="withBase('/matrix/')" style="text-decoration: none;">
   <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
-    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">⚖️ 横向能力对比矩阵</h3>
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">⚖️ 对比矩阵</h3>
     <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">投递语义、顺序保证、重试与 DLQ、延迟消息、回放保留、扩展复制、安全模型七大维度深度对比</p>
   </div>
 </a>
 
 <a :href="withBase('/playground/')" style="text-decoration: none;">
   <div style="background: var(--vp-c-bg-soft); border: 1px solid var(--vp-c-divider); padding: 20px; border-radius: 12px; height: 100%; transition: all 0.3s ease;">
-    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">🔬 MQ 交互回放实验台</h3>
+    <h3 style="margin: 0 0 8px 0; color: var(--vp-c-brand-1);">🧪 实验台</h3>
     <p style="margin: 0; font-size: 0.875rem; color: var(--vp-c-text-2);">回放 RabbitMQ、Kafka 与 Redis Streams 的已采集证据；页面不会启动 Broker，其他产品的本地实验见产品文档。</p>
   </div>
 </a>

@@ -2,7 +2,7 @@
 
 > 本页结论：七个产品都支持 TLS 传输加密与账号级认证授权，但粒度与形态不同——RabbitMQ 按 vhost 内资源正则授权，Kafka 用 ACL 到 topic/group，RocketMQ 提供 ACL 访问控制，Pulsar 在 Tenant/Namespace 层级做多租户授权，Redis 用 ACL 到命令/键模式级别，NATS 按 Account + Subject 权限授权，Artemis 按角色 × 地址（security-settings）授权；静态加密普遍需要存储层配合（NATS JetStream 可配置静态加密密钥），审计能力普遍需要额外组件或平台配合。
 
-覆盖 spec §8.2「运维矩阵」中安全能力部分（工具/指标/Schema 部分见[运维观测](/matrix/operations)）。版本基线与标记规则见[矩阵总览](/matrix/)（checkedAt: 2026-08-19）。安全基线的完整要求见 spec §12.3（TLS、最小授权、秘密管理、端口分离、Payload 脱敏）。
+覆盖 spec §8.2「运维矩阵」中安全能力部分（工具/指标/Schema 部分见[运维观测](/matrix/operations)）。版本基线与标记规则见[⚖️ 对比矩阵](/matrix/)（checkedAt: 2026-08-19）。安全基线的完整要求见 spec §12.3（TLS、最小授权、秘密管理、端口分离、Payload 脱敏）。
 
 ## 加密
 
