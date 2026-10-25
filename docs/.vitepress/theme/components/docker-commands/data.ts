@@ -3,19 +3,33 @@ export interface CaptureFile extends Record<string, unknown> {
   uid: number; gid: number; user: string | null; group: string | null; sizeBytes: string; sha256: string | null;
 }
 export interface CommandEntry { id: string; name: string; path: string | null; realPath?: string; purpose: string; category: string; verified: boolean; }
-export interface CommandStep { id: string; argv: string[]; status: string; stdout: string | null; stderr: string | null; exitCode: number | null; result?: unknown; parseError?: string; assertions?: unknown[]; }
+export interface CommandStep { id: string; argv: string[]; cwd?: string; status: string; stdout: string | null; stderr: string | null; exitCode: number | null; result?: unknown; parseError?: string; assertions?: unknown[]; }
 export interface CommandExample { id: string; title: string; notes: string[]; status: string; steps: CommandStep[]; }
 export interface FileDirectory { path: string; count: number; chunks: string[]; }
 export interface Difference { path: string; transition: string; change: string; fields: string[]; before: CaptureFile | null; after: CaptureFile | null; }
+export interface CaptureStage { id: string; label: string; imageId?: string; parentImageId?: string | null; }
+export interface DiffTransition { id: string; label?: string; count: number; chunks: string[]; }
+export interface CaptureVersion { version: string; captureId: string; manifestFile?: string; manifestSha256: string; product: string; status?: string; dataRevision?: string | null; }
 export interface DisplayManifest {
   schemaVersion: number; product: { id: string; name: string; version: string };
-  capture: { id: string; status: string; execution?: string; sourceSha: string | null; capturedAt: string | null; workflowUrl: string | null; base: { image: string }; recipeSha256: string; errors?: string[]; };
+  capture: { id: string; status: string; execution?: string; protocolVersion?: number; stages?: CaptureStage[]; sourceRepository?: string; sourceSha: string | null; sourceDirty?: boolean; toolDirty?: boolean; capturedAt: string | null; workflowUrl: string | null; base: { image: string }; recipeSha256: string; errors?: string[]; };
   catalog: string; examples: string; fileIndex: string; diffIndex: string;
   artifacts: Record<string, { sha256: string; sizeBytes: number }>;
 }
 export interface DisplayPayload { schemaVersion: number; captureId: string; [key: string]: unknown; }
 export const statusLabels: Record<string, string> = { pending: '待采集', passed: '通过', partial: '部分完成', failed: '失败', 'not-run': '未执行' };
 export const originLabels: Record<string, string> = { product: '目标软件', dependency: '依赖', system: '基础系统', unconfirmed: '未确认' };
+export const executionLabels: Record<string, string> = { 'local-wsl': '本地 WSL', 'local-linux': '本地 Linux', 'github-actions': 'GitHub Actions', fixture: '界面测试夹具' };
+
+export function transitionLabel(id: string, stages: CaptureStage[] = []): string {
+  const legacy: Record<string, string> = { base: '基础系统', dependencies: '依赖', software: '软件' };
+  return id.split('-to-').map(part => stages.find(stage => stage.id === part)?.label ?? legacy[part] ?? part).join(' → ');
+}
+
+export function validateVersion(value: CaptureVersion): CaptureVersion {
+  if (!value || !/^[a-z0-9-]{1,100}$/.test(value.captureId) || !/^[a-f0-9]{64}$/.test(value.manifestSha256) || typeof value.product !== 'string' || (value.manifestFile && value.manifestFile !== `runs/${value.captureId}/manifest.json`)) throw new Error('导入锁或版本目录包含无效的清单地址。');
+  return value;
+}
 
 export function shellCommand(argv: string[]): string {
   return argv.map(argument => /^[A-Za-z0-9_./:=+,@%-]+$/.test(argument) ? argument : "'" + argument.replaceAll("'", "'\\''") + "'").join(' ');
@@ -34,9 +48,12 @@ export function resultTable(value: unknown): { columns: string[]; rows: unknown[
 }
 export function cell(value: unknown): string { return value === undefined ? '—' : typeof value === 'string' ? value || '""' : JSON.stringify(value); }
 
-export async function checkedJson(url: string, signal: AbortSignal, expected?: { sha256: string; sizeBytes?: number }): Promise<unknown> {
+export async function checkedJson(url: string, signal: AbortSignal, expected?: { sha256: string; sizeBytes?: number }, optional = false): Promise<unknown> {
   const response = await fetch(url, { signal, cache: 'no-cache' });
+  if (optional && response.status === 404) return undefined;
   if (!response.ok) throw new Error(`数据请求失败（HTTP ${response.status}）。`);
+  // VitePress's development fallback can return its HTML shell for an absent optional index.
+  if (optional && response.headers.get('content-type')?.includes('text/html')) return undefined;
   if (!response.headers.get('content-type')?.includes('application/json')) throw new Error('服务器没有返回 JSON，无法读取采集数据。');
   const bytes = await response.arrayBuffer();
   if (expected) {

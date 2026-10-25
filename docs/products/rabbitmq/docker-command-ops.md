@@ -10,4 +10,8 @@ pageClass: docker-commands-page
 
 <DockerCommands data-url="/docker-data/rabbitmq/manifest.json" mode="examples" />
 
-基线：Ubuntu 26.04 LTS / linux/amd64，RabbitMQ 4.1.4 / Erlang 27.3.4.3。采集主数据保存在 [Hello Docker](https://github.com/xy2401/hello-docker/blob/codex/hello-docker/docs/support/software-capture.md)，本站读取校验后的独立展示包。
+案例覆盖版本、节点状态、虚拟主机、用户与权限和插件列表。每个采集批次在新的 RabbitMQ 4.1.4 / Erlang 27.3.4.3 容器中启动一次本地节点，全部案例完成或失败后停止节点；节点数据与命令记录保存在同一 `/capture` 挂载中。
+
+[Hello MQ 采集入口](https://github.com/xy2401/hello-mq/tree/main/support/capture/rabbitmq) 支持本地 WSL2 / Podman + Compose 和手动 Actions。原始命令、输入、stdout、stderr、退出码及断言随本项目批次保存；页面回放本站证据，不在浏览器中启动消息队列。待采集、失败和通过状态由实际记录决定。
+
+Ubuntu 26.04 LTS / linux/amd64 基线及各层镜像 ID 随批次记录，[历史 DockerTooling 结果](./DockerTooling) 继续保留。

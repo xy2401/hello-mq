@@ -1,0 +1,19 @@
+services:
+  erlang:
+    image: ${ERLANG_IMAGE:-localhost/hello-capture/erlang:27.3.4.3}
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: erlang.Dockerfile
+      args:
+        BASE_IMAGE: ${BASE_IMAGE:?Set the built common Ubuntu image explicitly}
+        BUILD_JOBS: ${BUILD_JOBS:-2}
+  rabbitmq:
+    image: ${RABBITMQ_IMAGE:-localhost/hello-capture/rabbitmq:4.1.4}
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: rabbitmq.Dockerfile
+      args:
+        ERLANG_IMAGE: ${ERLANG_PARENT:-localhost/hello-capture/erlang:27.3.4.3}
+

@@ -1,0 +1,114 @@
+name: Collect layered RabbitMQ files and commands
+on:
+  workflow_dispatch:
+    inputs:
+      tool_sha:
+        description: Published full 40-character hello-docker commit SHA with scripts/capture
+        type: string
+        required: true
+      engine:
+        description: Container engine (Podman runs rootless)
+        type: choice
+        options: [podman, docker]
+        default: podman
+permissions:
+  contents: read
+concurrency:
+  group: rabbitmq-capture-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      ENGINE: ${{ inputs.engine }}
+      BASE_IMAGE: localhost/hello-capture/ubuntu:26.04
+      HELLO_DOCKER_HOME: ${{ github.workspace }}/.hello-docker
+      BUILD_OUTPUT_DIR: ${{ github.workspace }}/.artifacts/product-build
+      COMMON_BUILD_DIR: ${{ github.workspace }}/.artifacts/common-build
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate the immutable tools reference
+        env:
+          TOOL_SHA: ${{ inputs.tool_sha }}
+        run: '[[ "$TOOL_SHA" =~ ^[a-f0-9]{40}$ ]]'
+      - uses: actions/checkout@v4
+        with:
+          repository: xy2401/hello-docker
+          ref: ${{ inputs.tool_sha }}
+          path: .hello-docker
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare the Podman Compose provider
+        if: inputs.engine == 'podman'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y podman
+          pipx install --force podman-compose==1.5.0
+          export PODMAN_COMPOSE_PROVIDER="$HOME/.local/bin/podman-compose"
+          echo "PODMAN_COMPOSE_PROVIDER=$PODMAN_COMPOSE_PROVIDER" >> "$GITHUB_ENV"
+          test "$(podman info --format '{{.Host.Security.Rootless}}')" = true
+          podman compose version
+      - name: Build the common Ubuntu baseline
+        run: |
+          mkdir -p "$COMMON_BUILD_DIR"
+          bash "$HELLO_DOCKER_HOME/support/capture/ubuntu/build.sh" \
+            > "$COMMON_BUILD_DIR/ubuntu.stdout.log" \
+            2> "$COMMON_BUILD_DIR/ubuntu.stderr.log"
+      - name: Build Erlang, then RabbitMQ
+        run: bash support/capture/rabbitmq/build.sh
+      - name: Capture full inventories, differences and five case groups
+        run: |
+          bash support/capture/rabbitmq/capture.sh \
+            --tools "$HELLO_DOCKER_HOME" \
+            --images "$BUILD_OUTPUT_DIR/images.json" \
+            --workspace "$GITHUB_WORKSPACE/.artifacts/capture"
+      - name: Prepare metadata-only upload, including failed captures
+        if: always()
+        run: |
+          upload="$GITHUB_WORKSPACE/.artifacts/upload"
+          mkdir -p "$upload"
+          if node .hello-docker/scripts/capture/bundle.mjs archive "$GITHUB_WORKSPACE/.artifacts/capture" "$upload/archive" \
+            > "$upload/archive.stdout.log" 2> "$upload/archive.stderr.log"; then
+            printf 'verified\n' > "$upload/archive-status.txt"
+          else
+            printf 'archive failed; preserving incomplete diagnostics without work files\n' > "$upload/archive-status.txt"
+          fi
+          node --input-type=module - "$GITHUB_WORKSPACE/.artifacts/capture" "$upload" "$BUILD_OUTPUT_DIR" "$COMMON_BUILD_DIR" <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const [capture, upload, build, common] = process.argv.slice(2);
+          function copyTree(source, target) {
+            if (!fs.existsSync(source) || fs.lstatSync(source).isSymbolicLink()) return;
+            if (fs.lstatSync(source).isDirectory()) {
+              fs.mkdirSync(target, { recursive: true });
+              for (const name of fs.readdirSync(source)) copyTree(path.join(source, name), path.join(target, name));
+            } else if (fs.lstatSync(source).isFile()) {
+              fs.mkdirSync(path.dirname(target), { recursive: true });
+              fs.copyFileSync(source, target);
+            }
+          }
+          copyTree(build, path.join(upload, 'product-build'));
+          copyTree(common, path.join(upload, 'common-build'));
+          if (fs.readFileSync(path.join(upload, 'archive-status.txt'), 'utf8').trim() !== 'verified') {
+            const diagnostics = path.join(upload, 'diagnostics');
+            for (const name of ['scripts', 'results']) copyTree(path.join(capture, name), path.join(diagnostics, name));
+            if (fs.existsSync(capture)) for (const name of fs.readdirSync(capture)) {
+              const file = path.join(capture, name);
+              if (/\.(json|jsonl)$/.test(name) && fs.lstatSync(file).isFile()) copyTree(file, path.join(diagnostics, name));
+            }
+          }
+          NODE
+      - name: Upload success and failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: rabbitmq-4.1.4-capture-${{ github.run_id }}
+          path: .artifacts/upload/
+          include-hidden-files: true
+          if-no-files-found: warn
+          retention-days: 14

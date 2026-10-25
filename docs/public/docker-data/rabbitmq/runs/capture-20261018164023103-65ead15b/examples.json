@@ -1,0 +1,373 @@
+{
+  "schemaVersion": 1,
+  "captureId": "capture-20261018164023103-65ead15b",
+  "product": {
+    "id": "rabbitmq",
+    "name": "RabbitMQ",
+    "version": "4.1.4 / Erlang 27.3.4.3"
+  },
+  "preparation": {
+    "command": "source /capture/scripts/product/prepare.sh",
+    "stdout": "",
+    "stderr": "",
+    "exitCode": 0
+  },
+  "examples": [
+    {
+      "id": "version",
+      "title": "版本",
+      "notes": [
+        "RabbitMQ 4.1.4 与既有 ERTS 15.2.7.2 对应的 Erlang 27.3.4.3；Erlang 命令归依赖。"
+      ],
+      "steps": [
+        {
+          "id": "version",
+          "argv": [
+            "rabbitmqctl",
+            "version"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "4.1.4",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "4.1.4\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "id": "status",
+      "title": "节点状态",
+      "notes": [
+        "单节点、隔离网络，不连接已有集群。"
+      ],
+      "steps": [
+        {
+          "id": "ping",
+          "argv": [
+            "rabbitmq-diagnostics",
+            "-q",
+            "ping"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "Ping succeeded",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Ping succeeded\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "running",
+          "argv": [
+            "rabbitmq-diagnostics",
+            "-q",
+            "check_running"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "fully booted",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "RabbitMQ on node rabbit@c4b76d07b33d is fully booted and running\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "status",
+          "argv": [
+            "rabbitmqctl",
+            "status"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "4.1.4",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Status of node rabbit@c4b76d07b33d ...\nRuntime\n\nOS PID: 13\nOS: Linux\nUptime (seconds): 6\nIs under maintenance?: false\nRabbitMQ version: 4.1.4\nRabbitMQ release series support status: see https://www.rabbitmq.com/release-information\nNode name: rabbit@c4b76d07b33d\nErlang configuration: Erlang/OTP 27 [erts-15.2.7.2] [source] [64-bit] [smp:2:2] [ds:2:2:10] [async-threads:1] [jit:ns]\nCrypto library: OpenSSL 3.5.5 27 Jan 2026\nErlang processes: 323 used, 1048576 limit\nScheduler run queue: 1\nCluster heartbeat timeout (net_ticktime): 60\n\nPlugins\n\nEnabled plugin file: /capture/work/rabbitmq/enabled_plugins\nEnabled plugins:\n\n\nData directory\n\nNode data directory: /capture/work/rabbitmq/mnesia/rabbit@c4b76d07b33d\nRaft data directory: /capture/work/rabbitmq/mnesia/rabbit@c4b76d07b33d/quorum/rabbit@c4b76d07b33d\n\nConfig files\n\n\nLog file(s)\n\n * /capture/work/rabbitmq/log/rabbit@c4b76d07b33d.log\n * <stdout>\n\nAlarms\n\n(none)\n\nTags\n\n(none)\n\nMemory\n\nTotal memory used: 0.1156 gb\nCalculation strategy: rss\nMemory high watermark setting: 0.6 of available memory, computed to: 19.4539 gb\n\nreserved_unallocated: 0.0598 gb (51.74 %)\ncode: 0.0195 gb (16.85 %)\nother_system: 0.0162 gb (14.02 %)\nother_proc: 0.0157 gb (13.62 %)\nother_ets: 0.0021 gb (1.84 %)\natom: 0.001 gb (0.86 %)\nmetrics: 0.0006 gb (0.55 %)\nallocated_unused: 0.0003 gb (0.27 %)\nmsg_index: 0.0001 gb (0.11 %)\nmnesia: 0.0001 gb (0.06 %)\nmetadata_store: 0.0 gb (0.03 %)\nbinary: 0.0 gb (0.02 %)\nplugins: 0.0 gb (0.01 %)\nquorum_ets: 0.0 gb (0.0 %)\nmetadata_store_ets: 0.0 gb (0.0 %)\nquorum_queue_procs: 0.0 gb (0.0 %)\nquorum_queue_dlx_procs: 0.0 gb (0.0 %)\nstream_queue_procs: 0.0 gb (0.0 %)\nstream_queue_replica_reader_procs: 0.0 gb (0.0 %)\nconnection_readers: 0.0 gb (0.0 %)\nconnection_writers: 0.0 gb (0.0 %)\nconnection_channels: 0.0 gb (0.0 %)\nconnection_other: 0.0 gb (0.0 %)\nqueue_procs: 0.0 gb (0.0 %)\nstream_queue_coordinator_procs: 0.0 gb (0.0 %)\nmgmt_db: 0.0 gb (0.0 %)\n\nFile Descriptors\n\nTotal: 0, limit: 1048479\n\nFree Disk Space\n\nLow free disk space watermark: 0.05 gb\nFree disk space: 1011.5304 gb\n\nTotals\n\nConnection count: 0\nQueue count: 0\nVirtual host count: 1\n\nListeners\n\nInterface: [::], port: 25672, protocol: clustering, purpose: inter-node and CLI tool communication\nInterface: [::], port: 5672, protocol: amqp, purpose: AMQP 0-9-1 and AMQP 1.0\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "id": "vhost",
+      "title": "虚拟主机",
+      "notes": [
+        "只创建本次容器内的 capture-vhost。"
+      ],
+      "steps": [
+        {
+          "id": "create",
+          "argv": [
+            "rabbitmqctl",
+            "add_vhost",
+            "capture-vhost"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "capture-vhost",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Adding vhost \"capture-vhost\" ...\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "list",
+          "argv": [
+            "rabbitmqctl",
+            "list_vhosts",
+            "name"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "capture-vhost",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Listing vhosts ...\nname\ncapture-vhost\n/\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "id": "users",
+      "title": "用户与权限",
+      "notes": [
+        "capture-demo / capture-only-password 是公开演示凭据，仅用于该临时容器。"
+      ],
+      "steps": [
+        {
+          "id": "create-vhost",
+          "argv": [
+            "rabbitmqctl",
+            "add_vhost",
+            "capture-users"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "capture-users",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Adding vhost \"capture-users\" ...\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "create-user",
+          "argv": [
+            "rabbitmqctl",
+            "add_user",
+            "capture-demo",
+            "capture-only-password"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "capture-demo",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Adding user \"capture-demo\" ...\nDone. Don't forget to grant the user permissions to some virtual hosts! See 'rabbitmqctl help set_permissions' to learn more.\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "permissions",
+          "argv": [
+            "rabbitmqctl",
+            "set_permissions",
+            "-p",
+            "capture-users",
+            "capture-demo",
+            ".*",
+            ".*",
+            ".*"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Setting permissions for user \"capture-demo\" in vhost \"capture-users\" ...\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        },
+        {
+          "id": "verify",
+          "argv": [
+            "rabbitmqctl",
+            "list_user_permissions",
+            "capture-demo"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "capture-users",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Listing permissions for user \"capture-demo\" ...\nvhost\tconfigure\twrite\tread\ncapture-users\t.*\t.*\t.*\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        }
+      ],
+      "status": "passed"
+    },
+    {
+      "id": "plugins",
+      "title": "插件列表",
+      "notes": [
+        "只读取插件列表，不额外下载或启用插件。"
+      ],
+      "steps": [
+        {
+          "id": "plugins",
+          "argv": [
+            "rabbitmq-plugins",
+            "list",
+            "-m"
+          ],
+          "assertions": [
+            {
+              "stream": "exitCode",
+              "op": "equals",
+              "value": 0,
+              "passed": true
+            },
+            {
+              "stream": "stdout",
+              "op": "includes",
+              "value": "rabbitmq_management",
+              "passed": true
+            }
+          ],
+          "cwd": "/capture/work",
+          "stdin": null,
+          "stdout": "Listing plugins with pattern \".*\" ...\nrabbitmq_amqp1_0\nrabbitmq_auth_backend_cache\nrabbitmq_auth_backend_http\nrabbitmq_auth_backend_internal_loopback\nrabbitmq_auth_backend_ldap\nrabbitmq_auth_backend_oauth2\nrabbitmq_auth_mechanism_ssl\nrabbitmq_consistent_hash_exchange\nrabbitmq_event_exchange\nrabbitmq_federation\nrabbitmq_federation_management\nrabbitmq_federation_prometheus\nrabbitmq_jms_topic_exchange\nrabbitmq_management\nrabbitmq_management_agent\nrabbitmq_mqtt\nrabbitmq_peer_discovery_aws\nrabbitmq_peer_discovery_common\nrabbitmq_peer_discovery_consul\nrabbitmq_peer_discovery_etcd\nrabbitmq_peer_discovery_k8s\nrabbitmq_prometheus\nrabbitmq_random_exchange\nrabbitmq_recent_history_exchange\nrabbitmq_sharding\nrabbitmq_shovel\nrabbitmq_shovel_management\nrabbitmq_shovel_prometheus\nrabbitmq_stomp\nrabbitmq_stream\nrabbitmq_stream_management\nrabbitmq_top\nrabbitmq_tracing\nrabbitmq_trust_store\nrabbitmq_web_dispatch\nrabbitmq_web_mqtt\nrabbitmq_web_mqtt_examples\nrabbitmq_web_stomp\nrabbitmq_web_stomp_examples\n",
+          "stderr": "warning: the VM is running with native name encoding of latin1 which may cause Elixir to malfunction as it expects utf8. Please ensure your locale is set to UTF-8 (which can be verified by running \"locale\" in your shell) or set the ELIXIR_ERL_OPTIONS=\"+fnu\" environment variable\n",
+          "exitCode": 0,
+          "status": "passed"
+        }
+      ],
+      "status": "passed"
+    }
+  ]
+}
