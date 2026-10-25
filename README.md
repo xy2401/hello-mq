@@ -96,6 +96,14 @@ RabbitMQ 新入口：[容器内命令](docs/products/rabbitmq/docker-commands.md
 
 完整文件清单、安装锁和采集历史归 [Hello Docker](https://github.com/xy2401/hello-docker/blob/codex/hello-docker/docs/support/software-capture.md) 管理。本站只保存导入并校验过的 `docs/public/docker-data/rabbitmq/` 展示包，构建不读取相邻仓库。初始 `pending` 包只有计划命令及案例，不代表已经运行。
 
+## Cloudflare Workers 部署
+
+仓库根目录的 [wrangler.jsonc](wrangler.jsonc) 声明了构建命令和静态资源目录。Wrangler 在部署阶段执行 `npm run docs:build`，随后发布 `docs/.vitepress/dist`；页面使用静态 HTML 路由和 VitePress 的 404 页面。
+
+在 Cloudflare Workers 中导入本仓库，Worker 名称使用 `hello-mq`（与配置中的 `name` 一致），根目录使用仓库根目录，**构建命令留空**，部署命令保留默认的 `npx wrangler deploy`。构建环境使用 Node.js 22.16+，站点默认部署到域名根路径 `/`，无需设置 `DOCS_BASE`。
+
+构建命令由 Wrangler 执行，不依赖控制台自动填充构建命令字段。配置方式见 [Wrangler 自定义构建](https://developers.cloudflare.com/workers/wrangler/custom-builds/)和 [Workers 静态站点路由](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)。
+
 ## License
 
 [MIT](LICENSE)
