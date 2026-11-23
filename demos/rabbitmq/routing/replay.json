@@ -11,7 +11,7 @@
     "digest": "sha256:294b01e1796a8acede4619f32a1c394fae1f8021e57986ea01aad38dc2a4f502"
   },
   "capture": {
-    "capturedAt": "2026-11-22T11:45:32.902Z",
+    "capturedAt": "2026-11-23T13:21:40.263Z",
     "exitCode": 0,
     "timedOut": false,
     "timeoutSeconds": 540,
@@ -23,7 +23,7 @@
       "maven": "Apache Maven 3.9.15 (98b2cdbfdb5f1ac8781f537ea9acccaed7922349)",
       "jq": "jq-1.8.1"
     },
-    "sourceRevision": "53459fa06b3fa3bd569f393d57eb83f1556267b4"
+    "sourceRevision": "7a858c4411ebc3d0c7cdbd267186dad209b3377b"
   },
   "topology": [
     {
@@ -119,9 +119,9 @@
             {
               "file": "demos/rabbitmq/routing/producer.out.txt",
               "line": 4,
-              "hash": "0acff0379025cbf4723c7b3b019b4104d25428d0a9cafd4c60ae3154d02caffa",
+              "hash": "07f6e7727d975200ee91229f138c750ba10acf521cc0ad0271cd07966e80789f",
               "role": "producer",
-              "content": "[producer] timestamp=2026-11-22T11:45:10.196789195Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.events routingKey=order.created durationMs=3 status=confirmed"
+              "content": "[producer] timestamp=2026-11-23T13:21:16.936875380Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.events routingKey=order.created durationMs=2 status=confirmed"
             }
           ]
         },
@@ -180,15 +180,15 @@
             {
               "file": "demos/rabbitmq/routing/producer.out.txt",
               "line": 5,
-              "hash": "95ea1f8de92463427ead0fd3606d06bbe938043442590da57474dafe58a5b1ea",
+              "hash": "3c585a81bb0e7b7230f3f00fb97d6dff7e824765b306f811e8fad355ab32bc16",
               "role": "producer",
-              "content": "[producer] timestamp=2026-11-22T11:45:10.200664663Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.events routingKey=order.created durationMs=1 status=confirmed"
+              "content": "[producer] timestamp=2026-11-23T13:21:16.940545218Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.events routingKey=order.created durationMs=0 status=confirmed"
             }
           ]
         },
         {
           "sequence": 2,
-          "relativeMs": 6,
+          "relativeMs": 5,
           "delayMs": 250,
           "actor": "producer",
           "type": "confirmed",
@@ -241,9 +241,9 @@
             {
               "file": "demos/rabbitmq/routing/producer.out.txt",
               "line": 6,
-              "hash": "86dd9fc0e623aa361086255f62bf6c45b3233bcfa64826a9cc471cff14d55e94",
+              "hash": "c57117d62a2eaa5a2680faebaf7bf7410f0a74e83692b4400f0e8dbd6018099c",
               "role": "producer",
-              "content": "[producer] timestamp=2026-11-22T11:45:10.202102593Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.events routingKey=order.created.eu durationMs=0 status=confirmed"
+              "content": "[producer] timestamp=2026-11-23T13:21:16.941952008Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.events routingKey=order.created.eu durationMs=0 status=confirmed"
             }
           ]
         },
@@ -301,21 +301,21 @@
             {
               "file": "demos/rabbitmq/routing/producer.out.txt",
               "line": 7,
-              "hash": "cbd3800baf7ccc9e11c3a4c1a7d517aae18ff03285bcf6c6ee66f8ccb6051beb",
+              "hash": "fc1930ec3988267f900edb5b127984d197b3749278cfda39fd746946ace7c9ca",
               "role": "producer",
-              "content": "[producer] timestamp=2026-11-22T11:45:10.202206671Z level=INFO service=order-service product=rabbitmq lab=routing destination=orders.events confirmed=3 status=done"
+              "content": "[producer] timestamp=2026-11-23T13:21:16.942056593Z level=INFO service=order-service product=rabbitmq lab=routing destination=orders.events confirmed=3 status=done"
             }
           ]
         },
         {
           "sequence": 4,
-          "relativeMs": 1476,
-          "delayMs": 1470,
-          "actor": "consumer-eu",
+          "relativeMs": 1490,
+          "delayMs": 1484,
+          "actor": "consumer-all",
           "type": "received",
           "title": "Consumer 收到消息",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000001",
           "state": {
             "nodes": [
               {
@@ -350,11 +350,11 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000001",
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.eu",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "received"
             },
@@ -363,17 +363,209 @@
           },
           "evidence": [
             {
-              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 4,
-              "hash": "88673f41a5aeffd225670cf68c1aac1888821a4e87b3564b4f703ecfb428950f",
-              "role": "consumer-eu",
-              "content": "[consumer] timestamp=2026-11-22T11:45:11.672012870Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.eu consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "hash": "8c8d15c55d5584910cd79b094234355b92e21d3727fc99b0c56dd969e7f231af",
+              "role": "consumer-all",
+              "content": "[consumer] timestamp=2026-11-23T13:21:18.426914656Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
           "sequence": 5,
-          "relativeMs": 1496,
+          "relativeMs": 1535,
+          "delayMs": 250,
+          "actor": "consumer-eu",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.eu",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "line": 4,
+              "hash": "55a34d7d68776e54f3193826e66c6631ef12159e8f31b416d26133a7d1b532f4",
+              "role": "consumer-eu",
+              "content": "[consumer] timestamp=2026-11-23T13:21:18.471910720Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.eu consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 6,
+          "relativeMs": 1537,
+          "delayMs": 250,
+          "actor": "consumer-all",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.eu",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
+              "line": 5,
+              "hash": "d719c8ec90b2371974b68fdfbe7ea019c4f409dffd987ea3f2a2dc3dc89721ee",
+              "role": "consumer-all",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:18.473050010Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 7,
+          "relativeMs": 1580,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "received",
+          "title": "Consumer 收到消息",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "idle"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "active"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "idle"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "received"
+            },
+            "metrics": {},
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 4,
+              "hash": "15c7c8ab6d09e818ead4600b1b0716b253986fa51524b24bad2b83acc56b348d",
+              "role": "consumer-created",
+              "content": "[consumer] timestamp=2026-11-23T13:21:18.516471560Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received"
+            }
+          ]
+        },
+        {
+          "sequence": 8,
+          "relativeMs": 1583,
           "delayMs": 250,
           "actor": "consumer-eu",
           "type": "waiting",
@@ -418,7 +610,7 @@
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.eu",
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -429,209 +621,17 @@
             {
               "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
               "line": 5,
-              "hash": "c7cf9c973199ba0b010c175766d975e41005da42f85f194dc5db1642954edf39",
+              "hash": "56ded3ba08acf1d635a7dd2e81916168c574bbd8ba079f7b24a17a5312a6fc4b",
               "role": "consumer-eu",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:11.692086830Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=17c76252fda2-1-after-delivery-01JMQ000000000000000000003-1 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 6,
-          "relativeMs": 1559,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "received",
-          "title": "Consumer 收到消息",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "idle"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "active"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "idle"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "received"
-            },
-            "metrics": {},
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 4,
-              "hash": "f28ea3342f45e8b51d229999542923f7ec522a4b082e496c3b78f24ae6268873",
-              "role": "consumer-created",
-              "content": "[consumer] timestamp=2026-11-22T11:45:11.755758272Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received"
-            }
-          ]
-        },
-        {
-          "sequence": 7,
-          "relativeMs": 1592,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "waiting",
-          "title": "Consumer 到达证据检查点",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "idle"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "idle"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {},
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 5,
-              "hash": "e0273baafd8b22d064de0d1cce4f7c3c1fa37df7590dfc1b8e8065d7578e6c89",
-              "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:11.788651230Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=ef14ae96b3bc-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 8,
-          "relativeMs": 1593,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "received",
-          "title": "Consumer 收到消息",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "idle"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "active"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "idle"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "received"
-            },
-            "metrics": {},
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 4,
-              "hash": "bd5e396b5058d651301d87ace3270eb563edd69ffbc4b66e40fde2f9602f5605",
-              "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:11.789866169Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:18.519450009Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=c4125b0c2543-1-after-delivery-01JMQ000000000000000000003-1 status=waiting"
             }
           ]
         },
         {
           "sequence": 9,
-          "relativeMs": 1609,
+          "relativeMs": 1606,
           "delayMs": 250,
-          "actor": "consumer-all",
+          "actor": "consumer-created",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
           "track": "observed",
@@ -674,7 +674,7 @@
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.all",
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -683,18 +683,18 @@
           },
           "evidence": [
             {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
               "line": 5,
-              "hash": "7fe6f94e945a185821b5363803c003731e093923fea8143431feb2e5f3b8f38e",
-              "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:11.805339719Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
+              "hash": "15bbde9ddbd0133a140dec6f6c7556680acd3f0cc3269ca87cdee20b983a87f2",
+              "role": "consumer-created",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:18.542468039Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=b4bf86f39458-1-after-delivery-01JMQ000000000000000000001-1 status=waiting"
             }
           ]
         },
         {
           "sequence": 10,
-          "relativeMs": 2310,
-          "delayMs": 701,
+          "relativeMs": 2402,
+          "delayMs": 796,
           "actor": "broker",
           "type": "services-started",
           "title": "Broker 状态：services-started",
@@ -738,7 +738,7 @@
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.all",
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -754,21 +754,21 @@
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
               "line": 1,
-              "hash": "41751854f2bc802af202f9d57d5a9101423f3d2a0cfd51588e1663b65d3070b4",
+              "hash": "e6536777f5ca0056cd95c87fb94a76c76c8b4d821e64c97bc23448c0874d6ada",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:12.506Z\",\"checkpoint\":\"services-started\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:19.338Z\",\"checkpoint\":\"services-started\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 11,
-          "relativeMs": 3610,
-          "delayMs": 1300,
+          "relativeMs": 3728,
+          "delayMs": 1326,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000001",
           "state": {
             "nodes": [
               {
@@ -807,7 +807,7 @@
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.all",
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -823,21 +823,21 @@
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
               "line": 2,
-              "hash": "3d2c76c2315727b9f78da5d0bd3ee82481df948f44d842b75591d7bdde70c886",
+              "hash": "d83db3ce41aa8fb0865fa544c85c0d3bc4cae7d71f04307db83480f8ba65be17",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:13.806Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:20.664Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 12,
-          "relativeMs": 3707,
+          "relativeMs": 3756,
           "delayMs": 250,
-          "actor": "consumer-eu",
+          "actor": "consumer-all",
           "type": "released",
           "title": "采集完成，解除门闩",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000001",
           "state": {
             "nodes": [
               {
@@ -872,11 +872,11 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000001",
               "location": "consumer",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.all",
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "released"
             },
@@ -890,23 +890,23 @@
           },
           "evidence": [
             {
-              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 6,
-              "hash": "e8fcb6848370503281675c8ae6d85cbbfeb82281e5a1688c9562bfd0969f626d",
-              "role": "consumer-eu",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:13.903433854Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=17c76252fda2-1-after-delivery-01JMQ000000000000000000003-1 status=released"
+              "hash": "6b8f3a71ecf24dd655991b838c7bdc04483229be29bead0f5670fa967132f612",
+              "role": "consumer-all",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:20.692422719Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000001-1 status=released"
             }
           ]
         },
         {
           "sequence": 13,
-          "relativeMs": 3728,
+          "relativeMs": 3781,
           "delayMs": 250,
-          "actor": "consumer-eu",
+          "actor": "consumer-all",
           "type": "business_committed",
           "title": "业务事务已提交",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000001",
           "state": {
             "nodes": [
               {
@@ -941,11 +941,11 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000001",
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.eu",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "business_committed"
             },
@@ -959,23 +959,23 @@
           },
           "evidence": [
             {
-              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 7,
-              "hash": "c246e58e2db9a4612b67d2d59247bf36fb67c4f879f7614f15ea2257acac3bff",
-              "role": "consumer-eu",
-              "content": "[consumer] timestamp=2026-11-22T11:45:13.924633987Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.eu attempt=1 status=business_committed"
+              "hash": "ff8c6d5f8c9a42a0b4b65d8c77e4794206882b67c852c36af0f25af2a81084ce",
+              "role": "consumer-all",
+              "content": "[consumer] timestamp=2026-11-23T13:21:20.717728100Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.all attempt=1 status=business_committed"
             }
           ]
         },
         {
           "sequence": 14,
-          "relativeMs": 3729,
+          "relativeMs": 3782,
           "delayMs": 250,
-          "actor": "consumer-eu",
+          "actor": "consumer-all",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000001",
           "state": {
             "nodes": [
               {
@@ -1010,11 +1010,11 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000001",
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.eu",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -1028,18 +1028,18 @@
           },
           "evidence": [
             {
-              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 8,
-              "hash": "e9ec7653367adf40f27cc93c1c270c9dcf08dbc4f66ff541f6e8bc328e90235d",
-              "role": "consumer-eu",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:13.925282906Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=17c76252fda2-1-before-ack-01JMQ000000000000000000003-2 status=waiting"
+              "hash": "46ea39e90ff7f236136e295a04ef74cf84db76876d61c8ef5c6eb231063ae766",
+              "role": "consumer-all",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:20.718270815Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
             }
           ]
         },
         {
           "sequence": 15,
-          "relativeMs": 4933,
-          "delayMs": 1204,
+          "relativeMs": 5037,
+          "delayMs": 1255,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -1079,11 +1079,11 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000001",
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.eu",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "waiting"
             },
@@ -1099,15 +1099,567 @@
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
               "line": 3,
-              "hash": "4cb06ae04b7711fa2c0cc9bea723b69452da498331e59a191c8e9c93daf3dd7c",
+              "hash": "ed34a99573e1f254f088830e94c9577e88ef44c32ddc25e576bf3c7db6153000",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:15.129Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:21.973Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 16,
-          "relativeMs": 5020,
+          "relativeMs": 5117,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.all",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 6,
+              "hash": "b233ab86824346995978d6ccf426a9f97ebc1514ed95b3dd02b1e70ea29fe90d",
+              "role": "consumer-created",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:22.053123670Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=b4bf86f39458-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 17,
+          "relativeMs": 5128,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 7,
+              "hash": "dad4f6c545aea62b6416ebc3211b2722561b7d90ee177b298caba0534671800d",
+              "role": "consumer-created",
+              "content": "[consumer] timestamp=2026-11-23T13:21:22.064404310Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.created attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 18,
+          "relativeMs": 5128,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 8,
+              "hash": "0b173742d3dea09827a5c0690a16f1f39ddef847ee50c720de4e480523c19bb8",
+              "role": "consumer-created",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:22.064866023Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=b4bf86f39458-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 19,
+          "relativeMs": 6293,
+          "delayMs": 1165,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000001",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
+              "line": 4,
+              "hash": "adcd3fd4a6c4985e10c0b0c08e0f4a59c5f3db179fbad811d99456dfe35cc569",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:23.229Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 20,
+          "relativeMs": 6303,
+          "delayMs": 250,
+          "actor": "consumer-eu",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "line": 6,
+              "hash": "78d2c5d5d55b8e7671cf5d59850db30ebd11129b904c4542fb783ad7a698de02",
+              "role": "consumer-eu",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:23.239650164Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=c4125b0c2543-1-after-delivery-01JMQ000000000000000000003-1 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 21,
+          "relativeMs": 6316,
+          "delayMs": 250,
+          "actor": "consumer-eu",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.eu",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "line": 7,
+              "hash": "1871601e03db17ac720c1a7bab04edd31a4ac79558eba8093cf9348e65c30f4a",
+              "role": "consumer-eu",
+              "content": "[consumer] timestamp=2026-11-23T13:21:23.252770407Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.eu attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 22,
+          "relativeMs": 6317,
+          "delayMs": 250,
+          "actor": "consumer-eu",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.eu",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
+              "line": 8,
+              "hash": "7fcf42354933e6dfca057861f359623a51aac7b0212c1529ec0803c391ed646b",
+              "role": "consumer-eu",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:23.253562167Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=c4125b0c2543-1-before-ack-01JMQ000000000000000000003-2 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 23,
+          "relativeMs": 7527,
+          "delayMs": 1210,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000001",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.eu",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 3,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
+              "line": 5,
+              "hash": "a71ac1d169a17311fc5dd13f73ca32374d00d4e4d3bcbedc237bfcd94f5c80d2",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:24.463Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 24,
+          "relativeMs": 7588,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "released",
@@ -1167,22 +1719,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 6,
-              "hash": "aecc246dd48f369db0a36d54c9ed7b0c25b2c6ac4b9f3d6cee415db0eaad6638",
+              "line": 9,
+              "hash": "0a5d0b69cbe0103951d842dde1791997c23ff1c4dbb12087ed9e0d99dc7e4c03",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:15.216874759Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:24.524244367Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000001-2 status=released"
             }
           ]
         },
         {
-          "sequence": 17,
-          "relativeMs": 5035,
+          "sequence": 25,
+          "relativeMs": 7590,
           "delayMs": 250,
           "actor": "consumer-all",
-          "type": "business_committed",
-          "title": "业务事务已提交",
+          "type": "received",
+          "title": "Consumer 收到消息",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -1207,7 +1759,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "waiting"
+                "status": "active"
               },
               {
                 "id": "database",
@@ -1217,13 +1769,13 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.all",
               "consumer": "consumer-1",
-              "status": "business_committed"
+              "status": "received"
             },
             "metrics": {
               "messagesReady": 3,
@@ -1236,22 +1788,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 7,
-              "hash": "3aa395c2bb8792b21ea7246fdf35d6c761da8a2239f203d8c2c37001657acb33",
+              "line": 10,
+              "hash": "e3b27171a1a645377a80dbe5f213ec334b642e678eed4d2d07f5907e8adbc517",
               "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:15.231072461Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.all attempt=1 status=business_committed"
+              "content": "[consumer] timestamp=2026-11-23T13:21:24.526818732Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
-          "sequence": 18,
-          "relativeMs": 5035,
+          "sequence": 26,
+          "relativeMs": 7591,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -1286,8 +1838,8 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.all",
@@ -1305,20 +1857,20 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 8,
-              "hash": "db2f01aa8fdbc6ab65ee6d709cdc5ef2f861d7f8222eb6454dce8c6fc5e954f4",
+              "line": 11,
+              "hash": "322c8bfbfc9cb4b0b4da300e87517e62765854e7c92d0d49dc33a24414c6c906",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:15.231815301Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=e0403f833c57-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:24.527551502Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
             }
           ]
         },
         {
-          "sequence": 19,
-          "relativeMs": 6159,
-          "delayMs": 1124,
+          "sequence": 27,
+          "relativeMs": 8750,
+          "delayMs": 1159,
           "actor": "broker",
-          "type": "after-delivery",
-          "title": "Broker 状态：after-delivery",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
           "track": "observed",
           "messageId": "01JMQ000000000000000000001",
           "state": {
@@ -1355,8 +1907,8 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.all",
@@ -1364,7 +1916,7 @@
               "status": "waiting"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 2,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1374,16 +1926,16 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 4,
-              "hash": "acb482388563f9f363eac746a33a2828e9898a462d89f60f8384f5caf8b28a4d",
+              "line": 6,
+              "hash": "03bc33840a71550220a48a2f9d167b5fd7f5603e145c4e5ee70d2f5c4eb87c10",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:16.355Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:25.686Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
-          "sequence": 20,
-          "relativeMs": 6214,
+          "sequence": 28,
+          "relativeMs": 8834,
           "delayMs": 250,
           "actor": "consumer-created",
           "type": "released",
@@ -1425,7 +1977,7 @@
             ],
             "message": {
               "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.all",
@@ -1433,7 +1985,7 @@
               "status": "released"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 2,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1443,22 +1995,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 6,
-              "hash": "cc3c6997a48c65b9d5af054a46772cda75dd9484b723ffbbde7078120253124e",
+              "line": 9,
+              "hash": "75c15e316a916a4aba8aa144a15c72619492f81aa027d51defabb2fd4ef4b729",
               "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:16.410569119Z checkpoint=after-delivery messageId=01JMQ000000000000000000001 token=ef14ae96b3bc-1-after-delivery-01JMQ000000000000000000001-1 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:25.770322098Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=b4bf86f39458-1-before-ack-01JMQ000000000000000000001-2 status=released"
             }
           ]
         },
         {
-          "sequence": 21,
-          "relativeMs": 6232,
+          "sequence": 29,
+          "relativeMs": 8836,
           "delayMs": 250,
           "actor": "consumer-created",
-          "type": "business_committed",
-          "title": "业务事务已提交",
+          "type": "received",
+          "title": "Consumer 收到消息",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -1483,7 +2035,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "waiting"
+                "status": "active"
               },
               {
                 "id": "database",
@@ -1493,16 +2045,16 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.created",
               "consumer": "consumer-1",
-              "status": "business_committed"
+              "status": "received"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 2,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1512,22 +2064,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 7,
-              "hash": "ddb4248826322e7d045e5585d8f72d9a2893e15fc5bdb7aaf3aec4436f88659b",
+              "line": 10,
+              "hash": "b811dfffd4d7f087595024b6a0311bca83a5e324728c997c3974f662ca7167a2",
               "role": "consumer-created",
-              "content": "[consumer] timestamp=2026-11-22T11:45:16.428523602Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000001 eventType=order.created schemaVersion=1 aggregateId=order-1001 traceId=00000000000000000000000000000001 correlationId=order-1001 destination=orders.routing.created attempt=1 status=business_committed"
+              "content": "[consumer] timestamp=2026-11-23T13:21:25.772173908Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
-          "sequence": 22,
-          "relativeMs": 6232,
+          "sequence": 30,
+          "relativeMs": 8836,
           "delayMs": 250,
           "actor": "consumer-created",
           "type": "waiting",
           "title": "Consumer 到达证据检查点",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -1562,8 +2114,8 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.created",
@@ -1571,7 +2123,7 @@
               "status": "waiting"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 2,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1581,17 +2133,293 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 8,
-              "hash": "2cf31de846c55bf7577ef352a595bc9eae8245afe84df8ab8ea86e97ae848575",
+              "line": 11,
+              "hash": "c1e07ecbbdec437bf4664ed7c6c5a0a58e58c845acfec816efadfc01535bf5aa",
               "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:16.428963261Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=ef14ae96b3bc-1-before-ack-01JMQ000000000000000000001-2 status=waiting"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:25.772684643Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=b4bf86f39458-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
             }
           ]
         },
         {
-          "sequence": 23,
-          "relativeMs": 7370,
-          "delayMs": 1138,
+          "sequence": 31,
+          "relativeMs": 10115,
+          "delayMs": 1279,
+          "actor": "broker",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
+              "line": 7,
+              "hash": "1f465f26f3909915bf3e26c535003fee95175e346d89d975cd895d2d522d432c",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:27.051Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 32,
+          "relativeMs": 10203,
+          "delayMs": 250,
+          "actor": "consumer-all",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "consumer",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
+              "line": 12,
+              "hash": "67c98be9bf1eaada389991962f1f161486089583dc4a0c31c6df3615560c58f4",
+              "role": "consumer-all",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:27.139080948Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000002-3 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 33,
+          "relativeMs": 10206,
+          "delayMs": 250,
+          "actor": "consumer-all",
+          "type": "business_committed",
+          "title": "业务事务已提交",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.all",
+              "consumer": "consumer-1",
+              "status": "business_committed"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
+              "line": 13,
+              "hash": "e971f0edce69751694443075c8f437c3da4e596578c1ad8167cba62b9a6c4073",
+              "role": "consumer-all",
+              "content": "[consumer] timestamp=2026-11-23T13:21:27.142792364Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.all attempt=1 status=business_committed"
+            }
+          ]
+        },
+        {
+          "sequence": 34,
+          "relativeMs": 10207,
+          "delayMs": 250,
+          "actor": "consumer-all",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.all",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 1,
+              "messagesUnacknowledged": 3,
+              "consumers": 3,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
+              "line": 14,
+              "hash": "bed89bbcf2033a4b0b4e26daf5ce477e2a705b50221bc100d784ac86b3256d43",
+              "role": "consumer-all",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:27.143183916Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 35,
+          "relativeMs": 11326,
+          "delayMs": 1119,
           "actor": "broker",
           "type": "before-ack",
           "title": "Broker 状态：before-ack",
@@ -1631,16 +2459,16 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000001",
+              "messageId": "01JMQ000000000000000000002",
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.created",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "waiting"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 1,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1650,16 +2478,16 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 5,
-              "hash": "978bde1b13af3330be6c0b685f7f9115ece36965973f796182cd7ced660df1ba",
+              "line": 8,
+              "hash": "f6977c13e7043398780f6ec279939b31b2c4b2c5974149655e7de8f14e79ee81",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:17.566Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:28.262Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":3,\"consumers\":3,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
-          "sequence": 24,
-          "relativeMs": 7435,
+          "sequence": 36,
+          "relativeMs": 11425,
           "delayMs": 250,
           "actor": "consumer-eu",
           "type": "released",
@@ -1704,12 +2532,12 @@
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.created",
+              "queue": "orders.routing.all",
               "consumer": "consumer-1",
               "status": "released"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 1,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1720,15 +2548,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
               "line": 9,
-              "hash": "1e78acc064ab520b9f5d975365506bcfeec0d66a74804dcb2fac540da8e9a6d8",
+              "hash": "73716212b3cfa7f99c4dcafe83664f33ec1a35eedeba226c9f01ea7b21ec2768",
               "role": "consumer-eu",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:17.631683262Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=17c76252fda2-1-before-ack-01JMQ000000000000000000003-2 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:28.361886001Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=c4125b0c2543-1-before-ack-01JMQ000000000000000000003-2 status=released"
             }
           ]
         },
         {
-          "sequence": 25,
-          "relativeMs": 7436,
+          "sequence": 37,
+          "relativeMs": 11426,
           "delayMs": 250,
           "actor": "consumer-eu",
           "type": "done",
@@ -1777,7 +2605,7 @@
               "status": "done"
             },
             "metrics": {
-              "messagesReady": 3,
+              "messagesReady": 1,
               "messagesUnacknowledged": 3,
               "consumers": 3,
               "dlqDepth": 0
@@ -1788,21 +2616,21 @@
             {
               "file": "demos/rabbitmq/routing/consumer-eu.out.txt",
               "line": 10,
-              "hash": "17d056404481b4159103c6ed89af88ca2771849b0a43ba747596531aeb872b2f",
+              "hash": "113295cf57b920eae529e900f5b1631f9ab7bf98d7da5718bbdcc0854d3589df",
               "role": "consumer-eu",
-              "content": "[consumer] timestamp=2026-11-22T11:45:17.632573249Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.eu received=1 status=done"
+              "content": "[consumer] timestamp=2026-11-23T13:21:28.362767139Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.eu received=1 status=done"
             }
           ]
         },
         {
-          "sequence": 26,
-          "relativeMs": 8599,
-          "delayMs": 1163,
+          "sequence": 38,
+          "relativeMs": 12581,
+          "delayMs": 1155,
           "actor": "broker",
           "type": "before-ack",
           "title": "Broker 状态：before-ack",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -1846,834 +2674,6 @@
               "status": "done"
             },
             "metrics": {
-              "messagesReady": 3,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 6,
-              "hash": "b7a2495f40ca25b29635bb20c0091f4f5c055d4c539667a788c59684b8d88541",
-              "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:18.795Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":3,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":2,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
-            }
-          ]
-        },
-        {
-          "sequence": 27,
-          "relativeMs": 8641,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "released",
-          "title": "采集完成，解除门闩",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "done"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.eu",
-              "consumer": "consumer-1",
-              "status": "released"
-            },
-            "metrics": {
-              "messagesReady": 3,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 9,
-              "hash": "ef48f99dba93bb795991ae785333f72ec987c57ee9f1855e4806f4b3dca2e8ba",
-              "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:18.837948345Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=e0403f833c57-1-before-ack-01JMQ000000000000000000001-2 status=released"
-            }
-          ]
-        },
-        {
-          "sequence": 28,
-          "relativeMs": 8644,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "received",
-          "title": "Consumer 收到消息",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "active"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "received"
-            },
-            "metrics": {
-              "messagesReady": 3,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 10,
-              "hash": "bfb3488eaeeb760e1cddce18dcf20f07626933454e7adb0718b245fb0e4d30a2",
-              "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:18.840479147Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
-            }
-          ]
-        },
-        {
-          "sequence": 29,
-          "relativeMs": 8645,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "waiting",
-          "title": "Consumer 到达证据检查点",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 3,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 11,
-              "hash": "541fea42103850e32085acb48202d2ea2f9f6d62052587f84986207156e3a394",
-              "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:18.841141974Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 30,
-          "relativeMs": 9922,
-          "delayMs": 1277,
-          "actor": "broker",
-          "type": "before-ack",
-          "title": "Broker 状态：before-ack",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 2,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 7,
-              "hash": "0e4192f72a065a30561a4297ebc7cd9fdd11a8f60e9cd08a81109975cc7a4d13",
-              "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:20.118Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000001\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":2,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
-            }
-          ]
-        },
-        {
-          "sequence": 31,
-          "relativeMs": 9938,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "released",
-          "title": "采集完成，解除门闩",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000001",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000001",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "released"
-            },
-            "metrics": {
-              "messagesReady": 2,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 9,
-              "hash": "783a3e9b20bb54b0a3610bbe3de7c8bf0b467ca262f2ba5ed0409a0dfa66ec38",
-              "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:20.134949579Z checkpoint=before-ack messageId=01JMQ000000000000000000001 token=ef14ae96b3bc-1-before-ack-01JMQ000000000000000000001-2 status=released"
-            }
-          ]
-        },
-        {
-          "sequence": 32,
-          "relativeMs": 9941,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "received",
-          "title": "Consumer 收到消息",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "active"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "received"
-            },
-            "metrics": {
-              "messagesReady": 2,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 10,
-              "hash": "b9fb9961a526e6640e679e88b16fee4f3d91c02d37e19f5a387e289e3a1f2ac6",
-              "role": "consumer-created",
-              "content": "[consumer] timestamp=2026-11-22T11:45:20.137855372Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.created consumer=consumer-1 attempt=1 redelivered=false status=received"
-            }
-          ]
-        },
-        {
-          "sequence": 33,
-          "relativeMs": 9942,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "waiting",
-          "title": "Consumer 到达证据检查点",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 2,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 11,
-              "hash": "9bb3c3a689654849d64c036a33419208da1a6d2f621e17f64c76b822f85d0320",
-              "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:20.138602329Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=ef14ae96b3bc-1-after-delivery-01JMQ000000000000000000002-3 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 34,
-          "relativeMs": 11139,
-          "delayMs": 1197,
-          "actor": "broker",
-          "type": "after-delivery",
-          "title": "Broker 状态：after-delivery",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 8,
-              "hash": "b1256ba5e520bdbc145de68fa4a80902d4035d47b40304c15482f3583b14cf8c",
-              "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:21.335Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
-            }
-          ]
-        },
-        {
-          "sequence": 35,
-          "relativeMs": 11150,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "released",
-          "title": "采集完成，解除门闩",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "released"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 12,
-              "hash": "e59a63ec630f229ae8d46686cf9a5df5be0341353123ff693c6ad174c0beec53",
-              "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:21.346498710Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000002-3 status=released"
-            }
-          ]
-        },
-        {
-          "sequence": 36,
-          "relativeMs": 11154,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "business_committed",
-          "title": "业务事务已提交",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "business_committed"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 13,
-              "hash": "694f4776421039e681970fc17d69de81b0d629b09898eaec376f65c204aee99c",
-              "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:21.350177799Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.all attempt=1 status=business_committed"
-            }
-          ]
-        },
-        {
-          "sequence": 37,
-          "relativeMs": 11154,
-          "delayMs": 250,
-          "actor": "consumer-all",
-          "type": "waiting",
-          "title": "Consumer 到达证据检查点",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-all.out.txt",
-              "line": 14,
-              "hash": "ad68d1a7ffd661d9c35f6265ff2835a00387c3075fcc5aee00fcbc5f4b6000e8",
-              "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:21.350654985Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=e0403f833c57-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 38,
-          "relativeMs": 12383,
-          "delayMs": 1229,
-          "actor": "broker",
-          "type": "after-delivery",
-          "title": "Broker 状态：after-delivery",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
               "messagesReady": 1,
               "messagesUnacknowledged": 2,
               "consumers": 2,
@@ -2685,291 +2685,15 @@
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
               "line": 9,
-              "hash": "174de08b77f6a9753fb5f4fa0cf321f5cfc8d12271e01f012985869fa566deb0",
+              "hash": "75b5ec46bd51115231d698b1a427dbc8401945f996081829c2a5c45380ebc252",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:22.579Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:29.517Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
           "sequence": 39,
-          "relativeMs": 12446,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "released",
-          "title": "采集完成，解除门闩",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.all",
-              "consumer": "consumer-1",
-              "status": "released"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 12,
-              "hash": "8c6b9cfc3ef667f8bcadf78dacd950246fb11151758d9d777e50b09635be01a1",
-              "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:22.642828185Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=ef14ae96b3bc-1-after-delivery-01JMQ000000000000000000002-3 status=released"
-            }
-          ]
-        },
-        {
-          "sequence": 40,
-          "relativeMs": 12449,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "business_committed",
-          "title": "业务事务已提交",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "business_committed"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 13,
-              "hash": "474455c47a9ccbffe2a9aed3f23ddf6dce00cb7da110448acde1f4ac01af46eb",
-              "role": "consumer-created",
-              "content": "[consumer] timestamp=2026-11-22T11:45:22.645656966Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.created attempt=1 status=business_committed"
-            }
-          ]
-        },
-        {
-          "sequence": 41,
-          "relativeMs": 12450,
-          "delayMs": 250,
-          "actor": "consumer-created",
-          "type": "waiting",
-          "title": "Consumer 到达证据检查点",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 14,
-              "hash": "79b37ba5758c6d5e34083cd8b0a5ac8abe128555c75c4aa97306ae697061e16a",
-              "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:22.646180826Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=ef14ae96b3bc-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
-            }
-          ]
-        },
-        {
-          "sequence": 42,
-          "relativeMs": 13593,
-          "delayMs": 1143,
-          "actor": "broker",
-          "type": "before-ack",
-          "title": "Broker 状态：before-ack",
-          "track": "observed",
-          "messageId": "01JMQ000000000000000000002",
-          "state": {
-            "nodes": [
-              {
-                "id": "producer",
-                "label": "Producer",
-                "kind": "producer",
-                "status": "done"
-              },
-              {
-                "id": "broker",
-                "label": "Exchange",
-                "kind": "broker",
-                "status": "active"
-              },
-              {
-                "id": "queue",
-                "label": "Queue",
-                "kind": "queue",
-                "status": "idle"
-              },
-              {
-                "id": "consumer",
-                "label": "Consumer",
-                "kind": "consumer",
-                "status": "waiting"
-              },
-              {
-                "id": "database",
-                "label": "业务数据库",
-                "kind": "database",
-                "status": "done"
-              }
-            ],
-            "message": {
-              "messageId": "01JMQ000000000000000000002",
-              "location": "database",
-              "attempt": 1,
-              "redelivered": false,
-              "queue": "orders.routing.created",
-              "consumer": "consumer-1",
-              "status": "waiting"
-            },
-            "metrics": {
-              "messagesReady": 1,
-              "messagesUnacknowledged": 2,
-              "consumers": 2,
-              "dlqDepth": 0
-            },
-            "business": {}
-          },
-          "evidence": [
-            {
-              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 10,
-              "hash": "42c356b82c8d607f623b340add0bd362f395ab4dda24415a23fd1cbc1db3a6b6",
-              "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:23.789Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":1,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":1,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
-            }
-          ]
-        },
-        {
-          "sequence": 43,
-          "relativeMs": 13658,
+          "relativeMs": 12610,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "released",
@@ -3000,7 +2724,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "waiting"
+                "status": "done"
               },
               {
                 "id": "database",
@@ -3014,7 +2738,7 @@
               "location": "database",
               "attempt": 1,
               "redelivered": false,
-              "queue": "orders.routing.created",
+              "queue": "orders.routing.eu",
               "consumer": "consumer-1",
               "status": "released"
             },
@@ -3030,15 +2754,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 15,
-              "hash": "032fe7a46e452130e1867ee6d92325673b5c3eda2b48d75324a5cadf12d94ef7",
+              "hash": "09dfdcd3fabeac436fe9a9da05e4e66ae1f37382a4ecd3d7aad34d7323324d51",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:23.854754171Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=e0403f833c57-1-before-ack-01JMQ000000000000000000002-4 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:29.546919628Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000002-4 status=released"
             }
           ]
         },
         {
-          "sequence": 44,
-          "relativeMs": 13660,
+          "sequence": 40,
+          "relativeMs": 12613,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "received",
@@ -3099,15 +2823,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 16,
-              "hash": "44e65f39566a98507c32fd32343d0b0aff9f118c34309154e00e9f3632d4e1fb",
+              "hash": "aa26aac5224e668cf50f984e12ac715af5a65ffd00198989d38b6cecbaf603ad",
               "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:23.856866894Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
+              "content": "[consumer] timestamp=2026-11-23T13:21:29.549466346Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.all consumer=consumer-1 attempt=1 redelivered=false status=received"
             }
           ]
         },
         {
-          "sequence": 45,
-          "relativeMs": 13661,
+          "sequence": 41,
+          "relativeMs": 12613,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "waiting",
@@ -3168,19 +2892,19 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 17,
-              "hash": "7dcc7ccea8af03b7dbdbe7fd756b7d302e1c3c6ffcd034476eae576948e65b88",
+              "hash": "4cbb8ae3323d19aad3a48cf4b9f4b2de2f01939682620e7a738904a1d3e31bc7",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:23.857461387Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000003-5 status=waiting"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:29.549997979Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000003-5 status=waiting"
             }
           ]
         },
         {
-          "sequence": 46,
-          "relativeMs": 14854,
-          "delayMs": 1193,
+          "sequence": 42,
+          "relativeMs": 13815,
+          "delayMs": 1202,
           "actor": "broker",
-          "type": "before-ack",
-          "title": "Broker 状态：before-ack",
+          "type": "after-delivery",
+          "title": "Broker 状态：after-delivery",
           "track": "observed",
           "messageId": "01JMQ000000000000000000002",
           "state": {
@@ -3236,16 +2960,16 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 11,
-              "hash": "fcf23cbd8aa7b11358acbd21f144f06183dfe380c938ee0c57a1cbb95c5cac54",
+              "line": 10,
+              "hash": "19fbc8b2851543e5b66fd6be98d21ccac02056974e1eae55995494e76f871aac",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:25.050Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:30.751Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
-          "sequence": 47,
-          "relativeMs": 14954,
+          "sequence": 43,
+          "relativeMs": 13844,
           "delayMs": 250,
           "actor": "consumer-created",
           "type": "released",
@@ -3305,21 +3029,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 15,
-              "hash": "095a1ebb9c285e414a900c105e513f2886e35b542b69bacd5ce3d4f89c67e2b8",
+              "line": 12,
+              "hash": "9391d281001c6753f99d38bfcf662387ba98f5118ac70e851f2dfb99fe2b14ac",
               "role": "consumer-created",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:25.150601453Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=ef14ae96b3bc-1-before-ack-01JMQ000000000000000000002-4 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:30.780942782Z checkpoint=after-delivery messageId=01JMQ000000000000000000002 token=b4bf86f39458-1-after-delivery-01JMQ000000000000000000002-3 status=released"
             }
           ]
         },
         {
-          "sequence": 48,
-          "relativeMs": 14955,
+          "sequence": 44,
+          "relativeMs": 13847,
           "delayMs": 250,
           "actor": "consumer-created",
-          "type": "done",
-          "title": "Consumer 完成处理",
+          "type": "business_committed",
+          "title": "业务事务已提交",
           "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -3344,7 +3069,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "done"
+                "status": "waiting"
               },
               {
                 "id": "database",
@@ -3355,12 +3080,12 @@
             ],
             "message": {
               "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
+              "location": "database",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.created",
               "consumer": "consumer-1",
-              "status": "done"
+              "status": "business_committed"
             },
             "metrics": {
               "messagesReady": 0,
@@ -3373,17 +3098,86 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/consumer-created.out.txt",
-              "line": 16,
-              "hash": "79411203c9a6141b4d12b37eb3154abece31ef9f9e77ba0321cac7fd18bfaf9c",
+              "line": 13,
+              "hash": "25103fd1cc7563b7040b2162746af9078b7231206180821356cc1ce55e7081cc",
               "role": "consumer-created",
-              "content": "[consumer] timestamp=2026-11-22T11:45:25.151161268Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.created received=2 status=done"
+              "content": "[consumer] timestamp=2026-11-23T13:21:30.783369650Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000002 eventType=order.created schemaVersion=1 aggregateId=order-1002 traceId=00000000000000000000000000000002 correlationId=order-1002 destination=orders.routing.created attempt=1 status=business_committed"
             }
           ]
         },
         {
-          "sequence": 49,
-          "relativeMs": 16208,
-          "delayMs": 1253,
+          "sequence": 45,
+          "relativeMs": 13847,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "waiting",
+          "title": "Consumer 到达证据检查点",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000002",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "waiting"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "waiting"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 14,
+              "hash": "154b48ef90896ea52fddbeb7c5491da7fa6e98e266508945537ed47d302e780b",
+              "role": "consumer-created",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:30.783807278Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=b4bf86f39458-1-before-ack-01JMQ000000000000000000002-4 status=waiting"
+            }
+          ]
+        },
+        {
+          "sequence": 46,
+          "relativeMs": 15151,
+          "delayMs": 1304,
           "actor": "broker",
           "type": "after-delivery",
           "title": "Broker 状态：after-delivery",
@@ -3413,7 +3207,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "done"
+                "status": "waiting"
               },
               {
                 "id": "database",
@@ -3424,17 +3218,17 @@
             ],
             "message": {
               "messageId": "01JMQ000000000000000000002",
-              "location": "consumer",
+              "location": "database",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.created",
               "consumer": "consumer-1",
-              "status": "done"
+              "status": "waiting"
             },
             "metrics": {
               "messagesReady": 0,
-              "messagesUnacknowledged": 1,
-              "consumers": 1,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
               "dlqDepth": 0
             },
             "business": {}
@@ -3442,16 +3236,16 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 12,
-              "hash": "bcc4805e427c6588ae4e7fd98509b75c2d475b618d4f3b963cf09847a4ead363",
+              "line": 11,
+              "hash": "9de5123a2fdad283425af920874c0c0333f19aea92354dbeed0bbeee2c8ccde9",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:26.404Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:32.087Z\",\"checkpoint\":\"after-delivery\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
-          "sequence": 50,
-          "relativeMs": 16266,
+          "sequence": 47,
+          "relativeMs": 15218,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "released",
@@ -3482,7 +3276,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "done"
+                "status": "waiting"
               },
               {
                 "id": "database",
@@ -3493,7 +3287,7 @@
             ],
             "message": {
               "messageId": "01JMQ000000000000000000003",
-              "location": "consumer",
+              "location": "database",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.created",
@@ -3502,8 +3296,8 @@
             },
             "metrics": {
               "messagesReady": 0,
-              "messagesUnacknowledged": 1,
-              "consumers": 1,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
               "dlqDepth": 0
             },
             "business": {}
@@ -3512,15 +3306,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 18,
-              "hash": "7ccb708db26c522b3227e985093b4fbb28f16b025e75572c391ee7ff83c270db",
+              "hash": "93e44eb4719a52fa32a62d2c49e1cec93f06e22b097ede6b9034859cf72a9bc1",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:26.462740731Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=e0403f833c57-1-after-delivery-01JMQ000000000000000000003-5 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:32.154637003Z checkpoint=after-delivery messageId=01JMQ000000000000000000003 token=a08025d5ebe2-1-after-delivery-01JMQ000000000000000000003-5 status=released"
             }
           ]
         },
         {
-          "sequence": 51,
-          "relativeMs": 16269,
+          "sequence": 48,
+          "relativeMs": 15221,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "business_committed",
@@ -3551,7 +3345,7 @@
                 "id": "consumer",
                 "label": "Consumer",
                 "kind": "consumer",
-                "status": "done"
+                "status": "waiting"
               },
               {
                 "id": "database",
@@ -3571,8 +3365,8 @@
             },
             "metrics": {
               "messagesReady": 0,
-              "messagesUnacknowledged": 1,
-              "consumers": 1,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
               "dlqDepth": 0
             },
             "business": {}
@@ -3581,15 +3375,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 19,
-              "hash": "2855f8a5116a4e76801b84d5fbea759f461d537967556b5687db4fb634e6796a",
+              "hash": "77b2626b22f4016fccda23e2de35fe97d828fa25498f5ba3e8bcebd68b8e8e04",
               "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:26.465854877Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.all attempt=1 status=business_committed"
+              "content": "[consumer] timestamp=2026-11-23T13:21:32.157155071Z level=INFO service=order-service product=rabbitmq lab=routing messageId=01JMQ000000000000000000003 eventType=order.created schemaVersion=1 aggregateId=order-1003 traceId=00000000000000000000000000000003 correlationId=order-1003 destination=orders.routing.all attempt=1 status=business_committed"
             }
           ]
         },
         {
-          "sequence": 52,
-          "relativeMs": 16270,
+          "sequence": 49,
+          "relativeMs": 15221,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "waiting",
@@ -3640,8 +3434,8 @@
             },
             "metrics": {
               "messagesReady": 0,
-              "messagesUnacknowledged": 1,
-              "consumers": 1,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
               "dlqDepth": 0
             },
             "business": {}
@@ -3650,21 +3444,21 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 20,
-              "hash": "86ed298986251b8bb2d0c15ce631e54c3225c0bb99acd2450f475c2dc0078481",
+              "hash": "cac40209c702761235b0607d71902dba5d209e8cf642781f404d07befc5a37f6",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:26.466359685Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=e0403f833c57-1-before-ack-01JMQ000000000000000000003-6 status=waiting"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:32.157797852Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000003-6 status=waiting"
             }
           ]
         },
         {
-          "sequence": 53,
-          "relativeMs": 17566,
-          "delayMs": 1296,
+          "sequence": 50,
+          "relativeMs": 16484,
+          "delayMs": 1263,
           "actor": "broker",
           "type": "before-ack",
           "title": "Broker 状态：before-ack",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -3709,8 +3503,8 @@
             },
             "metrics": {
               "messagesReady": 0,
-              "messagesUnacknowledged": 1,
-              "consumers": 1,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
               "dlqDepth": 0
             },
             "business": {}
@@ -3718,22 +3512,22 @@
           "evidence": [
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
-              "line": 13,
-              "hash": "4ff8ab60800edf3c80660dcccb1f5b6d73d324e3fe12bc976dc827b4f9822dfe",
+              "line": 12,
+              "hash": "f0ea03b9b868a666193b33ea94f3342db42ae41e2cf41a822e467c4cef77dbec",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:27.762Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:33.420Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000002\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":2,\"consumers\":2,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         },
         {
-          "sequence": 54,
-          "relativeMs": 17572,
+          "sequence": 51,
+          "relativeMs": 16552,
           "delayMs": 250,
-          "actor": "consumer-all",
+          "actor": "consumer-created",
           "type": "released",
           "title": "采集完成，解除门闩",
           "track": "observed",
-          "messageId": "01JMQ000000000000000000003",
+          "messageId": "01JMQ000000000000000000002",
           "state": {
             "nodes": [
               {
@@ -3768,11 +3562,217 @@
               }
             ],
             "message": {
-              "messageId": "01JMQ000000000000000000003",
+              "messageId": "01JMQ000000000000000000002",
               "location": "database",
               "attempt": 1,
               "redelivered": false,
               "queue": "orders.routing.all",
+              "consumer": "consumer-1",
+              "status": "released"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 15,
+              "hash": "51f81896d36b090001c74df03e7d28df04df8b782f7b81735c5bfaa5d5835545",
+              "role": "consumer-created",
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:33.488505342Z checkpoint=before-ack messageId=01JMQ000000000000000000002 token=b4bf86f39458-1-before-ack-01JMQ000000000000000000002-4 status=released"
+            }
+          ]
+        },
+        {
+          "sequence": 52,
+          "relativeMs": 16553,
+          "delayMs": 250,
+          "actor": "consumer-created",
+          "type": "done",
+          "title": "Consumer 完成处理",
+          "track": "observed",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 2,
+              "consumers": 2,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/consumer-created.out.txt",
+              "line": 16,
+              "hash": "5db43ed1185ab237c7b52c0cf891ff37e12dd61955b2e754a95860e1ca4f6e71",
+              "role": "consumer-created",
+              "content": "[consumer] timestamp=2026-11-23T13:21:33.489245551Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.created received=2 status=done"
+            }
+          ]
+        },
+        {
+          "sequence": 53,
+          "relativeMs": 17952,
+          "delayMs": 1399,
+          "actor": "broker",
+          "type": "before-ack",
+          "title": "Broker 状态：before-ack",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000002",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
+              "consumer": "consumer-1",
+              "status": "done"
+            },
+            "metrics": {
+              "messagesReady": 0,
+              "messagesUnacknowledged": 1,
+              "consumers": 1,
+              "dlqDepth": 0
+            },
+            "business": {}
+          },
+          "evidence": [
+            {
+              "file": "demos/rabbitmq/routing/replay.raw.jsonl",
+              "line": 13,
+              "hash": "dbb6af83c201466aa2771b766faa708a065bc24b85207f5229caccb0ccd1e20a",
+              "role": "broker-state",
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:34.888Z\",\"checkpoint\":\"before-ack\",\"messageId\":\"01JMQ000000000000000000003\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":1,\"consumers\":1,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":1,\\\"consumers\\\":1}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+            }
+          ]
+        },
+        {
+          "sequence": 54,
+          "relativeMs": 18029,
+          "delayMs": 250,
+          "actor": "consumer-all",
+          "type": "released",
+          "title": "采集完成，解除门闩",
+          "track": "observed",
+          "messageId": "01JMQ000000000000000000003",
+          "state": {
+            "nodes": [
+              {
+                "id": "producer",
+                "label": "Producer",
+                "kind": "producer",
+                "status": "done"
+              },
+              {
+                "id": "broker",
+                "label": "Exchange",
+                "kind": "broker",
+                "status": "active"
+              },
+              {
+                "id": "queue",
+                "label": "Queue",
+                "kind": "queue",
+                "status": "idle"
+              },
+              {
+                "id": "consumer",
+                "label": "Consumer",
+                "kind": "consumer",
+                "status": "done"
+              },
+              {
+                "id": "database",
+                "label": "业务数据库",
+                "kind": "database",
+                "status": "done"
+              }
+            ],
+            "message": {
+              "messageId": "01JMQ000000000000000000003",
+              "location": "database",
+              "attempt": 1,
+              "redelivered": false,
+              "queue": "orders.routing.created",
               "consumer": "consumer-1",
               "status": "released"
             },
@@ -3788,15 +3788,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 21,
-              "hash": "d83eae4b40085170b110f18765b668fa6b5229721f5837aa82213c1804d2f67e",
+              "hash": "7acaf16bda68edd8396635b71e2f1b19c47cdce8c32cb823d07c7ed981d99bb2",
               "role": "consumer-all",
-              "content": "[replay-gate] timestamp=2026-11-22T11:45:27.768970409Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=e0403f833c57-1-before-ack-01JMQ000000000000000000003-6 status=released"
+              "content": "[replay-gate] timestamp=2026-11-23T13:21:34.965556496Z checkpoint=before-ack messageId=01JMQ000000000000000000003 token=a08025d5ebe2-1-before-ack-01JMQ000000000000000000003-6 status=released"
             }
           ]
         },
         {
           "sequence": 55,
-          "relativeMs": 17573,
+          "relativeMs": 18030,
           "delayMs": 250,
           "actor": "consumer-all",
           "type": "done",
@@ -3856,15 +3856,15 @@
             {
               "file": "demos/rabbitmq/routing/consumer-all.out.txt",
               "line": 22,
-              "hash": "72d187ab1b1fc97e8d533301c2d9f321dd8b625e4e925b3b75b0008c8ef4f04d",
+              "hash": "e7188616523a389c0e9b10a95114262a9bc2c6d88bac76984b82926520157fd8",
               "role": "consumer-all",
-              "content": "[consumer] timestamp=2026-11-22T11:45:27.769536012Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.all received=3 status=done"
+              "content": "[consumer] timestamp=2026-11-23T13:21:34.966083838Z level=INFO service=order-service product=rabbitmq lab=routing queue=orders.routing.all received=3 status=done"
             }
           ]
         },
         {
           "sequence": 56,
-          "relativeMs": 21310,
+          "relativeMs": 21900,
           "delayMs": 1600,
           "actor": "broker",
           "type": "final-state",
@@ -3925,9 +3925,9 @@
             {
               "file": "demos/rabbitmq/routing/replay.raw.jsonl",
               "line": 14,
-              "hash": "3b90a80f3e5ce675795fb71f501e5bb404ac7e9ec16357a50f6706c767166c49",
+              "hash": "95284804ae57d0d714667193c26f5c11ffa1e2d448e495c3749267f256ad3b38",
               "role": "broker-state",
-              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-22T11:45:31.506Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
+              "content": "{\"kind\":\"broker-state\",\"timestamp\":\"2026-11-23T13:21:38.836Z\",\"checkpoint\":\"final-state\",\"messageId\":\"none\",\"adapterOk\":true,\"metrics\":{\"messagesReady\":0,\"messagesUnacknowledged\":0,\"consumers\":0,\"dlqDepth\":0},\"commands\":{\"queues\":\"[\\n{\\\"name\\\":\\\"orders.routing.eu\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.all\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n,{\\\"name\\\":\\\"orders.routing.created\\\",\\\"messages_ready\\\":0,\\\"messages_unacknowledged\\\":0,\\\"consumers\\\":0}\\n]\\n\",\"bindings\":\"[\\n{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"orders.routing.eu\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"orders.routing.all\\\"}\\n,{\\\"source_name\\\":\\\"\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"orders.routing.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.all\\\",\\\"routing_key\\\":\\\"order.#\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.created\\\",\\\"routing_key\\\":\\\"order.created\\\"}\\n,{\\\"source_name\\\":\\\"orders.events\\\",\\\"destination_name\\\":\\\"orders.routing.eu\\\",\\\"routing_key\\\":\\\"order.created.eu\\\"}\\n]\\n\"}}"
             }
           ]
         }
